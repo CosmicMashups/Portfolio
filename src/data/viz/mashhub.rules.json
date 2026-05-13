@@ -1,0 +1,22 @@
+{
+  "weights": [
+    { "id": "harmonic", "label": "Harmonic distance", "value": 0.45 },
+    { "id": "bpm", "label": "BPM window", "value": 0.3 },
+    { "id": "key", "label": "Key affinity", "value": 0.15 },
+    { "id": "section", "label": "Section overlap", "value": 0.1 }
+  ],
+  "bpmMembership": [
+    { "bpm": 118, "mu": 0.92 },
+    { "bpm": 120, "mu": 1 },
+    { "bpm": 122, "mu": 0.88 },
+    { "bpm": 124, "mu": 0.62 },
+    { "bpm": 126, "mu": 0.35 }
+  ],
+  "keyMembership": [
+    { "semitones": 0, "mu": 1 },
+    { "semitones": 1, "mu": 0.78 },
+    { "semitones": 2, "mu": 0.55 },
+    { "semitones": 3, "mu": 0.4 },
+    { "semitones": 4, "mu": 0.22 }
+  ]
+}

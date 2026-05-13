@@ -1,0 +1,20 @@
+{
+  "metricsSeries": [
+    { "name": "Epoch 1", "mae": 0.42, "mse": 0.31, "rmse": 0.56 },
+    { "name": "Epoch 2", "mae": 0.36, "mse": 0.24, "rmse": 0.49 },
+    { "name": "Epoch 3", "mae": 0.31, "mse": 0.19, "rmse": 0.44 },
+    { "name": "Epoch 4", "mae": 0.28, "mse": 0.15, "rmse": 0.39 },
+    { "name": "Epoch 5", "mae": 0.25, "mse": 0.12, "rmse": 0.35 }
+  ],
+  "scatter": [
+    { "commodity": "Energy", "x": 12, "y": 0.31, "split": "val" },
+    { "commodity": "Energy", "x": 18, "y": 0.28, "split": "train" },
+    { "commodity": "Metals", "x": 22, "y": 0.35, "split": "val" },
+    { "commodity": "Metals", "x": 30, "y": 0.33, "split": "train" },
+    { "commodity": "Agri", "x": 8, "y": 0.41, "split": "train" },
+    { "commodity": "Agri", "x": 14, "y": 0.37, "split": "val" },
+    { "commodity": "FX", "x": 40, "y": 0.27, "split": "val" },
+    { "commodity": "FX", "x": 36, "y": 0.25, "split": "train" }
+  ],
+  "commodities": ["All", "Energy", "Metals", "Agri", "FX"]
+}

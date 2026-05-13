@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+
+  --color-bg: #0a0f1e;
+  --color-surface: #111827;
+  --color-surface-elevated: #1a2235;
+  --color-border: rgba(148, 163, 184, 0.18);
+  --color-text: #e2e8f0;
+  --color-text-muted: #94a3b8;
+}
+
+:root {
+  color-scheme: dark;
+
+  --global-bg: #0a0f1e;
+  --global-surface: #111827;
+  --global-surface-elevated: #1a2235;
+  --global-border: rgba(148, 163, 184, 0.18);
+  --global-text: #e2e8f0;
+  --global-text-muted: #94a3b8;
+  --global-accent: #22c55e;
+  --global-accent-muted: rgba(34, 197, 94, 0.15);
+
+  --accent-primary: var(--global-accent);
+  --accent-secondary: #38bdf8;
+  --surface-tint: rgba(17, 24, 39, 0.92);
+  --chart-a: #10b981;
+  --chart-b: #f43f5e;
+  --chart-c: #3b82f6;
+  --chart-d: #f59e0b;
+
+  --radius-project: 0.5rem;
+  --density-gap: 1rem;
+  --shell-header-height: 4rem;
+  --shell-gutter-sm: 1.25rem;
+  --shell-gutter-md: 2rem;
+  --shell-gutter-lg: 2.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-family: var(--font-sans);
+  background: var(--global-bg);
+  color: var(--global-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent-primary) 35%, transparent);
+}
+
+.font-numeric {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
