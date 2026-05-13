@@ -1,92 +1,79 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
-import { Card } from '@/components/ui/Card'
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { projectById } from '@/config/projects.registry'
+import { IMPACT_MILESTONES } from '@/components/impact/impactMilestones'
+import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { fadeInUp, motionEase } from '@/lib/motion/presets'
 import { cn } from '@/components/ui/cn'
-import { KineticCounter } from '@/components/ui/KineticCounter'
-import { BorderTrace } from '@/components/ui/BorderTrace'
-
-const ITEMS = [
-  {
-    id: 'auto',
-    title: 'Automation tooling',
-    metric: '~12h / week reclaimed',
-    summary:
-      'Scripted ingestion, batch evaluation, and repeatable deploy paths — fewer context switches between “try idea” and “see number”.',
-    detail:
-      'The leverage is not the script itself but the contract it enforces: the same inputs produce comparable metrics across runs.',
-  },
-  {
-    id: 'ml',
-    title: 'ML classification + monitoring',
-    metric: 'Top-1 0.86 macro-F1 (fixture)',
-    summary:
-      'Offline confusion matrices and train/val divergence checks ship beside the model, not in a forgotten notebook.',
-    detail:
-      'Classification surfaces stay tied to the product metaphor (risk gradients, not raw logits) while Technical View keeps the receipts.',
-  },
-  {
-    id: 'prod',
-    title: 'Productivity & collaboration',
-    metric: 'Single narrative across roles',
-    summary:
-      'Design docs, architecture blurbs, and UI language share one vocabulary so PM ↔ engineer ↔ stakeholder alignment costs less.',
-    detail:
-      'Measurable outcome: shorter review loops because diagrams and metrics cite the same system boundaries.',
-  },
-] as const
 
 export function ImpactTimeline() {
-  const [open, setOpen] = useState<string | null>(ITEMS[0]?.id ?? null)
+  const reduce = usePrefersReducedMotion()
 
   return (
-    <div className="space-y-6 md:space-y-7">
-      {ITEMS.map((item) => {
-        const expanded = open === item.id
-        return (
-          <BorderTrace key={item.id}>
-            <Card>
-            <button
-              type="button"
-              className="flex w-full items-start justify-between gap-5 text-left"
-              onClick={() => setOpen(expanded ? null : item.id)}
+    <div className="relative">
+      <motion.div
+        className="absolute bottom-0 left-[7px] top-0 w-px origin-top bg-[color:color-mix(in_oklab,var(--accent-primary)_55%,var(--global-border))] md:left-[11px]"
+        initial={reduce ? { scaleY: 1 } : { scaleY: 0 }}
+        whileInView={reduce ? undefined : { scaleY: 1 }}
+        viewport={{ once: true, margin: '-15% 0px' }}
+        transition={{ duration: reduce ? 0 : 1.1, ease: motionEase }}
+        aria-hidden
+      />
+
+      <ul className="relative z-[1] space-y-10 pl-6 md:space-y-14 md:pl-10">
+        {IMPACT_MILESTONES.map((m, i) => {
+          const project = projectById(m.projectId)
+          const title = project?.title ?? m.projectId
+          const slug = project?.slug ?? m.projectId
+          const flip = i % 2 === 1
+
+          return (
+            <motion.li
+              key={m.projectId}
+              className="relative"
+              variants={fadeInUp}
+              initial={reduce ? false : 'hidden'}
+              whileInView={reduce ? undefined : 'show'}
+              viewport={{ once: true, margin: '-10% 0px' }}
             >
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[var(--accent-primary)]">
-                  Outcome
-                </p>
-                <h3 className="mt-1 text-lg font-semibold text-[var(--global-text)]">{item.title}</h3>
-                <p className="font-mono text-sm text-[var(--global-text-muted)]">
-                  <KineticCounter value={Number.parseFloat(item.metric) || 12} /> {item.metric.replace(/^[^a-zA-Z]*/, '')}
-                </p>
-              </div>
-              <ChevronRight
+              <span className="absolute left-[-23px] top-1.5 z-[2] h-2.5 w-2.5 rounded-full border-2 border-[var(--accent-primary)] bg-[var(--global-bg)] md:left-[-31px]" />
+
+              <div
                 className={cn(
-                  'mt-1 h-5 w-5 shrink-0 text-[var(--global-text-muted)] transition-transform',
-                  expanded && 'rotate-90 text-[var(--accent-primary)]',
+                  'grid gap-4 md:grid-cols-2 md:items-start md:gap-10',
+                  flip && 'md:[direction:rtl]',
                 )}
-                aria-hidden
-              />
-            </button>
-            <p className="mt-5 text-sm leading-relaxed text-[var(--global-text-muted)]">{item.summary}</p>
-            <AnimatePresence initial={false}>
-              {expanded ? (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <p className="mt-5 border-t border-[var(--global-border)] pt-5 text-sm leading-relaxed text-[var(--global-text)]">
-                    {item.detail}
-                  </p>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-            </Card>
-          </BorderTrace>
-        )
-      })}
+              >
+                <div className={cn('md:[direction:ltr]', flip && 'md:text-right')}>
+                  <p className="font-[var(--font-mono)] text-[10px] text-[var(--global-text-muted)]">{m.year}</p>
+                  <Link
+                    to={`/projects/${slug}`}
+                    className="mt-1 inline-flex rounded-md font-[var(--font-display)] text-lg font-semibold text-[var(--global-text)] outline-offset-2 hover:text-[var(--accent-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--accent-primary)]"
+                  >
+                    <span className="rounded-full border border-[color:color-mix(in_oklab,var(--accent-primary)_35%,var(--global-border))] bg-[color:color-mix(in_oklab,var(--accent-primary)_12%,transparent)] px-2.5 py-0.5 text-sm">
+                      {title}
+                    </span>
+                  </Link>
+                </div>
+                <div className={cn('md:[direction:ltr]', flip && 'md:text-right')}>
+                  <p className="text-sm leading-relaxed text-[var(--global-text-muted)]">{m.impact}</p>
+                  <ul className={cn('mt-3 flex flex-wrap gap-2', flip && 'md:justify-end')}>
+                    {m.metrics.map((x) => (
+                      <li
+                        key={x.label}
+                        className="rounded-md border border-[var(--global-border)] px-2 py-1 font-[var(--font-mono)] text-[10px] text-[var(--global-text)]"
+                      >
+                        <span className="text-[var(--global-text-muted)]">{x.label}: </span>
+                        {x.value}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </motion.li>
+          )
+        })}
+      </ul>
     </div>
   )
 }

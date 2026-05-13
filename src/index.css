@@ -71,3 +71,71 @@ body {
   font-variant-numeric: tabular-nums;
   font-family: var(--font-mono);
 }
+
+@keyframes hero-domain-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-hint-chevron {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-domain-marquee-track {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
+
+  .scroll-hint-chevron-motion {
+    animation: none !important;
+  }
+
+  .hero-portrait-scanline::after {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+.hero-portrait-scanline {
+  position: relative;
+}
+
+.hero-portrait-scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    color-mix(in oklab, var(--global-text) 5%, transparent) 3px,
+    color-mix(in oklab, var(--global-text) 5%, transparent) 4px
+  );
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  animation: hero-scanline-sweep 4.5s linear infinite;
+}
+
+@keyframes hero-scanline-sweep {
+  from {
+    transform: translateY(-8%);
+  }
+  to {
+    transform: translateY(8%);
+  }
+}

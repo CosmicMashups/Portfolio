@@ -9,13 +9,17 @@ export function Section({
   title,
   kicker,
   className,
+  headerClassName,
   children,
+  hideHeader = false,
 }: {
   id: string
-  title: string
-  kicker?: string
+  title?: ReactNode
+  kicker?: ReactNode
   className?: string
+  headerClassName?: string
   children: ReactNode
+  hideHeader?: boolean
 }) {
   const reduce = usePrefersReducedMotion()
 
@@ -31,16 +35,25 @@ export function Section({
       viewport={{ once: true, margin: '-12% 0px' }}
       variants={fadeInUp}
     >
-      <div className="mb-10 flex flex-col gap-3 border-b border-[var(--global-border)] pb-7 md:mb-14 md:pb-9">
-        {kicker ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-            {kicker}
-          </p>
-        ) : null}
-        <h2 className="text-2xl font-semibold tracking-tight text-[var(--global-text)] md:text-3xl">
-          {title}
-        </h2>
-      </div>
+      {!hideHeader && (kicker != null || title != null) ? (
+        <div
+          className={cn(
+            'mb-10 flex flex-col gap-3 border-b border-[var(--global-border)] pb-7 md:mb-14 md:pb-9',
+            headerClassName,
+          )}
+        >
+          {kicker != null ? (
+            typeof kicker === 'string' ? (
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent-primary)]">{kicker}</p>
+            ) : (
+              <div>{kicker}</div>
+            )
+          ) : null}
+          {title != null ? (
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--global-text)] md:text-3xl">{title}</h2>
+          ) : null}
+        </div>
+      ) : null}
       {children}
     </motion.section>
   )

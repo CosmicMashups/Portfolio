@@ -10,7 +10,11 @@ export function ScrollHint({ className }: { className?: string }) {
       )}
     >
       <span className="uppercase tracking-[0.25em]">Scroll</span>
-      <ChevronDown className="h-4 w-4 animate-bounce opacity-60" aria-hidden />
+      <ChevronDown
+        className="scroll-hint-chevron-motion h-4 w-4 opacity-70"
+        style={{ animation: 'scroll-hint-chevron 2.2s ease-in-out infinite' }}
+        aria-hidden
+      />
     </div>
   )
 }

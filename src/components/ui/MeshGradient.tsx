@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { cn } from '@/components/ui/cn'
 
 interface BlobState {
   x: number
@@ -8,7 +9,13 @@ interface BlobState {
   driftY: number
 }
 
-export function MeshGradient() {
+export interface MeshGradientProps {
+  /** `global` = fixed full-viewport (App shell). `hero` = in-flow absolute layer using accent tokens. */
+  variant?: 'global' | 'hero'
+  className?: string
+}
+
+export function MeshGradient({ variant = 'global', className }: MeshGradientProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const blobsRef = useRef<BlobState[]>([
     { x: 72, y: 14, driftX: 0.3, driftY: 0.25 },
@@ -18,6 +25,7 @@ export function MeshGradient() {
   ])
   const mouseRef = useRef({ x: 50, y: 50 })
   const reduce = usePrefersReducedMotion()
+  const isHero = variant === 'hero'
 
   useEffect(() => {
     if (reduce) return
@@ -58,28 +66,47 @@ export function MeshGradient() {
     }
   }, [reduce])
 
+  const blobStyle = (i: number) => {
+    if (isHero) {
+      const opacities = ['14%', '10%', '8%', '10%']
+      return {
+        width: i === 0 ? 520 : i === 1 ? 420 : i === 2 ? 320 : 400,
+        height: i === 0 ? 520 : i === 1 ? 420 : i === 2 ? 320 : 400,
+        background: `color-mix(in oklab, var(--accent-primary) ${opacities[i] ?? '10%'}, transparent)`,
+      } as CSSProperties
+    }
+    const sizes = [800, 600, 400, 500]
+    const colors = [
+      'rgba(34,211,238,0.06)',
+      'rgba(167,139,250,0.05)',
+      'rgba(251,191,36,0.03)',
+      'rgba(34,211,238,0.03)',
+    ]
+    return {
+      width: sizes[i],
+      height: sizes[i],
+      background: colors[i],
+    } as CSSProperties
+  }
+
   return (
-    <div ref={containerRef} className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div
-        data-blob
-        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ width: 800, height: 800, background: 'rgba(34,211,238,0.06)' }}
-      />
-      <div
-        data-blob
-        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ width: 600, height: 600, background: 'rgba(167,139,250,0.05)' }}
-      />
-      <div
-        data-blob
-        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ width: 400, height: 400, background: 'rgba(251,191,36,0.03)' }}
-      />
-      <div
-        data-blob
-        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
-        style={{ width: 500, height: 500, background: 'rgba(34,211,238,0.03)' }}
-      />
+    <div
+      ref={containerRef}
+      className={cn(
+        'pointer-events-none overflow-hidden',
+        isHero ? 'absolute inset-0 z-0' : 'fixed inset-0 z-0',
+        className,
+      )}
+      aria-hidden
+    >
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          data-blob
+          className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+          style={blobStyle(i)}
+        />
+      ))}
     </div>
   )
 }

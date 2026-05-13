@@ -9,6 +9,10 @@ interface TiltCardProps {
   glareEnabled?: boolean
   maxTilt?: number
   glareMaxOpacity?: number
+  /** Omit default glass box-shadow (e.g. hero portrait on solid photo background). */
+  noShadow?: boolean
+  /** Omit glass backdrop blur / saturate (hero photo should stay sharp on its own pixels). */
+  noBackdrop?: boolean
 }
 
 export function TiltCard({
@@ -17,6 +21,8 @@ export function TiltCard({
   glareEnabled = true,
   maxTilt = 12,
   glareMaxOpacity = 0.15,
+  noShadow = false,
+  noBackdrop = false,
 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement | null>(null)
   const glareRef = useRef<HTMLDivElement | null>(null)
@@ -65,11 +71,12 @@ export function TiltCard({
       onMouseLeave={onLeave}
       className={cn(
         'relative overflow-hidden rounded-2xl border',
-        'border-[var(--color-border-subtle)] bg-[var(--color-bg-glass)]',
-        'backdrop-blur-[24px] backdrop-saturate-[180%]',
+        noBackdrop
+          ? 'border-transparent bg-transparent'
+          : 'border-[var(--color-border-subtle)] bg-[var(--color-bg-glass)] backdrop-blur-[24px] backdrop-saturate-[180%]',
         className,
       )}
-      style={{ boxShadow: 'var(--shadow-glass)' }}
+      style={noShadow ? undefined : { boxShadow: 'var(--shadow-glass)' }}
     >
       {children}
       {glareEnabled ? <div ref={glareRef} className="pointer-events-none absolute inset-0 opacity-0" /> : null}

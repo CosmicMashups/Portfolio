@@ -1,107 +1,148 @@
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
+import { PROJECTS } from '@/config/projects.registry'
+import { useTechnicalView } from '@/app/providers/useTechnicalView'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { fadeInUp, motionEase } from '@/lib/motion/presets'
+import { TiltCard } from '@/components/ui/TiltCard'
+import { BorderTrace } from '@/components/ui/BorderTrace'
+import { cn } from '@/components/ui/cn'
 
-const CLUSTERS = [
+type ClusterId = 'frontend' | 'backend' | 'ai' | 'mobile' | 'devops'
+
+const CLUSTERS: {
+  id: ClusterId
+  title: string
+  stackKeywords: string[]
+  prose: string
+}[] = [
+  {
+    id: 'frontend',
+    title: 'Frontend',
+    stackKeywords: ['react', 'typescript', 'tailwind', 'javascript', 'html', 'vite', 'bootstrap'],
+    prose:
+      'Interfaces are contracts: typed React surfaces, token-driven Tailwind density, and chart shells that stay legible under real data volume — not decoration layered on top.',
+  },
+  {
+    id: 'backend',
+    title: 'Backend',
+    stackKeywords: ['php', 'mysql', 'firebase', 'sqlite', 'mariadb'],
+    prose:
+      'Data paths stay explicit — prepared statements, session-gated portals, and local-first persistence when the network cannot be trusted.',
+  },
   {
     id: 'ai',
     title: 'AI / ML',
-    items: ['Experiment design', 'Evaluation', 'Deployability'],
-    x: 60,
-    y: 70,
+    stackKeywords: ['tensorflow', 'tflite', 'ml', 'pytorch', 'python'],
+    prose:
+      'Models ship with their evaluation story: confusion matrices, error triplets, and Technical View exports that mirror what reviewers expect from lab work.',
   },
   {
-    id: 'fs',
-    title: 'Full-stack',
-    items: ['Contracts', 'State', 'Operational UX'],
-    x: 220,
-    y: 70,
+    id: 'mobile',
+    title: 'Mobile',
+    stackKeywords: ['flutter', 'dart', 'pwa'],
+    prose:
+      'One Dart tree across Android, iOS, web, and desktop where UX must stay coherent while sensors and on-device inference diverge.',
   },
   {
-    id: 'cr',
-    title: 'Creative systems',
-    items: ['Tooling', 'Media workflows', 'Expressive UI'],
-    x: 380,
-    y: 70,
+    id: 'devops',
+    title: 'DevOps',
+    stackKeywords: ['git', 'apache', 'xampp', 'ci'],
+    prose:
+      'Builds favor reproducibility: Vite splits for heavy viz, public GitHub activity, and deployment constraints that match where software actually lands.',
   },
-] as const
+]
+
+function registryTechnicalLines(cluster: (typeof CLUSTERS)[number]): string[] {
+  const lines: string[] = []
+  for (const p of PROJECTS) {
+    const stacks = p.stack.filter((s) =>
+      cluster.stackKeywords.some((k) => s.name.toLowerCase().includes(k)),
+    )
+    for (const s of stacks) {
+      lines.push(`${p.title}: ${s.name} — ${s.reason}`)
+    }
+  }
+  return [...new Set(lines)].slice(0, 4)
+}
 
 export function CapabilityClusters() {
+  const { technical } = useTechnicalView()
   const reduce = usePrefersReducedMotion()
+  const [active, setActive] = useState<ClusterId | null>(null)
+
+  const linesByCluster = useMemo(() => {
+    const m = new Map<ClusterId, string[]>()
+    for (const c of CLUSTERS) {
+      m.set(c.id, registryTechnicalLines(c))
+    }
+    return m
+  }, [])
 
   return (
-    <div className="relative overflow-hidden rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/50 p-6">
-      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--global-text-muted)]">
-        Capability clusters
-      </p>
-      <svg viewBox="0 0 480 200" className="h-auto w-full text-[var(--accent-primary)]" aria-hidden>
-        <defs>
-          <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-            <path d="M0,0 L6,3 L0,6 z" fill="currentColor" opacity="0.5" />
-          </marker>
-        </defs>
-        <path
-          d="M 60 70 C 120 30, 180 110, 220 70"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeOpacity="0.35"
-          markerEnd="url(#arrow)"
-        />
-        <path
-          d="M 220 70 C 280 30, 320 110, 380 70"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeOpacity="0.35"
-          markerEnd="url(#arrow)"
-        />
-        {CLUSTERS.map((c, i) => (
-          <motion.g
+    <div className="space-y-6">
+      {CLUSTERS.map((c, index) => {
+        const isActive = active === c.id
+        return (
+          <motion.div
             key={c.id}
-            data-cursor="hover"
-            initial={reduce ? false : { opacity: 0, y: 8 }}
+            className="grid gap-4 lg:grid-cols-2 lg:items-stretch"
+            initial={reduce ? false : { opacity: 0, y: 10 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.08 }}
+            viewport={{ once: true, margin: '-6% 0px' }}
+            transition={{ duration: reduce ? 0 : 0.45, delay: reduce ? 0 : index * 0.05, ease: motionEase }}
           >
-            <rect
-              x={c.x - 52}
-              y={c.y - 28}
-              width={104}
-              height={84}
-              rx={12}
-              fill="color-mix(in oklab, var(--accent-primary) 14%, transparent)"
-              stroke="currentColor"
-              strokeOpacity="0.4"
-            />
-            <text
-              x={c.x}
-              y={c.y - 8}
-              textAnchor="middle"
-              fill="var(--global-text)"
-              fontSize="12"
-              fontWeight="600"
-            >
-              {c.title}
-            </text>
-            {c.items.map((line, j) => (
-              <text
-                key={line}
-                x={c.x}
-                y={c.y + 8 + j * 14}
-                textAnchor="middle"
-                fill="var(--global-text-muted)"
-                fontSize="10"
+            <TiltCard maxTilt={5} className="h-full min-h-0">
+              <BorderTrace
+                className={cn(
+                  'h-full rounded-[var(--radius-project)] transition-shadow',
+                  isActive && 'shadow-[0_0_24px_-6px_color-mix(in_oklab,var(--accent-primary)_35%,transparent)]',
+                )}
               >
-                {line}
-              </text>
-            ))}
-          </motion.g>
-        ))}
-      </svg>
-      <p className="mt-2 text-xs text-[var(--global-text-muted)]">
-        Diagram semantics: flows show dependency of product UX on ML rigor and vice versa — not three silos.
-      </p>
+                <div
+                  className="flex h-full flex-col rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/60 p-4 md:p-5"
+                  onMouseEnter={() => setActive(c.id)}
+                  onMouseLeave={() => setActive(null)}
+                  onFocusCapture={() => setActive(c.id)}
+                  onBlurCapture={() => setActive(null)}
+                  tabIndex={-1}
+                >
+                  <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
+                    {c.title}
+                  </p>
+                  <ul className="mt-3 flex flex-wrap gap-1.5">
+                    {c.stackKeywords.slice(0, 6).map((kw) => (
+                      <li
+                        key={kw}
+                        className="rounded-full border border-[color:color-mix(in_oklab,var(--accent-primary)_28%,var(--global-border))] px-2 py-0.5 font-[var(--font-mono)] text-[9px] uppercase tracking-wide text-[var(--global-text-muted)]"
+                      >
+                        {kw}
+                      </li>
+                    ))}
+                  </ul>
+                  {technical ? (
+                    <ul className="mt-4 space-y-1.5 border-t border-[var(--global-border)] pt-3 font-[var(--font-mono)] text-[10px] leading-snug text-[var(--global-text)]">
+                      {(linesByCluster.get(c.id) ?? []).map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              </BorderTrace>
+            </TiltCard>
+
+            <motion.div
+              variants={fadeInUp}
+              initial={reduce ? false : 'hidden'}
+              whileInView={reduce ? undefined : 'show'}
+              viewport={{ once: true }}
+              className="flex flex-col justify-center rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[color:color-mix(in_oklab,var(--global-surface)_90%,transparent)] p-5 md:p-6"
+            >
+              <p className="text-sm leading-relaxed text-[var(--global-text-muted)]">{c.prose}</p>
+            </motion.div>
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
