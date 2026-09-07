@@ -32,6 +32,8 @@ import {
 } from '@/components/projects/pocketpt/pocketptConstants'
 import { POCKETPT_THEME_CSS } from '@/components/projects/pocketpt/pocketptThemeCss'
 import { cn } from '@/components/ui/cn'
+import { projectById } from '@/config/projects.registry'
+import { researchPaperUrl } from '@/config/researchPapers'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -301,6 +303,8 @@ export function PocketPTPage() {
   const [activeFeature, setActiveFeature] = useState<number | null>(null)
   const tabIds = useId()
   const featureDefs = useMemo(() => buildFeatureDefs(reduce), [reduce])
+  const pocketLiveUrl = useMemo(() => projectById('pocketpt')?.liveUrl, [])
+  const pocketPaperUrl = useMemo(() => researchPaperUrl('pocketpt'), [])
 
   useEffect(() => {
     setActiveProjectId('pocketpt')
@@ -723,6 +727,27 @@ export function PocketPTPage() {
               >
                 ← Back to Projects
               </Link>
+              {pocketLiveUrl ? (
+                <a
+                  href={pocketLiveUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="rounded-full border border-[var(--pkt-border)] px-5 py-2.5 text-sm text-[var(--pkt-text)] transition-colors hover:border-[var(--pkt-accent)]"
+                >
+                  Live site
+                </a>
+              ) : null}
+              {pocketPaperUrl ? (
+                <a
+                  href={pocketPaperUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  download
+                  className="rounded-full border border-[var(--pkt-border)] px-5 py-2.5 text-sm text-[var(--pkt-text)] transition-colors hover:border-[var(--pkt-accent)]"
+                >
+                  Research paper (PDF)
+                </a>
+              ) : null}
               <a
                 href={THESIS_URL}
                 target="_blank"

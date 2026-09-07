@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { researchPaperUrl } from '@/config/researchPapers'
 
 const STACK = [
   'React 19',
@@ -21,6 +22,7 @@ const AUTHORS = ['Brown', 'Quitaneg', 'Rosalinas', 'Tan']
 
 export function ResearchFooter() {
   const reduce = usePrefersReducedMotion()
+  const mashhubPaper = researchPaperUrl('mashhub')
 
   return (
     <section
@@ -55,6 +57,19 @@ export function ResearchFooter() {
           <p className="mh-mono mt-1 text-xs text-[var(--mashhub-text-dim)]">
             Special Topics in Artificial Intelligence
           </p>
+          {mashhubPaper ? (
+            <p className="mt-5">
+              <a
+                href={mashhubPaper}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="mh-mono mh-focus-ring inline-flex items-center gap-2 rounded-full border border-[color:var(--mashhub-border-strong)] bg-[color:var(--mashhub-surface)] px-4 py-2 text-xs text-[var(--mashhub-accent)] transition-shadow hover:shadow-[0_0_18px_var(--mashhub-accent-glow)]"
+              >
+                Download research paper (PDF)
+              </a>
+            </p>
+          ) : null}
         </motion.blockquote>
 
         <div className="mt-10">

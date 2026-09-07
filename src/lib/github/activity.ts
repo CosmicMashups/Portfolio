@@ -29,3 +29,6 @@ export async function fetchPublicEvents(
 }
 
 export const GITHUB_PROFILE_URL = `https://github.com/${USER}`
+
+/** Platane/snk publishes this file on the `output` branch of the GitHub profile repo (CosmicMashups/CosmicMashups). */
+export const GITHUB_PROFILE_SNAKE_SVG_URL = `https://raw.githubusercontent.com/${USER}/${USER}/output/github-contribution-grid-snake.svg`

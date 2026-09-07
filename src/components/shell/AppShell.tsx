@@ -1,123 +1,271 @@
-import { useMemo } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import { useMemo, useState, type CSSProperties } from 'react'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useScroll, useMotionValueEvent, AnimatePresence, motion } from 'framer-motion'
+import { FileText, Menu, Moon, Sun, X } from 'lucide-react'
 import { NAV_SECTIONS } from '@/config/navigation'
-import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { RESUME_PDF_URL } from '@/config/resume'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { cn } from '@/components/ui/cn'
 import { SkipLink } from '@/components/ui/SkipLink'
 import { ToggleTechnical } from '@/components/ui/ToggleTechnical'
 import { ScrollProgressBar } from '@/components/ui/ScrollProgressBar'
-import { MeshGradient } from '@/components/ui/MeshGradient'
-import { CustomCursor } from '@/components/ui/CustomCursor'
 import { PageTransition } from '@/components/ui/PageTransition'
-import { useState } from 'react'
+import { useContactDialog } from '@/components/ui/ContactDialog'
+import { SiteFooter } from '@/components/shell/SiteFooter'
+import { useTheme } from '@/app/providers/ThemeProvider'
+import logoMark from '@/assets/cosmicmashups.jpg'
 
 function scrollToId(id: string) {
   const el = document.getElementById(id)
   el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-function CursorGlow() {
-  const reduce = usePrefersReducedMotion()
+/**
+ * Top nav and the floating section-map dots are chrome that sits over the hero's
+ * fixed dark photo backdrop on every route — pinned to dark-mode's palette
+ * (matching `:root[data-theme='dark']` in design-system.css) regardless of the
+ * site's own light/dark toggle, rather than following it like page content does.
+ */
+const PINNED_DARK_CHROME_VARS = {
+  '--color-bg-base': '#1c3a13',
+  '--color-bg-surface': '#1c3a13',
+  '--color-bg-elevated': '#1c3a13',
+  '--color-bg-glass': 'rgba(252, 252, 247, 0.04)',
+  '--color-bg-glass-hover': 'rgba(252, 252, 247, 0.07)',
+  '--color-text-primary': '#fcfcf7',
+  '--color-text-secondary': '#fcfcf7',
+  '--color-text-muted': '#c4c7c4',
+  '--color-text-inverse': '#1c3a13',
+  '--color-accent-primary': '#d3fa99',
+  '--color-accent-primary-dim': 'rgba(211, 250, 153, 0.14)',
+  '--color-border-subtle': 'rgba(252, 252, 247, 0.08)',
+  '--color-border-default': '#fcfcf7',
+  '--color-border-strong': 'rgba(252, 252, 247, 0.24)',
+} as CSSProperties
 
-  if (reduce) return null
-
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme()
   return (
-    <div
-      id="cursor-glow"
-      className="pointer-events-none fixed -left-1/2 -top-1/2 h-[42vmin] w-[42vmin] rounded-full opacity-0 blur-3xl"
-      style={{
-        background:
-          'radial-gradient(circle at center, color-mix(in oklab, var(--accent-primary) 35%, transparent), transparent 60%)',
-      }}
-      aria-hidden
-    />
-  )
-}
-
-function GridBackdrop() {
-  return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[var(--z-noise)] opacity-[0.14]"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(148,163,184,0.15) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px)
-        `,
-        backgroundSize: '48px 48px',
-      }}
-      aria-hidden
-    />
+    <button
+      type="button"
+      onClick={toggleTheme}
+      aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--color-border-default)] text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)]"
+    >
+      {theme === 'light' ? <Moon className="h-4 w-4" aria-hidden /> : <Sun className="h-4 w-4" aria-hidden />}
+    </button>
   )
 }
 
 export function AppShell() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { open, toggle: toggleContactDialog } = useContactDialog()
   const activeSection = useActiveSection()
   const isHome = location.pathname === '/'
   const dots = useMemo(() => NAV_SECTIONS, [])
   const [navSolid, setNavSolid] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
 
-  useMotionValueEvent(scrollY, 'change', (value) => setNavSolid(value > 60))
+  useMotionValueEvent(scrollY, 'change', (value) => {
+    const next = value > 60
+    setNavSolid((prev) => (prev === next ? prev : next))
+  })
+
+  const projectsNavActive =
+    (location.pathname === '/' && location.hash === '#projects') || location.pathname.startsWith('/projects/')
+
+  const navItemClass = (active: boolean) =>
+    cn(
+      'rounded-full px-3 py-1.5 text-xs font-medium tracking-wide transition-colors duration-150',
+      'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-glass-hover)] hover:text-[var(--color-text-primary)]',
+      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)]',
+      active && 'bg-[var(--color-accent-primary-dim)] text-[var(--color-accent-primary)]',
+    )
 
   return (
-    <div className="relative min-h-svh overflow-x-hidden">
+    <div className="relative min-h-svh overflow-x-clip bg-[var(--color-bg-base)]">
       <SkipLink />
       <ToggleTechnical />
-      <MeshGradient />
       <ScrollProgressBar />
-      <CustomCursor />
-      <GridBackdrop />
-      <CursorGlow />
-      <FlowLines />
       <header
-        className="fixed inset-x-0 top-0 z-[var(--z-nav)] transition-all duration-400"
+        className={cn('fixed inset-x-0 top-0 z-[var(--z-nav)] border-b transition-colors duration-200')}
         style={{
-          background: navSolid ? 'rgba(7, 7, 15, 0.8)' : 'transparent',
-          backdropFilter: navSolid ? 'blur(20px) saturate(180%)' : 'blur(0px)',
-          borderBottom: navSolid ? '1px solid var(--color-border-subtle)' : '1px solid transparent',
-          transitionTimingFunction: 'var(--ease-out-expo)',
+          ...PINNED_DARK_CHROME_VARS,
+          background: navSolid
+            ? 'var(--color-bg-surface)'
+            : 'color-mix(in oklab, var(--color-bg-surface) 88%, transparent)',
+          backdropFilter: 'blur(10px)',
+          borderColor: navSolid ? 'var(--color-border-default)' : 'transparent',
         }}
       >
-        <div className="mx-auto flex h-16 max-w-[var(--shell-content-max-width)] items-center justify-between px-[var(--shell-gutter-sm)] sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
-          <NavLink to="/" className="font-[var(--font-display)] text-xl font-bold text-[var(--color-text-primary)]">
-            YB
+        <div className="relative mx-auto flex h-16 max-w-[var(--shell-content-max-width)] items-center gap-2 px-[var(--shell-gutter-sm)] sm:gap-4 sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
+          <NavLink
+            to="/"
+            end
+            className="group flex shrink-0 items-center gap-2 rounded-md px-1 py-1.5"
+          >
+            <img
+              src={logoMark}
+              alt=""
+              className="h-8 w-8 shrink-0 rounded-full object-cover"
+            />
+            <span className="font-[var(--font-display)] text-lg font-semibold leading-none tracking-tight text-[var(--color-text-primary)] sm:text-xl">
+              Yuri Brown
+            </span>
+            <span className="hidden h-5 w-px bg-[var(--color-border-default)] sm:block" aria-hidden />
+            <span className="hidden max-w-[9rem] truncate font-[var(--font-mono)] text-[10px] uppercase leading-tight tracking-[0.14em] text-[var(--color-text-muted)] sm:block">
+              Software / ML Engineer
+            </span>
           </NavLink>
-          <nav className="hidden items-center gap-5 md:flex">
-            <NavLink to="/" className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
-              Home
-            </NavLink>
-            <NavLink
-              to="/#projects"
-              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-            >
-              Projects
-            </NavLink>
-            <NavLink
-              to="/thoughts"
-              className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-            >
-              Thoughts
-            </NavLink>
+
+          <nav
+            className="hidden min-w-0 flex-1 justify-center overflow-x-auto sm:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            aria-label="Primary"
+          >
+            <div className="inline-flex items-center gap-0.5">
+              <NavLink to="/" end className={({ isActive }) => navItemClass(isActive)}>
+                Home
+              </NavLink>
+              <a
+                href="/#projects"
+                className={navItemClass(projectsNavActive)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (location.pathname === '/') {
+                    scrollToId('projects')
+                  } else {
+                    void navigate({ pathname: '/', hash: 'projects' })
+                  }
+                }}
+              >
+                Projects
+              </a>
+              <NavLink to="/thoughts" className={({ isActive }) => navItemClass(isActive)}>
+                Thoughts
+              </NavLink>
+              <button
+                type="button"
+                onClick={() => toggleContactDialog()}
+                className={navItemClass(open)}
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                aria-controls="contact-dialog-content"
+              >
+                Contact
+              </button>
+            </div>
           </nav>
-          <a href="#" className="rounded-full border border-[var(--color-border-default)] px-3 py-1.5 text-xs">
-            Resume
-          </a>
+
+          <div className="ml-auto flex shrink-0 items-center gap-2 sm:ml-0 sm:gap-3">
+            <a
+              href={RESUME_PDF_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden shrink-0 items-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3 py-1.5 text-xs font-medium text-[var(--color-text-inverse)] transition-opacity hover:opacity-90 sm:inline-flex sm:gap-2 sm:px-4 sm:py-2"
+              download="Brown_Resume.pdf"
+            >
+              <FileText className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              <span>Resume</span>
+            </a>
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-panel"
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--color-border-default)] text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)] sm:hidden"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
+            </button>
+          </div>
         </div>
+
+        <AnimatePresence>
+          {mobileMenuOpen ? (
+            <motion.div
+              id="mobile-nav-panel"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="overflow-hidden border-t border-[var(--color-border-default)] sm:hidden"
+              style={{ background: 'var(--color-bg-surface)' }}
+            >
+              <nav className="flex flex-col gap-1 px-[var(--shell-gutter-sm)] py-3" aria-label="Primary mobile">
+                <NavLink
+                  to="/"
+                  end
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) => cn(navItemClass(isActive), 'w-full text-left')}
+                >
+                  Home
+                </NavLink>
+                <a
+                  href="/#projects"
+                  className={cn(navItemClass(projectsNavActive), 'w-full text-left')}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setMobileMenuOpen(false)
+                    if (location.pathname === '/') {
+                      scrollToId('projects')
+                    } else {
+                      void navigate({ pathname: '/', hash: 'projects' })
+                    }
+                  }}
+                >
+                  Projects
+                </a>
+                <NavLink
+                  to="/thoughts"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={({ isActive }) => cn(navItemClass(isActive), 'w-full text-left')}
+                >
+                  Thoughts
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    toggleContactDialog()
+                  }}
+                  className={cn(navItemClass(open), 'w-full text-left')}
+                  aria-haspopup="dialog"
+                  aria-controls="contact-dialog-content"
+                >
+                  Contact
+                </button>
+                <a
+                  href={RESUME_PDF_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mt-1 inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3 py-2 text-xs font-medium text-[var(--color-text-inverse)]"
+                  download="Brown_Resume.pdf"
+                >
+                  <FileText className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                  <span>Resume</span>
+                </a>
+              </nav>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </header>
-      <div className="relative z-[var(--z-content)] mx-auto max-w-[var(--shell-content-max-width)] px-[var(--shell-gutter-sm)] pb-28 pt-[calc(var(--shell-header-height)+2.5rem)] sm:px-[var(--shell-gutter-md)] sm:pb-32 sm:pt-[calc(var(--shell-header-height)+3rem)] lg:px-[var(--shell-gutter-lg)]">
+      <div className="relative z-[var(--z-content)] mx-auto max-w-[var(--shell-content-max-width)] px-[var(--shell-gutter-sm)] pb-16 pt-[calc(var(--shell-header-height)+2.5rem)] sm:px-[var(--shell-gutter-md)] sm:pb-20 sm:pt-[calc(var(--shell-header-height)+3rem)] lg:px-[var(--shell-gutter-lg)]">
         <div>
           <PageTransition>
             <Outlet />
           </PageTransition>
         </div>
       </div>
+      <SiteFooter />
       {isHome ? (
         <nav
           className="pointer-events-auto fixed bottom-10 right-6 top-1/2 z-[var(--z-floating)] hidden -translate-y-1/2 flex-col gap-3 xl:flex"
           aria-label="Section map"
+          style={PINNED_DARK_CHROME_VARS}
         >
           {dots.map((s) => (
             <button
@@ -126,43 +274,16 @@ export function AppShell() {
               onClick={() => scrollToId(s.id)}
               title={s.label}
               className={cn(
-                'group relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--global-border)] bg-[var(--global-surface)]/80 text-[10px] text-[var(--global-text-muted)] backdrop-blur transition-colors hover:border-[var(--accent-primary)]',
-                activeSection === s.id && 'border-[var(--accent-primary)] text-[var(--accent-primary)]',
+                'group relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-surface)] text-[10px] text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent-primary)]',
+                activeSection === s.id && 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]',
               )}
             >
               <span className="sr-only">{s.label}</span>
               <span aria-hidden>{s.short}</span>
-              {activeSection === s.id ? (
-                <motion.span
-                  className="absolute inset-0 rounded-full border border-[var(--color-accent-primary)]"
-                  animate={{ scale: [1, 2], opacity: [0.6, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
-                />
-              ) : null}
             </button>
           ))}
         </nav>
       ) : null}
     </div>
-  )
-}
-
-function FlowLines() {
-  return (
-    <svg
-      className="pointer-events-none fixed inset-0 z-[var(--z-noise)] opacity-[0.07]"
-      xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="none"
-    >
-      <defs>
-        <linearGradient id="fl" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0" />
-          <stop offset="50%" stopColor="var(--accent-primary)" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="var(--accent-primary)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d="M0 120 Q 400 80 900 140 T 1800 100" stroke="url(#fl)" fill="none" strokeWidth="1" />
-      <path d="M0 420 Q 500 360 1100 400 T 2200 380" stroke="url(#fl)" fill="none" strokeWidth="1" />
-    </svg>
   )
 }

@@ -17,12 +17,11 @@ export function KineticCounter({
   value,
   suffix = '',
   prefix = '',
-  duration = 2000,
+  duration = 1200,
   decimals = 0,
   className,
 }: KineticCounterProps) {
   const [display, setDisplay] = useState(0)
-  const [shimmer, setShimmer] = useState(false)
   const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true })
   const reduce = usePrefersReducedMotion()
   const started = useRef(false)
@@ -34,14 +33,12 @@ export function KineticCounter({
       setDisplay(value)
       return
     }
-    setShimmer(true)
     const obj = { val: 0 }
     gsap.to(obj, {
       val: value,
       duration: duration / 1000,
       ease: 'power2.out',
       onUpdate: () => setDisplay(obj.val),
-      onComplete: () => setShimmer(false),
     })
   }, [duration, inView, reduce, value])
 
@@ -53,13 +50,7 @@ export function KineticCounter({
   return (
     <span
       ref={ref}
-      className={cn(
-        'inline-block font-[var(--font-display)] text-[var(--color-accent-primary)]',
-        'font-bold [background-size:200%_100%]',
-        shimmer &&
-          'animate-[shimmer_1.2s_linear_infinite] bg-gradient-to-r from-[var(--color-accent-primary)] via-white to-[var(--color-accent-primary)] bg-clip-text text-transparent',
-        className,
-      )}
+      className={cn('inline-block font-[var(--font-mono)] font-semibold text-[var(--color-text-primary)]', className)}
     >
       {formatted}
     </span>

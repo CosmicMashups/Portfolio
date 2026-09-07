@@ -8,7 +8,7 @@ export function SystemOverview() {
   return (
     <Section
       id="system-overview"
-      kicker={<SectionEyebrow>// 02 — CAPABILITY MAP</SectionEyebrow>}
+      kicker={<SectionEyebrow>Capability Map</SectionEyebrow>}
       title={
         <span className="font-[var(--font-display)]">
           How I ship <DrawUnderline color="var(--accent-primary)">Systems</DrawUnderline>

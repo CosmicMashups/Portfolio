@@ -5,10 +5,12 @@ import { SongSelector } from './SongSelector'
 import { MatchResults } from './MatchResults'
 import { affinityTier, buildReason, matchScore, type Song } from './fuzzyEngine'
 import { DEMO_SONGS } from './songs'
+import { projectById } from '@/config/projects.registry'
 
 export function LiveDemoWidget() {
   const reduce = usePrefersReducedMotion()
   const [selectedId, setSelectedId] = useState<string>(DEMO_SONGS[0]?.id ?? '')
+  const mashhubLive = useMemo(() => projectById('mashhub')?.liveUrl, [])
 
   const targetSong: Song | undefined = useMemo(
     () => DEMO_SONGS.find((s) => s.id === selectedId),
@@ -71,6 +73,19 @@ export function LiveDemoWidget() {
           score = (avg BPM μ × 0.45) + (avg key μ × 0.45) + 0.10 base offset · per-section pairs averaged · HIGH &gt;
           0.70, MEDIUM 0.40&ndash;0.70, LOW &lt; 0.40
         </p>
+        {mashhubLive ? (
+          <p className="mt-4 max-w-3xl text-sm text-[var(--mashhub-text-muted)]">
+            <a
+              href={mashhubLive}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mh-focus-ring text-[var(--mashhub-accent)] underline decoration-[color:var(--mashhub-border-strong)] underline-offset-4 transition-colors hover:text-[var(--mashhub-neon)]"
+            >
+              Open the full MashHub deployment
+            </a>{' '}
+            for the complete PWA experience.
+          </p>
+        ) : null}
       </div>
     </section>
   )

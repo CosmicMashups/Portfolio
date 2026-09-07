@@ -24,6 +24,8 @@ import { Panel } from '@/components/ui/Panel'
 import { Card } from '@/components/ui/Card'
 import { MashHubProjectPage } from '@/pages/mashhub/MashHubProjectPage'
 import { PocketPTPage } from '@/components/projects/pocketpt/PocketPTPage'
+import { ExpensIoBusinessPage } from '@/pages/ExpensIoBusinessPage'
+import { SchedulIoPage } from '@/pages/SchedulIoPage'
 import { useThemeAccent } from '@/app/providers/useThemeAccent'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { useTechnicalView } from '@/app/providers/useTechnicalView'
@@ -68,6 +70,14 @@ export function ProjectPage() {
 
   if (project.slug === 'arimarket') {
     return <AriMarketProjectPage />
+  }
+
+  if (project.slug === 'expens-io-business') {
+    return <ExpensIoBusinessPage />
+  }
+
+  if (project.slug === 'schedul-io') {
+    return <SchedulIoPage />
   }
 
   return (

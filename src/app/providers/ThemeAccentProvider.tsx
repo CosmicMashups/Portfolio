@@ -8,7 +8,6 @@ import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion
 const globalAccentVars = {
   '--accent-primary': '#22c55e',
   '--accent-secondary': '#38bdf8',
-  '--surface-tint': 'rgba(17, 24, 39, 0.92)',
   '--chart-a': '#10b981',
   '--chart-b': '#f43f5e',
   '--chart-c': '#3b82f6',

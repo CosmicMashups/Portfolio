@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -12,6 +13,7 @@ import type { ProjectSectionKey } from '@/components/projects/ProjectSubnav'
 import { ProjectSubnav } from '@/components/projects/ProjectSubnav'
 import { Panel } from '@/components/ui/Panel'
 import { useTechnicalView } from '@/app/providers/useTechnicalView'
+import { researchPaperUrl } from '@/config/researchPapers'
 
 const AriMarketViz = lazy(() =>
   import('@/components/viz/AriMarketViz').then((m) => ({ default: m.AriMarketViz })),
@@ -28,7 +30,6 @@ const ExpensDashMock = lazy(() =>
 const RegistrarTableMock = lazy(() =>
   import('@/components/viz/RegistrarTableMock').then((m) => ({ default: m.RegistrarTableMock })),
 )
-const AriMarketDeepDiveLazy = lazy(() => import('@/components/projects/ProjectDeepDive_AriMarket'))
 
 function VizLoader() {
   return (
@@ -41,16 +42,8 @@ function VizLoader() {
 export function ProjectDeepDive({ project }: { project: ProjectEntry }) {
   const { technical } = useTechnicalView()
   const [active, setActive] = useState<ProjectSectionKey>('overview')
-
-  if (project.id === 'arimarket') {
-    return (
-      <Suspense fallback={<VizLoader />}>
-        <div className="-mx-1 overflow-x-hidden rounded-xl border border-[var(--global-border)] sm:-mx-2">
-          <AriMarketDeepDiveLazy />
-        </div>
-      </Suspense>
-    )
-  }
+  const [vizReadyProjectId, setVizReadyProjectId] = useState<ProjectEntry['id'] | null>(null)
+  const manuscriptUrl = researchPaperUrl(project.id)
 
   const refOverview = useRef<HTMLDivElement | null>(null)
   const refDecisions = useRef<HTMLDivElement | null>(null)
@@ -73,6 +66,24 @@ export function ProjectDeepDive({ project }: { project: ProjectEntry }) {
   }, [])
 
   const showViz = project.viz !== 'none'
+  const vizReady = vizReadyProjectId === project.id
+
+  useEffect(() => {
+    if (!showViz || vizReady) return
+    const target = refViz.current
+    if (!target) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVizReadyProjectId(project.id)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '240px 0px' },
+    )
+    observer.observe(target)
+    return () => observer.disconnect()
+  }, [project.id, showViz, vizReady])
 
   const vizBlock = useMemo(() => {
     switch (project.viz) {
@@ -108,6 +119,19 @@ export function ProjectDeepDive({ project }: { project: ProjectEntry }) {
           <span className="text-[var(--global-text)]">Solution. </span>
           {project.solution}
         </p>
+        {manuscriptUrl ? (
+          <p className="text-sm">
+            <a
+              href={manuscriptUrl}
+              target="_blank"
+              rel="noreferrer"
+              download
+              className="font-medium text-[var(--accent-primary)] underline-offset-2 hover:underline"
+            >
+              Research paper (PDF)
+            </a>
+          </p>
+        ) : null}
       </div>
 
       <div
@@ -164,7 +188,11 @@ export function ProjectDeepDive({ project }: { project: ProjectEntry }) {
           className="scroll-mt-[calc(var(--shell-header-height)+2.5rem)] sm:scroll-mt-[calc(var(--shell-header-height)+3rem)] space-y-4"
         >
           <h4 className="text-sm font-semibold text-[var(--global-text)]">Semi-interactive signals</h4>
-          <Suspense fallback={<VizLoader />}>{vizBlock}</Suspense>
+          {vizReady ? (
+            <Suspense fallback={<VizLoader />}>{vizBlock}</Suspense>
+          ) : (
+            <Panel className="text-sm text-[var(--global-text-muted)]">Visualization loads when this section is near view.</Panel>
+          )}
         </div>
       ) : null}
     </div>

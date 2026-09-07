@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
+import { ExternalLink } from 'lucide-react'
 import { useTextScramble } from '@/hooks/useTextScramble'
 import { RevealText } from '@/components/ui/RevealText'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { projectById } from '@/config/projects.registry'
 
 interface StatTile {
   value: string
@@ -121,6 +123,7 @@ function ScrambledStat({ value }: { value: string }) {
 export function HeroBand() {
   const titleScramble = useTextScramble({ targetText: 'MASHHUB' })
   const reduce = usePrefersReducedMotion()
+  const mashhub = useMemo(() => projectById('mashhub'), [])
 
   return (
     <section
@@ -173,6 +176,38 @@ export function HeroBand() {
             </motion.div>
           ))}
         </motion.div>
+
+        {mashhub?.liveUrl || mashhub?.repoUrl ? (
+          <motion.div
+            className="mt-10 flex w-full min-w-0 max-w-md flex-col items-stretch gap-2 self-center sm:max-w-none sm:flex-row sm:flex-nowrap sm:items-center sm:justify-center sm:gap-3"
+            initial={reduce ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {mashhub.liveUrl ? (
+              <a
+                href={mashhub.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mh-mono mh-focus-ring inline-flex min-h-[2.5rem] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--mashhub-neon)] bg-[color:var(--mashhub-neon-dim)] px-4 py-2 text-center text-xs font-medium text-[var(--mashhub-neon)] transition-shadow hover:shadow-[0_0_20px_rgba(6,255,165,0.35)] sm:w-auto sm:px-5 sm:py-2.5 sm:text-sm"
+              >
+                Live site
+                <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+              </a>
+            ) : null}
+            {mashhub.repoUrl ? (
+              <a
+                href={mashhub.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mh-mono mh-focus-ring inline-flex min-h-[2.5rem] w-full min-w-0 shrink-0 items-center justify-center gap-2 rounded-full border border-[color:var(--mashhub-border-strong)] bg-[color:var(--mashhub-surface)] px-4 py-2 text-center text-xs text-[var(--mashhub-accent)] transition-shadow hover:shadow-[0_0_18px_var(--mashhub-accent-glow)] sm:w-auto sm:px-5 sm:py-2.5 sm:text-sm"
+              >
+                Repository
+                <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+              </a>
+            ) : null}
+          </motion.div>
+        ) : null}
       </div>
 
       <motion.div

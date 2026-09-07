@@ -66,7 +66,7 @@ export function LifecycleTimeline() {
               key={p.id}
               variants={fadeInUp}
               className={cn(
-                'relative w-full rounded-xl border border-[var(--global-border)] bg-[var(--global-surface)]/50 p-4 transition-[box-shadow]',
+                'relative w-full rounded-xl border border-[var(--global-border)] bg-[var(--global-surface)]/90 p-4 backdrop-blur-sm transition-[box-shadow]',
                 expanded && 'z-[1] shadow-[0_0_0_1px_color-mix(in_oklab,var(--accent-primary)_40%,transparent)]',
               )}
               onMouseEnter={() => setHovered(p.id)}

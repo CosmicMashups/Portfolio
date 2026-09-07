@@ -7,7 +7,8 @@ export function CreativeHomeSection() {
   return (
     <Section
       id="creative"
-      kicker={<SectionEyebrow>// 06 — CREATIVE LAYER</SectionEyebrow>}
+      tone="light"
+      kicker={<SectionEyebrow>Creative Layer</SectionEyebrow>}
       title={
         <span className="font-[var(--font-display)]">
           <RevealText>Engineering with Intent.</RevealText>

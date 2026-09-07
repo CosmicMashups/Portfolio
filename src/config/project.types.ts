@@ -4,6 +4,8 @@ export type ProjectId =
   | 'mashhub'
   | 'expens_io'
   | 'registrar'
+  | 'expens_io_business'
+  | 'schedul_io'
 
 export type VizKind =
   | 'arimarket'

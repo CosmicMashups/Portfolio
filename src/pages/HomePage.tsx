@@ -1,23 +1,26 @@
-import { HeroSystemEntry } from '@/components/hero/HeroSystemEntry'
-import { SystemOverview } from '@/components/system-overview/SystemOverview'
-import { ProjectsShowcaseSection } from '@/components/projects/ProjectsShowcaseSection'
-import { ImpactHomeSection } from '@/components/impact/ImpactHomeSection'
-import { SkillsHomeSection } from '@/components/skills/SkillsHomeSection'
-import { CreativeHomeSection } from '@/components/creative/CreativeHomeSection'
-import { CredibilityHomeSection } from '@/components/credibility/CredibilityHomeSection'
-import { ProjectsAccentGuard } from '@/components/home/ProjectsAccentGuard'
+import { Suspense, lazy } from 'react'
+import { HeroPinnedSection } from '@/components/hero/HeroPinnedSection'
+import { Panel } from '@/components/ui/Panel'
+
+const HomePageBelowFold = lazy(() => import('@/components/home/HomePageBelowFold'))
+
+function BelowFoldFallback() {
+  return (
+    <div className="py-16" aria-busy="true" aria-label="Loading page sections">
+      <Panel className="mx-auto max-w-lg text-center text-sm text-[var(--global-text-muted)]">
+        Loading sections…
+      </Panel>
+    </div>
+  )
+}
 
 export function HomePage() {
   return (
     <main id="main-content" tabIndex={-1} className="text-left outline-none">
-      <ProjectsAccentGuard />
-      <HeroSystemEntry />
-      <SystemOverview />
-      <ProjectsShowcaseSection />
-      <ImpactHomeSection />
-      <SkillsHomeSection />
-      <CreativeHomeSection />
-      <CredibilityHomeSection />
+      <HeroPinnedSection />
+      <Suspense fallback={<BelowFoldFallback />}>
+        <HomePageBelowFold />
+      </Suspense>
     </main>
   )
 }

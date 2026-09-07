@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { HeroBand } from './HeroBand'
 import { ProblemSection } from './ProblemSection'
 import { FuzzyEngineSection } from './FuzzyEngineSection'
@@ -5,6 +6,7 @@ import { ArchitectureDiagram } from './ArchitectureDiagram'
 import { FeatureGrid } from './FeatureGrid'
 import { LiveDemoWidget } from './LiveDemoWidget'
 import { ResearchFooter } from './ResearchFooter'
+import { useThemeAccent } from '@/app/providers/useThemeAccent'
 
 const MASHHUB_THEME_CSS = `
 .mashhub-root {
@@ -118,9 +120,50 @@ const MASHHUB_THEME_CSS = `
     animation: none !important;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme='dark']) .mashhub-root {
+    --mashhub-bg: #f5f8ff;
+    --mashhub-surface: #ffffff;
+    --mashhub-surface-elevated: #eaf1fd;
+    --mashhub-border: rgba(29, 99, 179, 0.18);
+    --mashhub-border-strong: rgba(29, 99, 179, 0.38);
+    --mashhub-text: #0b1a33;
+    --mashhub-text-muted: #445374;
+    --mashhub-text-dim: #6b7a9e;
+    --mashhub-accent: #1d63b3;
+    --mashhub-electric: #6d28d9;
+    --mashhub-neon: #059669;
+  }
+}
+
+html[data-theme='light'] .mashhub-root {
+  --mashhub-bg: #f5f8ff;
+  --mashhub-surface: #ffffff;
+  --mashhub-surface-elevated: #eaf1fd;
+  --mashhub-border: rgba(29, 99, 179, 0.18);
+  --mashhub-border-strong: rgba(29, 99, 179, 0.38);
+  --mashhub-text: #0b1a33;
+  --mashhub-text-muted: #445374;
+  --mashhub-text-dim: #6b7a9e;
+  --mashhub-accent: #1d63b3;
+  --mashhub-electric: #6d28d9;
+  --mashhub-neon: #059669;
+}
+
+html:not([data-theme='dark']) .mashhub-root .mh-glow-text {
+  text-shadow: 0 0 18px rgba(29, 99, 179, 0.22), 0 0 36px rgba(29, 99, 179, 0.1);
+}
 `
 
 export function MashHubProjectPage() {
+  const { setActiveProjectId } = useThemeAccent()
+
+  useEffect(() => {
+    setActiveProjectId('mashhub')
+    return () => setActiveProjectId(null)
+  }, [setActiveProjectId])
+
   return (
     <div className="mashhub-root relative overflow-hidden rounded-[var(--radius-project)] border border-[color:var(--mashhub-border)] shadow-[0_0_60px_rgba(0,11,38,0.5)]">
       <style>{MASHHUB_THEME_CSS}</style>

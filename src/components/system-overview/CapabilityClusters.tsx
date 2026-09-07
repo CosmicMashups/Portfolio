@@ -100,7 +100,7 @@ export function CapabilityClusters() {
                 )}
               >
                 <div
-                  className="flex h-full flex-col rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/60 p-4 md:p-5"
+                  className="flex h-full flex-col rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/90 p-4 backdrop-blur-sm md:p-5"
                   onMouseEnter={() => setActive(c.id)}
                   onMouseLeave={() => setActive(null)}
                   onFocusCapture={() => setActive(c.id)}
@@ -136,7 +136,7 @@ export function CapabilityClusters() {
               initial={reduce ? false : 'hidden'}
               whileInView={reduce ? undefined : 'show'}
               viewport={{ once: true }}
-              className="flex flex-col justify-center rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[color:color-mix(in_oklab,var(--global-surface)_90%,transparent)] p-5 md:p-6"
+              className="flex flex-col justify-center rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/90 p-5 backdrop-blur-sm md:p-6"
             >
               <p className="text-sm leading-relaxed text-[var(--global-text-muted)]">{c.prose}</p>
             </motion.div>

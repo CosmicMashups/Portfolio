@@ -1,6 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
-import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { cn } from '@/components/ui/cn'
+import { usePerformanceTier } from '@/app/providers/PerformanceTierProvider'
 
 interface BlobState {
   x: number
@@ -17,6 +17,7 @@ export interface MeshGradientProps {
 
 export function MeshGradient({ variant = 'global', className }: MeshGradientProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const nodesRef = useRef<HTMLElement[]>([])
   const blobsRef = useRef<BlobState[]>([
     { x: 72, y: 14, driftX: 0.3, driftY: 0.25 },
     { x: 12, y: 78, driftX: 0.2, driftY: 0.22 },
@@ -24,13 +25,14 @@ export function MeshGradient({ variant = 'global', className }: MeshGradientProp
     { x: 10, y: 10, driftX: 0.18, driftY: 0.26 },
   ])
   const mouseRef = useRef({ x: 50, y: 50 })
-  const reduce = usePrefersReducedMotion()
+  const { reducedMotion, lowTier } = usePerformanceTier()
   const isHero = variant === 'hero'
 
   useEffect(() => {
-    if (reduce) return
+    if (reducedMotion || lowTier) return
     let raf = 0
     let frame = 0
+    let active = true
     const onMove = (event: PointerEvent) => {
       mouseRef.current = {
         x: (event.clientX / window.innerWidth) * 100,
@@ -38,10 +40,19 @@ export function MeshGradient({ variant = 'global', className }: MeshGradientProp
       }
     }
     window.addEventListener('pointermove', onMove, { passive: true })
+    nodesRef.current = Array.from(containerRef.current?.querySelectorAll<HTMLElement>('[data-blob]') ?? [])
+
+    const onVisibility = () => {
+      active = document.visibilityState === 'visible'
+    }
+    document.addEventListener('visibilitychange', onVisibility)
 
     const tick = () => {
+      if (!active) {
+        raf = requestAnimationFrame(tick)
+        return
+      }
       frame += 1
-      const nodes = containerRef.current?.querySelectorAll<HTMLElement>('[data-blob]')
       blobsRef.current.forEach((blob, index) => {
         const factor = frame * 0.0003
         let x = blob.x + Math.sin(factor * 80 * blob.driftX) * 3
@@ -50,10 +61,9 @@ export function MeshGradient({ variant = 'global', className }: MeshGradientProp
           x += (mouseRef.current.x - x) * 0.03
           y += (mouseRef.current.y - y) * 0.03
         }
-        const node = nodes?.[index]
+        const node = nodesRef.current[index]
         if (node) {
-          node.style.left = `${x}%`
-          node.style.top = `${y}%`
+          node.style.transform = `translate3d(${x}vw, ${y}vh, 0) translate(-50%, -50%)`
         }
       })
       raf = requestAnimationFrame(tick)
@@ -63,8 +73,10 @@ export function MeshGradient({ variant = 'global', className }: MeshGradientProp
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('visibilitychange', onVisibility)
+      nodesRef.current = []
     }
-  }, [reduce])
+  }, [lowTier, reducedMotion])
 
   const blobStyle = (i: number) => {
     if (isHero) {
@@ -103,7 +115,7 @@ export function MeshGradient({ variant = 'global', className }: MeshGradientProp
         <div
           key={i}
           data-blob
-          className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+          className="absolute left-0 top-0 rounded-full blur-[120px] will-change-transform"
           style={blobStyle(i)}
         />
       ))}

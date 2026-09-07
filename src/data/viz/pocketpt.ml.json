@@ -1,4 +1,14 @@
 {
+  "poseTrainVal": [
+    { "epoch": 1, "train": 0.71, "val": 0.66 },
+    { "epoch": 2, "train": 0.78, "val": 0.71 },
+    { "epoch": 3, "train": 0.82, "val": 0.76 },
+    { "epoch": 4, "train": 0.86, "val": 0.79 },
+    { "epoch": 5, "train": 0.88, "val": 0.82 },
+    { "epoch": 6, "train": 0.9, "val": 0.835 },
+    { "epoch": 7, "train": 0.91, "val": 0.848 },
+    { "epoch": 8, "train": 0.92, "val": 0.854 }
+  ],
   "confusion": [
     [42, 6, 3],
     [5, 48, 4],

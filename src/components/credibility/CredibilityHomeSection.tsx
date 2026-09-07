@@ -9,7 +9,8 @@ export function CredibilityHomeSection() {
   return (
     <Section
       id="credibility"
-      kicker={<SectionEyebrow>// 07 — PROOF OF WORK</SectionEyebrow>}
+      tone="light"
+      kicker={<SectionEyebrow>Proof of Work</SectionEyebrow>}
       title={
         <span className="font-[var(--font-display)]">
           <RevealText>Consistent. Curious. Compounding.</RevealText>

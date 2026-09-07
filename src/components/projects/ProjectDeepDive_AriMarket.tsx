@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { researchPaperUrl } from '@/config/researchPapers'
 
 type TabKey = 'latency' | 'nlp' | 'charts'
 
@@ -82,27 +83,27 @@ const features = [
   },
   {
     icon: '[NLP]',
-    title: 'AI Sentiment Classification',
+    title: 'NLP sentiment on contact',
     description:
-      'Contact form feedback is automatically classified as positive or negative using a Scikit-learn NLP model. The UI dynamically adapts its response dialog inside a live ML-integrated PHP form workflow.',
+      'connect.php receives POST, exec() invokes sentiment.py with escaped arguments; NLTK tokenizes, a Joblib-loaded Scikit-learn model classifies tone, PHP polls output and writes sentiment to MySQL before tailoring the response dialog.',
   },
   {
     icon: '[FAST]',
-    title: 'Zero-Latency Forecasting',
+    title: 'Fast chart loads',
     description:
-      'ARIMA models are trained offline and serialized to JSON. The frontend reads predictions as static assets, achieving sub-100ms chart loads regardless of model complexity.',
+      'ARIMA runs offline in Jupyter; predictions land as static JSON (e.g. tomato.json). The browser fetches them with vanilla JavaScript so Chart.js stays fast with no live inference on each request.',
   },
   {
     icon: '[UI]',
     title: 'Command Center UI',
     description:
-      'Bloomberg-inspired dark interface with monospaced financial typography, bullish and bearish semantic colors, and a particle-style animated background for data-dense display.',
+      'Bloomberg-inspired dark interface with monospaced financial typography, bullish and bearish semantic colors, Particles.js background, and modular JS files (top_prices.js, gdp.js, collapsible-list.js).',
   },
   {
     icon: '[SAFE]',
     title: 'Security-First Backend',
     description:
-      'PHP backend applies four layers of protection: htmlspecialchars() for XSS, filter_var() for validation, escapeshellarg() for shell injection prevention, and MySQLi prepared statements for SQL injection defense.',
+      'PHP applies htmlspecialchars(), filter_var(…, FILTER_SANITIZE_EMAIL), escapeshellarg() before exec(), and MySQLi prepared statements on every write path.',
   },
   {
     icon: '[MOD]',
@@ -139,29 +140,35 @@ const stakeholders = [
   },
 ] as const
 
-const techStack = {
-  dataScience: [
-    ['Python', 'ARIMA modeling & NLP classification'],
-    ['Jupyter', 'Model training environment'],
-    ['Pandas', 'Data wrangling & time-series preprocessing'],
-    ['Statsmodels', 'ARIMA implementation'],
-    ['Scikit-learn', 'Sentiment classifier'],
-    ['NLTK', 'Text tokenization & stop-word removal'],
-    ['Joblib', 'Model serialization'],
-  ],
-  backend: [
-    ['PHP 8.x', 'Server-side logic & form handling'],
-    ['MySQL', 'Relational data storage'],
-    ['Apache/XAMPP', 'Local development server'],
-  ],
-  frontend: [
-    ['Vanilla JavaScript', 'SPA interaction logic'],
-    ['Chart.js', 'Financial chart rendering'],
-    ['Particles.js', 'Animated background'],
-    ['HTML5 / CSS3', 'Structure & styling'],
-    ['FontAwesome', 'Iconography'],
-  ],
-} as const
+const ARIMARKET_TECH_STACK_LAYERS: { title: string; items: ReadonlyArray<readonly [string, string]> }[] = [
+  {
+    title: 'Frontend',
+    items: [
+      ['HTML5 / CSS3', 'Structure, CSS variables, dark-mode-first layout'],
+      ['Vanilla JavaScript', 'SPA-style dashboard logic; Fetch API to JSON'],
+      ['Chart.js', 'OHLC / candlesticks; custom financial controller'],
+      ['Particles.js', 'Background micro-motion'],
+      ['Font Awesome', 'Iconography'],
+    ],
+  },
+  {
+    title: 'Backend & database',
+    items: [
+      ['PHP 8.x', 'MVC-inspired routing, forms, sessions'],
+      ['MySQL', 'contacts + sentiment; commodity-related state'],
+      ['Apache / XAMPP', 'Host stack documented in features spec'],
+      ['Static JSON', 'Per-commodity files under /json/…'],
+    ],
+  },
+  {
+    title: 'Machine learning',
+    items: [
+      ['Jupyter Notebooks', 'Offline ARIMA training & data prep'],
+      ['Python + ARIMA', 'Forecast exports serialized to JSON'],
+      ['Scikit-learn / NLTK / Joblib', 'sentiment.py NLP pipeline'],
+    ],
+  },
+]
 
 const arimaRows = [
   { commodity: 'Well-Milled Rice', p: 2, d: 1, q: 1, mae: 0.388, notes: 'Most stable' },
@@ -307,6 +314,7 @@ export default function AriMarketDeepDive() {
   const [activeTab, setActiveTab] = useState<TabKey>('latency')
   const [windowMode, setWindowMode] = useState<'historical' | 'forecasted'>('historical')
   const [expanded, setExpanded] = useState(false)
+  const ariPaperUrl = researchPaperUrl('arimarket')
 
   const tabIndex = activeTab === 'latency' ? 0 : activeTab === 'nlp' ? 1 : 2
   const chartData = useMemo(
@@ -360,14 +368,15 @@ export default function AriMarketDeepDive() {
               make smarter financial decisions in a volatile market.
             </p>
             <p className="ari-display mx-auto mt-4 max-w-3xl text-left text-sm leading-relaxed text-[#B9C9DD] sm:text-base">
-              <span className="ari-mono text-[#10B981]">Core engineering feat:</span> The ML inference layer is fully
-              decoupled from the live web stack. Python ARIMA models train offline in Jupyter, predictions serialize to
-              static JSON, and the frontend reads them as a static asset API for millisecond loads instead of multi-second
-              live inference.
+              <span className="ari-mono text-[#10B981]">Core engineering feat:</span> Heavy ML stays off the request
+              path—Jupyter notebooks train ARIMA models offline, export per-commodity JSON, and Apache serves those files so
+              Chart.js renders in milliseconds instead of blocking PHP on every chart view.
             </p>
             <p className="ari-display mx-auto mt-3 max-w-3xl text-left text-sm leading-relaxed text-[#B9C9DD] sm:text-base">
-              <span className="ari-mono text-[#F59E0B]">Secondary feat:</span> A PHP backend shells out to a live Python
-              NLP sentiment pipeline, classifies feedback, and adapts the UI response without standing up a microservice.
+              <span className="ari-mono text-[#F59E0B]">Hybrid stack (features spec):</span> HTML5, CSS3, vanilla
+              JavaScript with Chart.js, Particles.js, and Font Awesome; PHP 8.x + MySQL on XAMPP; Python with Jupyter,
+              Scikit-learn, NLTK, and Joblib for forecasts and sentiment.py invoked from PHP—explicitly{' '}
+              <span className="text-[#F43F5E]">no React and no TypeScript</span> in the AriMarket codebase.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <span className="ari-mono rounded-full border border-[#1E2D45] bg-[#141C2C]/80 px-4 py-2 text-sm text-[#10B981]">
@@ -378,7 +387,7 @@ export default function AriMarketDeepDive() {
               </span>
             </div>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {['[ARIMA]', '[NLP / Scikit-learn]', '[Chart.js Candlestick]'].map((tag) => (
+              {['[ARIMA]', '[NLP / Scikit-learn]', '[Chart.js + Particles.js]'].map((tag) => (
                 <span key={tag} className="ari-mono rounded border border-[#1E2D45] bg-[#0F1520] px-3 py-1 text-xs text-[#D0E0F0]">
                   {tag}
                 </span>
@@ -389,9 +398,19 @@ export default function AriMarketDeepDive() {
                 View Live Demo ↗
               </a>
               <span className="text-[#4A6080]">|</span>
-              <a href="#" className="text-[#10B981] hover:text-[#34D399]">
-                Read the Paper ↗
-              </a>
+              {ariPaperUrl ? (
+                <a
+                  href={ariPaperUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="text-[#10B981] hover:text-[#34D399]"
+                >
+                  Read the Paper ↗
+                </a>
+              ) : (
+                <span className="text-[#4A6080]">Read the Paper (PDF)</span>
+              )}
             </div>
           </div>
         </section>
@@ -425,7 +444,7 @@ export default function AriMarketDeepDive() {
             <div className="relative border-b border-[#1E2D45]">
               <div className="relative grid grid-cols-1 sm:grid-cols-3">
                 <TabButton active={activeTab === 'latency'} onClick={() => setActiveTab('latency')} label="Zero-Latency Forecasting" />
-                <TabButton active={activeTab === 'nlp'} onClick={() => setActiveTab('nlp')} label="PHP x Python NLP Bridge" />
+                <TabButton active={activeTab === 'nlp'} onClick={() => setActiveTab('nlp')} label="PHP × Python NLP bridge" />
                 <TabButton active={activeTab === 'charts'} onClick={() => setActiveTab('charts')} label="Candlestick Charts" />
               </div>
               <span
@@ -527,43 +546,52 @@ export default function AriMarketDeepDive() {
         <RevealSection className="rounded-2xl border border-[#1E2D45] bg-[#0B0F19]">
           <h2 className="ari-display text-3xl font-bold text-white">System Architecture Overview</h2>
           <div className="mt-6 overflow-x-auto">
-            <svg viewBox="0 0 1200 520" className="h-auto min-w-[960px] w-full">
-              <defs>
-                <path id="lineOne" d="M350 140 C 430 140, 520 140, 600 140" />
-                <path id="lineTwo" d="M350 320 C 430 320, 520 320, 600 320" />
-                <path id="lineThree" d="M750 220 C 820 220, 900 220, 970 220" />
-              </defs>
-              <Layer x={40} y={60} color="#F59E0B" title="Data Science Layer" lines={['Jupyter Notebooks', 'ARIMA Training Pipeline', 'ACF/PACF Analysis', '20+ Commodity Models', 'Outputs: JSON files']} />
-              <Layer x={40} y={260} color="#F59E0B" title="Python NLP Engine" lines={['NLTK Tokenizer', 'Scikit-learn Classifier', 'Joblib Model Loader']} />
-              <Layer x={430} y={60} color="#3B82F6" title="Backend Layer" lines={['PHP 8.x Backend', 'Form Handler', 'exec() Bridge', 'Polling Mechanism', 'MySQLi Prepared Stmts']} />
-              <Layer x={430} y={260} color="#3B82F6" title="MySQL Database" lines={['contacts table', '(name, email, concern, sentiment)']} />
-              <Layer x={820} y={60} color="#10B981" title="Frontend Layer" lines={['Vanilla JS / HTML', 'Fetch API to JSON files', 'Chart.js Financial', 'Particles.js BG']} />
-              <Layer x={820} y={260} color="#10B981" title="UI System" lines={['Dark Mode Toggle', 'Monospace Typography', 'Bullish/Bearish Colors']} />
-
-              <line x1="350" y1="140" x2="430" y2="140" stroke="#1E2D45" strokeWidth="2" />
-              <line x1="350" y1="320" x2="430" y2="320" stroke="#1E2D45" strokeWidth="2" />
-              <line x1="750" y1="220" x2="820" y2="220" stroke="#1E2D45" strokeWidth="2" />
-
-              <circle r="5" fill="#10B981">
-                <animateMotion dur="2.8s" repeatCount="indefinite">
-                  <mpath xlinkHref="#lineOne" href="#lineOne" />
-                </animateMotion>
-              </circle>
-              <circle r="5" fill="#3B82F6">
-                <animateMotion dur="3.2s" begin="0.4s" repeatCount="indefinite">
-                  <mpath xlinkHref="#lineTwo" href="#lineTwo" />
-                </animateMotion>
-              </circle>
-              <circle r="5" fill="#F59E0B">
-                <animateMotion dur="3s" begin="0.8s" repeatCount="indefinite">
-                  <mpath xlinkHref="#lineThree" href="#lineThree" />
-                </animateMotion>
-              </circle>
+            <svg viewBox="0 0 1120 380" className="h-auto min-w-[900px] w-full">
+              <Layer
+                x={32}
+                y={70}
+                w={248}
+                h={210}
+                color="#F59E0B"
+                title="ML pipeline (Python)"
+                lines={['Jupyter + ARIMA exports', 'JSON forecast files', 'sentiment.py (NLTK + sklearn)', 'Joblib model load']}
+              />
+              <Layer
+                x={312}
+                y={70}
+                w={248}
+                h={210}
+                color="#3B82F6"
+                title="PHP · Apache (XAMPP)"
+                lines={['MVC-style pages', 'connect.php + exec()', 'Polling sleep(3) × 10', 'Serves /json/*.json']}
+              />
+              <Layer
+                x={592}
+                y={70}
+                w={248}
+                h={210}
+                color="#F97316"
+                title="MySQL"
+                lines={['contacts + sentiment', 'Commodity tables', 'Prepared statements', 'Session-friendly host']}
+              />
+              <Layer
+                x={872}
+                y={70}
+                w={216}
+                h={210}
+                color="#10B981"
+                title="Browser"
+                lines={['HTML5 + CSS variables', 'Vanilla JS + Fetch', 'Chart.js + Particles.js', 'Font Awesome']}
+              />
+              <line x1="280" y1="175" x2="312" y2="175" stroke="#1E2D45" strokeWidth="2" />
+              <line x1="560" y1="175" x2="592" y2="175" stroke="#1E2D45" strokeWidth="2" />
+              <line x1="840" y1="175" x2="872" y2="175" stroke="#1E2D45" strokeWidth="2" />
             </svg>
           </div>
           <p className="ari-display mt-5 text-sm text-[#B9C9DD]">
-            <span className="text-[#10B981]">Polyglot by necessity, elegant by design.</span> Each layer speaks its
-            native language and is connected by clear contracts: JSON files, shell arguments, and HTTP forms.
+            <span className="text-[#10B981]">Hybrid architecture (see docs/features/arimarket_features.md).</span> Heavy
+            data-science work stays in Python notebooks and scripts; PHP/MySQL own the operational web surface; the
+            dashboard is vanilla HTML/CSS/JS—no React or TypeScript in the product.
           </p>
         </RevealSection>
 
@@ -588,16 +616,16 @@ export default function AriMarketDeepDive() {
           <h2 className="ari-display text-3xl font-bold text-white">Challenges & Engineering Decisions</h2>
           <div className="mt-6 space-y-8 border-l border-[#1E2D45] pl-6">
             <TimelineItem
-              title="The Latency Problem"
-              problem="Live ARIMA inference on every request caused 3-8 second loads and high server CPU."
-              solution="Decoupled ML from runtime: models run offline, predictions serialize to JSON, and the web server serves static assets only."
-              insight="This precompute pattern mirrors static generation architectures used in modern frontend frameworks."
+              title="The latency problem"
+              problem="Running ARIMA inference on every chart request produced multi-second loads and spiked CPU on shared hosting."
+              solution="Precompute in Jupyter, export lightweight JSON, and let vanilla JS + Chart.js read static files—mirroring a static API without live ML on the hot path."
+              insight="Same trade as static-site generation: compute once, read many—without adopting a React/TypeScript SPA toolchain."
             />
             <TimelineItem
-              title="The Polyglot Bridge Problem"
-              problem="PHP cannot natively run Python ML models, and a separate microservice was out of budget."
-              solution="Used PHP exec() with sanitized arguments and a polling loop (max 10 retries x 3-second sleep) for cross-process coordination."
-              insight="Pragmatic shell-based IPC can outperform over-engineered infrastructure in constrained environments."
+              title="The polyglot bridge problem"
+              problem="PHP excels at forms, while Scikit-learn + NLTK excel at NLP—but there was no budget for a separate microservice."
+              solution="connect.php shells out to sentiment.py with escapeshellarg(), pipes output to a temp file, and polls with sleep(3) up to 10 tries before persisting sentiment in MySQL."
+              insight="Pragmatic exec + polling beats over-built infrastructure when the host is XAMPP-class hardware."
             />
             <TimelineItem
               title="The Volatility Problem"
@@ -625,11 +653,11 @@ export default function AriMarketDeepDive() {
           <h2 className="ari-display text-3xl font-bold text-white">Tech Stack Visual</h2>
           <div className="mt-6 overflow-x-auto pb-2">
             <div className="flex min-w-max gap-6">
-              {Object.entries(techStack).map(([layer, list]) => (
-                <div key={layer} className="w-[320px] rounded-xl border border-[#1E2D45] bg-[#141C2C]/70 p-4">
-                  <p className="ari-display text-sm font-semibold capitalize text-[#10B981]">{layer}</p>
+              {ARIMARKET_TECH_STACK_LAYERS.map((layer) => (
+                <div key={layer.title} className="w-[320px] rounded-xl border border-[#1E2D45] bg-[#141C2C]/70 p-4">
+                  <p className="ari-display text-sm font-semibold text-[#10B981]">{layer.title}</p>
                   <div className="mt-3 flex flex-col gap-2">
-                    {list.map(([name, role]) => (
+                    {layer.items.map(([name, role]) => (
                       <div key={name} className="rounded border border-[#1E2D45] bg-[#0F1520] px-3 py-2">
                         <p className="ari-mono text-xs text-[#D0E0F0]">[{name}]</p>
                         <p className="ari-display mt-1 text-xs text-[#9BB0CC]">{role}</p>
@@ -650,9 +678,9 @@ export default function AriMarketDeepDive() {
             expressive models.
           </p>
           <p className="ari-display mx-auto mt-4 max-w-4xl leading-relaxed text-[#B9C9DD]">
-            The roadmap points toward LSTM hybrid models with external signals, daily automated scraping for continuously
-            refreshed JSON outputs, and a RESTful FastAPI service replacing the PHP shell bridge with a clean HTTP
-            contract.
+            Future improvements from the spec: automated scraping with cron to refresh training data, user accounts with
+            saved commodities and alerts, and optionally replacing the exec bridge with a FastAPI/Flask microservice for
+            cleaner HTTP contracts.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a href="#" className="ari-display rounded border border-[#10B981] px-5 py-2 text-sm text-[#10B981] hover:bg-[#10B981]/10">
@@ -702,17 +730,17 @@ function TabButton({ active, label, onClick }: { active: boolean; label: string;
 
 function LatencyTab() {
   const nodes = [
-    ['Jupyter Notebook', 'train ARIMA model'],
-    ['Python ARIMA Engine', 'serialize predictions'],
-    ['Static JSON Files', 'e.g. tomato.json, rice.json'],
-    ['Vanilla JS Frontend', 'Fetch API'],
-    ['User sees chart in <100ms', 'Chart.js render'],
+    ['Jupyter Notebook', 'train ARIMA + export JSON'],
+    ['Python ARIMA pipeline', 'serialize per-commodity forecasts'],
+    ['Static JSON files', 'e.g. tomato.json, beef_brisket.json'],
+    ['Vanilla JavaScript', 'Fetch API + Chart.js'],
+    ['User sees charts fast', 'no live inference on request'],
   ] as const
   return (
     <div className="space-y-6">
       <p className="ari-display text-sm leading-relaxed text-[#B9C9DD]">
-        Running ARIMA prediction live on every request takes 3-8 seconds per commodity and spikes CPU. AriMarket
-        inverts this flow: machine learning completes before a user loads the page.
+        Per docs/features/arimarket_features.md: live ML on every request would cost seconds per chart; AriMarket instead
+        precomputes in notebooks and serves predictions as static JSON so the SPA-style vanilla dashboard stays crisp.
       </p>
       <div className="grid gap-3">
         {nodes.map(([name, sub], index) => (
@@ -771,13 +799,13 @@ function LatencyTab() {
 
 function NlpTab() {
   const steps = [
-    ['User submits form', 'neutral'],
+    ['User submits contact form', 'neutral'],
     ['PHP: connect.php receives POST', 'php'],
     ['PHP: sanitizes input', 'php'],
-    ["PHP: exec('python sentiment.py ... > output.txt &')", 'php'],
-    ['PHP: polls output.txt (max 10 retries)', 'php'],
+    ["PHP: exec('python sentiment.py … > output.txt &')", 'php'],
+    ['PHP: polls output (sleep 3s, max 10 tries)', 'php'],
     ['Python: NLTK tokenizes & removes stop words', 'python'],
-    ["Python: model classifies sentiment", 'python'],
+    ['Python: Scikit-learn + Joblib classifies sentiment', 'python'],
     ['PHP: stores sentiment in MySQL contacts', 'php'],
     ['UI: personalized dialog rendered', 'success'],
   ] as const
@@ -792,8 +820,8 @@ function NlpTab() {
   return (
     <div className="space-y-6">
       <p className="ari-display text-sm leading-relaxed text-[#B9C9DD]">
-        AriMarket uses a pragmatic bridge: PHP receives and sanitizes form input, shells out to a live Python NLP
-        classifier, polls for completion, and stores sentiment in MySQL before rendering adaptive UI feedback.
+        Matches the features doc: PHP bridges to sentiment.py; NLTK + a Joblib-loaded Scikit-learn model classify text;
+        PHP polls the filesystem and persists sentiment before returning adaptive UI copy.
       </p>
       <div className="space-y-2">
         {steps.map(([label, kind], index) => (
@@ -807,9 +835,9 @@ function NlpTab() {
       </div>
       <div className="rounded border border-[#1E2D45] bg-[#141C2C] p-4">
         <p className="ari-display text-sm text-[#D0E0F0]">
-          <span className="font-semibold text-[#10B981]">Why not a REST microservice?</span> For a single-server
-          student project, shell execution keeps infrastructure cost near zero while preserving real ML classification.
-          Retry-with-sleep polling is a proven IPC pattern on shared hosting.
+          <span className="font-semibold text-[#10B981]">Why not a REST microservice?</span> On a student budget,
+          shelling out from PHP keeps infra near zero while still using a real sklearn pipeline—polling avoids hanging
+          Apache indefinitely.
         </p>
       </div>
       <pre className="overflow-x-auto rounded border border-[#F59E0B]/40 bg-[#1A1510] p-4 ari-mono text-xs text-[#FDE68A]">
@@ -884,16 +912,20 @@ function Layer({
   color,
   title,
   lines,
+  w = 310,
+  h = 180,
 }: {
   x: number
   y: number
   color: string
   title: string
   lines: string[]
+  w?: number
+  h?: number
 }) {
   return (
     <g transform={`translate(${x},${y})`}>
-      <rect width="310" height="180" rx="12" fill="#0F1520" stroke={color} strokeWidth="2" />
+      <rect width={w} height={h} rx="12" fill="#0F1520" stroke={color} strokeWidth="2" />
       <text x="16" y="28" fill="#D0E0F0" fontSize="14" fontFamily="'JetBrains Mono', monospace">
         {title}
       </text>
