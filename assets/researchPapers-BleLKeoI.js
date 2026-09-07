@@ -1,0 +1,1 @@
+var e={mashhub:`/Portfolio/assets/MashHub-l99Vl-n4.pdf`,arimarket:`/Portfolio/assets/ARIMArket-6JHCX6FT.pdf`,pocketpt:`/Portfolio/assets/PocketPT-CQCUzJ4F.pdf`};function t(t){return e[t]}export{t};

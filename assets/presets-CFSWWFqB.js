@@ -1,0 +1,1 @@
+var e=[.22,1,.36,1],t={hidden:{opacity:0,y:12},show:{opacity:1,y:0,transition:{duration:.45,ease:e}}};export{e as n,t};
