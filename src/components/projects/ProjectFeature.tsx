@@ -12,6 +12,7 @@ import { researchPaperUrl } from '@/config/researchPapers'
 import { cn } from '@/components/ui/cn'
 import { fadeInUp } from '@/lib/motion/presets'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
+import { useTheme } from '@/app/providers/ThemeProvider'
 
 /** Seed's supporting botanical palette — one distinct, harmonious tint per project. */
 const CARD_ACCENTS = [
@@ -42,11 +43,11 @@ const DARK_GREEN_TONE_VARS: CSSProperties = {
 } as CSSProperties
 
 /**
- * Even-indexed sections stay on Seed's light surface — explicitly pinned (not just
- * "unset") so the band reads correctly even when the site's own light/dark toggle is
- * set to dark, matching the dark-green band's fixed-surface treatment above.
+ * Even-indexed sections sit on Seed's light surface in light mode — but unlike the
+ * dark-green band above, this one DOES follow the site's light/dark toggle: white in
+ * light mode, near-black (matching Section's own dark-tone palette) in dark mode.
  */
-const LIGHT_TONE_VARS: CSSProperties = {
+const LIGHT_MODE_TONE_VARS: CSSProperties = {
   background: '#fafffa',
   color: '#121613',
   '--global-bg': '#fafffa',
@@ -59,15 +60,29 @@ const LIGHT_TONE_VARS: CSSProperties = {
   '--color-accent-primary': '#1c3a13',
 } as CSSProperties
 
+const DARK_MODE_TONE_VARS: CSSProperties = {
+  background: '#121613',
+  color: '#fafffa',
+  '--global-bg': '#121613',
+  '--global-surface': '#121613',
+  '--global-surface-elevated': '#1c211d',
+  '--global-border': '#fafffa',
+  '--global-text': '#fafffa',
+  '--global-text-muted': '#8a938c',
+  '--accent-primary': '#d3fa99',
+  '--color-accent-primary': '#d3fa99',
+} as CSSProperties
+
 export function ProjectFeature({ project, index }: { project: ProjectEntry; index: number }) {
   const reduce = usePrefersReducedMotion()
+  const { theme } = useTheme()
   const [open, setOpen] = useState(false)
   const imageOnRight = index % 2 === 0
   const isDark = index % 2 === 1
   const accent = CARD_ACCENTS[index % CARD_ACCENTS.length]
   const accentStyle = {
     '--card-accent': accent.color,
-    ...(isDark ? DARK_GREEN_TONE_VARS : LIGHT_TONE_VARS),
+    ...(isDark ? DARK_GREEN_TONE_VARS : theme === 'dark' ? DARK_MODE_TONE_VARS : LIGHT_MODE_TONE_VARS),
   } as CSSProperties
 
   const primaryMetric = project.metrics?.[0]

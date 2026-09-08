@@ -6,6 +6,7 @@ export type ProjectId =
   | 'registrar'
   | 'expens_io_business'
   | 'schedul_io'
+  | 'sell_io'
 
 export type VizKind =
   | 'arimarket'

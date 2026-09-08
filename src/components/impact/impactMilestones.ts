@@ -10,6 +10,17 @@ export interface ImpactMilestone {
 /** Curated milestones; titles align with registry entries. */
 export const IMPACT_MILESTONES: ImpactMilestone[] = [
   {
+    projectId: 'sell_io',
+    year: 'Aug–Sep 2026',
+    impact:
+      'Stock-aware self-service kiosk & POS architecture: append-only inventory ledger, 5-minute atomic TTL reservations, and edge-first SQLite offline sync for high-volume apparel retail.',
+    metrics: [
+      { label: 'Sync latency', value: '<100ms SignalR' },
+      { label: 'Reservation lock', value: '5-min TTL' },
+      { label: 'Architecture', value: 'Edge-first .NET 8' },
+    ],
+  },
+  {
     projectId: 'schedul_io',
     year: 'Aug–Sep 2026',
     impact: 'Multi-tenant clinic access platform: three role-scoped SPAs over one Spring Boot API, with tenant isolation enforced at the persistence layer.',

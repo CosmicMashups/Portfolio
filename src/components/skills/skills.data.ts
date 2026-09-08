@@ -25,7 +25,7 @@ export const SKILL_NODES: SkillNode[] = [
   { id: 'flutter', label: 'Flutter', category: 'frontend', projectIds: ['pocketpt', 'expens_io'] },
   { id: 'php', label: 'PHP / LAMP', category: 'backend', projectIds: ['registrar', 'arimarket'] },
   { id: 'mysql', label: 'MySQL', category: 'backend', projectIds: ['registrar', 'arimarket'] },
-  { id: 'sqlite', label: 'SQLite', category: 'backend', projectIds: ['pocketpt'] },
+  { id: 'sqlite', label: 'SQLite', category: 'backend', projectIds: ['pocketpt', 'sell_io'] },
   { id: 'firebase', label: 'Firebase', category: 'backend', projectIds: ['expens_io'] },
   { id: 'javascript', label: 'JavaScript', category: 'frontend', projectIds: ['registrar', 'arimarket'] },
   { id: 'html-css', label: 'HTML · CSS', category: 'frontend', projectIds: ['registrar', 'arimarket'] },
@@ -34,11 +34,12 @@ export const SKILL_NODES: SkillNode[] = [
     id: 'git',
     label: 'Git / CI',
     category: 'tools',
-    projectIds: ['arimarket', 'pocketpt', 'mashhub', 'expens_io', 'registrar', 'expens_io_business', 'schedul_io'],
+    projectIds: ['arimarket', 'pocketpt', 'mashhub', 'expens_io', 'registrar', 'expens_io_business', 'schedul_io', 'sell_io'],
   },
   { id: 'java-spring', label: 'Java / Spring Boot', category: 'backend', projectIds: ['schedul_io'] },
   { id: 'postgresql', label: 'PostgreSQL', category: 'backend', projectIds: ['schedul_io', 'expens_io_business'] },
   { id: 'supabase', label: 'Supabase', category: 'backend', projectIds: ['expens_io_business'] },
+  { id: 'csharp-dotnet', label: 'C# / .NET 8', category: 'backend', projectIds: ['sell_io'] },
 ]
 
 export const SKILL_EDGES: SkillEdge[] = [
@@ -57,6 +58,7 @@ export const SKILL_EDGES: SkillEdge[] = [
   { source: 'java-spring', target: 'postgresql' },
   { source: 'supabase', target: 'postgresql' },
   { source: 'react', target: 'supabase' },
+  { source: 'csharp-dotnet', target: 'sqlite' },
 ]
 
 /** Every graph card uses this size so layout and React Flow bounds stay aligned. */

@@ -6,6 +6,7 @@ import bgExpensIo from '@/assets/background/expens_io.jpg'
 import bgRegistrar from '@/assets/background/registrar.jpg'
 import bgExpensIoBusiness from '@/assets/background/expens_io_business.jpg'
 import bgSchedulIo from '@/assets/background/schedul_io.jpg'
+import bgSellIo from '@/assets/background/sell_io.jpg'
 
 export type { ProjectId, VizKind }
 
@@ -174,6 +175,79 @@ export const PROJECTS: ProjectEntry[] = [
       { label: 'mAP@0.5', value: 87.8, suffix: '%', description: 'Detection quality across categories' },
       { label: 'Pain Recognition Accuracy', value: 99.46, suffix: '%', description: 'High-confidence classification' },
       { label: 'Severe Pain Recall', value: 100, suffix: '%', description: 'Zero severe misses in tests' },
+    ],
+  },
+  {
+    id: 'sell_io',
+    slug: 'sell-io',
+    title: 'Sell.io',
+    tagline: 'Stock-aware self-service kiosk & POS architecture with two-phase reservations and an offline-resilient edge',
+    personalHook:
+      'High-volume apparel retail can\'t tolerate inventory ghosting or checkout blackouts — so we built an append-only ledger, 5-minute atomic TTL locks, and edge SQLite reconciliation.',
+    repoUrl: 'https://github.com/CosmicMashups/Sell.io',
+    liveUrl: 'https://cosmicmashups.github.io/Sell.io/',
+    complexity: 'high',
+    problem:
+      'Generic retail checkouts fail in variant-heavy apparel where styles fan out into dozens of size and color permutations; simultaneous checkouts create ghost inventory, overselling, and database deadlocks, while store internet blackouts halt revenue.',
+    solution:
+      'A Clean Architecture .NET 8 POS & touch kiosk backed by an append-only StockMovement ledger, an in-memory two-phase TTL reservation engine (IStockReservationStore), real-time branch-scoped SignalR broadcasts (StockHub), and an edge SQLite offline sync engine with timestamp-deterministic reconciliation.',
+    challenge:
+      'Eliminating race conditions on the last available size/color during peak retail foot traffic while keeping hardware operational during branch internet severance.',
+    outcome:
+      'Shipped a production-grade multi-branch retail kiosk architecture with Japanese Modernist touch UX, QRPH/PayMongo payments, ESC/POS 12% VAT thermal printing, and sub-100ms live inventory sync.',
+    lessonsLearned: [
+      'Append-only movement ledgers turn inventory debugging from guessing into reproducible ledger replay.',
+      'Two-phase TTL memory locks eliminate database row contention during flash traffic while preventing overselling.',
+      'True edge resilience requires client-timestamp deterministic conflict resolution rather than sync-arrival order.',
+    ],
+    techDeep: {
+      architecture:
+        'ASP.NET Core .NET 8 LTS modular Clean Architecture (Core, Infrastructure, Web) with dual-layer inventory (StockMovement ledger + BranchStock cache), branch-scoped SignalR WebSockets, and edge SQLite with async reconciliation.',
+      keyDecisions: [
+        'Append-only StockMovement as single source of truth; BranchStock.QuantityOnHand is strictly a transactional derived cache',
+        'Two-phase distributed reservation with 5-minute TTL locks via IStockReservationStore (thread-safe ConcurrentDictionary transitioning to Redis)',
+        'Branch-scoped SignalR (StockHub) pushes real-time stock decrements exclusively to terminal groups in that branch',
+        'Client-timestamp deterministic conflict resolution for queued offline SQLite transactions upon reconnection',
+      ],
+      tradeoffs:
+        'Writing every stock event as an append-only ledger delta incurs an extra row insertion per sale, but delivers an auditable paper trail and instant rollback capabilities without separate analytics warehousing.',
+    },
+    decisions: [
+      {
+        title: 'Ledger over mutable counter',
+        detail:
+          'Instead of UPDATE BranchStock SET QuantityOnHand = QuantityOnHand - @qty, the system mandates an immutable StockMovement entry. BranchStock is a transactional cache, guaranteeing zero inventory drift over time.',
+      },
+      {
+        title: 'In-memory TTL locks over DB row locking',
+        detail:
+          'Variant reservations resolve in O(1) in-memory space via IStockReservationStore with 5-minute expirations, preventing database deadlocks and preserving 60fps responsiveness during high-concurrency apparel drops.',
+      },
+      {
+        title: 'Edge-first offline resilience',
+        detail:
+          'Kiosks run a local SQLite database (sellio_kiosk.db) to continue processing cash and staff-assist orders during network severance, reconciling in strict client-timestamp order upon reconnection.',
+      },
+    ],
+    architectureSummary:
+      'Customer Touch Kiosk (Razor/MVC + SignalR) → ASP.NET Core Web API (.NET 8) → Dual-Layer Inventory (EF Core + StockMovement ledger & BranchStock cache) + In-Memory/Redis TTL Reservation Store + PayMongo QRPH & ESC/POS Thermal Printing.',
+    technicalNotes:
+      'Reference doc: docs/projects/sell_io_design_system.md. Front-end reflects a Japanese Modernist retail aesthetic (Uniqlo crimson #EC0000, editorial alabaster #FBFBF9, Space Grotesk and Noto Sans JP typography).',
+    stack: [
+      { name: 'C# 12 · ASP.NET Core (.NET 8 LTS)', reason: 'Clean Architecture modular monolith with dependency injection and branch-scoped controllers.' },
+      { name: 'Entity Framework Core + SQLite / Azure SQL', reason: 'Local edge SQLite database for offline resilience; central relational database for multi-branch HQ.' },
+      { name: 'ASP.NET Core SignalR (StockHub)', reason: 'Real-time WebSocket stock synchronization broadcast to branch-isolated terminal groups.' },
+      { name: 'In-Memory / Redis TTL Reservation Store', reason: 'Two-phase atomic 5-minute inventory locks preventing race conditions during checkout.' },
+      { name: 'PayMongo API & ESC/POS Thermal Printer', reason: 'Philippine payment rails (QRPH, Maya, GCash, BDO) and 12% VAT receipt/claim-ticket formatting.' },
+    ],
+    skillIds: ['csharp-dotnet', 'sqlite', 'ef-core', 'signalr', 'git'],
+    viz: 'none',
+    imageUrl: bgSellIo,
+    metrics: [
+      { label: 'Sync latency', value: 100, suffix: 'ms', description: 'Sub-100ms real-time SignalR stock broadcast' },
+      { label: 'Reservation lock', value: 5, suffix: 'min', description: 'Atomic TTL lock preventing overselling' },
+      { label: 'VAT compliance', value: 12, suffix: '%', description: 'Accurate ESC/POS thermal receipt tax computation' },
+      { label: 'Offline availability', value: 100, suffix: '%', description: 'Edge SQLite local queue and deterministic replay' },
     ],
   },
   {

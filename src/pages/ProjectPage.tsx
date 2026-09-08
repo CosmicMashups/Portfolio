@@ -26,6 +26,7 @@ import { MashHubProjectPage } from '@/pages/mashhub/MashHubProjectPage'
 import { PocketPTPage } from '@/components/projects/pocketpt/PocketPTPage'
 import { ExpensIoBusinessPage } from '@/pages/ExpensIoBusinessPage'
 import { SchedulIoPage } from '@/pages/SchedulIoPage'
+import { SellIoPage } from '@/pages/SellIoPage'
 import { useThemeAccent } from '@/app/providers/useThemeAccent'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { useTechnicalView } from '@/app/providers/useTechnicalView'
@@ -54,6 +55,10 @@ export function ProjectPage() {
 
   if (project.slug === 'pocketpt') {
     return <PocketPTPage />
+  }
+
+  if (project.slug === 'sell-io') {
+    return <SellIoPage />
   }
 
   if (project.slug === 'mashhub') {

@@ -5,6 +5,7 @@ import logoMashHub from '@/assets/logo/mashhub.png'
 import logoPocketPt from '@/assets/logo/pocketpt.png'
 import logoRegistrar from '@/assets/logo/registrar.png'
 import logoSchedulIo from '@/assets/logo/schedul_io.jpg'
+import logoSellIo from '@/assets/logo/sell_io.svg'
 
 export const PROJECT_LOGO_SRC: Partial<Record<ProjectId, string>> = {
   arimarket: logoAriMarket,
@@ -15,6 +16,7 @@ export const PROJECT_LOGO_SRC: Partial<Record<ProjectId, string>> = {
   // Same product family/mark as the consumer Expens.io app.
   expens_io_business: logoExpensIo,
   schedul_io: logoSchedulIo,
+  sell_io: logoSellIo,
 }
 
 export function projectLogoSrc(id: ProjectId): string | undefined {
