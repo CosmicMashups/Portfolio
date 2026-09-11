@@ -14,10 +14,10 @@ import { useContactDialog } from '@/components/ui/ContactDialog'
 import { SiteFooter } from '@/components/shell/SiteFooter'
 import { useTheme } from '@/app/providers/ThemeProvider'
 import logoMark from '@/assets/cosmicmashups.jpg'
+import { smoothScrollTo } from '@/lib/motion/gsapScroll'
 
 function scrollToId(id: string) {
-  const el = document.getElementById(id)
-  el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  smoothScrollTo(id, { updateHash: true })
 }
 
 /**
@@ -267,21 +267,30 @@ export function AppShell() {
           aria-label="Section map"
           style={PINNED_DARK_CHROME_VARS}
         >
-          {dots.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => scrollToId(s.id)}
-              title={s.label}
-              className={cn(
-                'group relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-surface)] text-[10px] text-[var(--color-text-muted)] transition-colors hover:border-[var(--color-accent-primary)]',
-                activeSection === s.id && 'border-[var(--color-accent-primary)] text-[var(--color-accent-primary)]',
-              )}
-            >
-              <span className="sr-only">{s.label}</span>
-              <span aria-hidden>{s.short}</span>
-            </button>
-          ))}
+          {dots.map((s) => {
+            const isActive = activeSection === s.id
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => scrollToId(s.id)}
+                title={s.label}
+                aria-label={`Jump to section ${s.short}: ${s.label}`}
+                className={cn(
+                  'group relative flex h-8 w-8 items-center justify-center rounded-full border text-[10px] transition-all duration-300 outline-none',
+                  isActive
+                    ? 'border-[var(--color-accent-primary)] bg-[var(--color-accent-primary-dim)] text-[var(--color-accent-primary)] scale-110 shadow-[0_0_12px_rgba(211,250,153,0.35)]'
+                    : 'border-[var(--color-border-default)] bg-[var(--color-bg-surface)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)] hover:scale-105',
+                )}
+              >
+                <span className="sr-only">{s.label}</span>
+                <span aria-hidden className="font-[var(--font-mono)]">{s.short}</span>
+                <span className="pointer-events-none absolute right-10 whitespace-nowrap rounded-md border border-white/10 bg-[#121613] px-2.5 py-1 text-[11px] font-medium tracking-wide text-[#fafffa] opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+                  {s.label}
+                </span>
+              </button>
+            )
+          })}
         </nav>
       ) : null}
     </div>

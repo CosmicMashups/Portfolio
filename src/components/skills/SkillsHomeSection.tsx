@@ -10,11 +10,21 @@ const SkillsGraph = lazy(() =>
   import('@/components/skills/SkillsGraph').then((m) => ({ default: m.SkillsGraph })),
 )
 
+import { smoothScrollTo } from '@/lib/motion/gsapScroll'
+
 function scrollToProject(id: ProjectId) {
-  document.querySelector<HTMLElement>(`[data-project="${id}"]`)?.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-  })
+  const el = document.getElementById(id) ?? document.querySelector<HTMLElement>(`[data-project="${id}"]`)
+  if (el) {
+    smoothScrollTo(el, {
+      updateHash: true,
+      onComplete: () => {
+        el.classList.add('ring-2', 'ring-[#d3fa99]', 'ring-offset-4', 'ring-offset-[#121613]')
+        setTimeout(() => {
+          el.classList.remove('ring-2', 'ring-[#d3fa99]', 'ring-offset-4', 'ring-offset-[#121613]')
+        }, 1800)
+      },
+    })
+  }
 }
 
 const TITLE = 'Expertise Network'

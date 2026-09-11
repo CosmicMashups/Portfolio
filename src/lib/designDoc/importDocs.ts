@@ -4,6 +4,7 @@ import mashhubDesignSystem from '../../../docs/projects/mashhub_design_system.md
 import pocketptDesignSystem from '../../../docs/projects/pocketpt_design_system.md?raw'
 import registrarDesignSystem from '../../../docs/projects/registrar_design_system.md?raw'
 import sellIoDesignSystem from '../../../docs/projects/sell_io_design_system.md?raw'
+import purchIoSystem from '../../../docs/projects/purch_io_system.md?raw'
 
 export const designDocRaw = {
   arimarket: arimarketDesignSystem,
@@ -12,4 +13,5 @@ export const designDocRaw = {
   expens_io: expensIoDesignSystem,
   registrar: registrarDesignSystem,
   sell_io: sellIoDesignSystem,
+  purch_io: purchIoSystem,
 } as const

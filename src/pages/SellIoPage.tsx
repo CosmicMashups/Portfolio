@@ -570,13 +570,13 @@ export function SellIoPage() {
         {/* Next project navigation */}
         <div className="mt-12 flex justify-end border-t border-[var(--global-border)] pt-6">
           <Link
-            to="/projects/schedul-io"
+            to="/projects/mashhub"
             className="inline-flex items-baseline gap-2 text-sm font-medium text-[var(--accent-primary)]"
           >
             <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.22em] text-[var(--global-text-muted)]">
               Next project
             </span>
-            <DrawUnderline color="var(--accent-primary)">Schedul.io: Clinic Access Platform</DrawUnderline>
+            <DrawUnderline color="var(--accent-primary)">MashHub: Harmonic Intelligence &amp; Mix Tooling</DrawUnderline>
             <span aria-hidden>→</span>
           </Link>
         </div>

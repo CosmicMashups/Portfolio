@@ -3,53 +3,44 @@ import { motion } from 'framer-motion'
 import { PROJECTS } from '@/config/projects.registry'
 import { useTechnicalView } from '@/app/providers/useTechnicalView'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
-import { fadeInUp, motionEase } from '@/lib/motion/presets'
-import { TiltCard } from '@/components/ui/TiltCard'
-import { BorderTrace } from '@/components/ui/BorderTrace'
+import { motionEase } from '@/lib/motion/presets'
 import { cn } from '@/components/ui/cn'
 
-type ClusterId = 'frontend' | 'backend' | 'ai' | 'mobile' | 'devops'
+export type ClusterId = 'frontend' | 'backend' | 'ai' | 'mobile' | 'devops'
 
-const CLUSTERS: {
+export const CLUSTERS: {
   id: ClusterId
   title: string
   stackKeywords: string[]
   prose: string
 }[] = [
   {
-    id: 'frontend',
-    title: 'Frontend',
-    stackKeywords: ['react', 'typescript', 'tailwind', 'javascript', 'html', 'vite', 'bootstrap'],
-    prose:
-      'Interfaces are contracts: typed React surfaces, token-driven Tailwind density, and chart shells that stay legible under real data volume — not decoration layered on top.',
-  },
-  {
-    id: 'backend',
-    title: 'Backend',
-    stackKeywords: ['php', 'mysql', 'firebase', 'sqlite', 'mariadb'],
-    prose:
-      'Data paths stay explicit — prepared statements, session-gated portals, and local-first persistence when the network cannot be trusted.',
-  },
-  {
     id: 'ai',
-    title: 'AI / ML',
-    stackKeywords: ['tensorflow', 'tflite', 'ml', 'pytorch', 'python'],
+    title: 'AI & Machine Learning',
+    stackKeywords: ['tensorflow', 'tflite', 'pytorch', 'python', 'ml'],
     prose:
-      'Models ship with their evaluation story: confusion matrices, error triplets, and Technical View exports that mirror what reviewers expect from lab work.',
+      'Models ship with their evaluation story: confusion matrices, error triplets (MAE/MSE/RMSE), and reproducible lab artifacts.',
   },
   {
     id: 'mobile',
-    title: 'Mobile',
-    stackKeywords: ['flutter', 'dart', 'pwa'],
+    title: 'Mobile & On-Device Neural Nets',
+    stackKeywords: ['flutter', 'dart', 'tflite', 'sqlite', 'pwa'],
     prose:
-      'One Dart tree across Android, iOS, web, and desktop where UX must stay coherent while sensors and on-device inference diverge.',
+      'Single Dart tree across mobile and web where UX stays resilient and on-device inference runs with zero cloud dependency.',
+  },
+  {
+    id: 'frontend',
+    title: 'Full-Stack & Systems Architecture',
+    stackKeywords: ['react', 'typescript', 'tailwind', 'php', 'mysql'],
+    prose:
+      'Typed React surfaces, token-driven Tailwind density, and explicit data paths with session-gated persistence.',
   },
   {
     id: 'devops',
-    title: 'DevOps',
-    stackKeywords: ['git', 'apache', 'xampp', 'ci'],
+    title: 'Reliability & Deployment',
+    stackKeywords: ['git', 'apache', 'xampp', 'ci', 'vite'],
     prose:
-      'Builds favor reproducibility: Vite splits for heavy viz, public GitHub activity, and deployment constraints that match where software actually lands.',
+      'Reproducible builds, Vite optimization for heavy visualization, and deployment constraints that match real operational environments.',
   },
 ]
 
@@ -63,13 +54,13 @@ function registryTechnicalLines(cluster: (typeof CLUSTERS)[number]): string[] {
       lines.push(`${p.title}: ${s.name} — ${s.reason}`)
     }
   }
-  return [...new Set(lines)].slice(0, 4)
+  return [...new Set(lines)].slice(0, 3)
 }
 
-export function CapabilityClusters() {
+export function CapabilityClusters({ activeCluster }: { activeCluster?: ClusterId }) {
   const { technical } = useTechnicalView()
   const reduce = usePrefersReducedMotion()
-  const [active, setActive] = useState<ClusterId | null>(null)
+  const [hovered, setHovered] = useState<ClusterId | null>(null)
 
   const linesByCluster = useMemo(() => {
     const m = new Map<ClusterId, string[]>()
@@ -80,66 +71,52 @@ export function CapabilityClusters() {
   }, [])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {CLUSTERS.map((c, index) => {
-        const isActive = active === c.id
+        const isTarget = (activeCluster ?? hovered) === c.id
         return (
           <motion.div
             key={c.id}
-            className="grid gap-4 lg:grid-cols-2 lg:items-stretch"
-            initial={reduce ? false : { opacity: 0, y: 10 }}
+            initial={reduce ? false : { opacity: 0, y: 8 }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-6% 0px' }}
-            transition={{ duration: reduce ? 0 : 0.45, delay: reduce ? 0 : index * 0.05, ease: motionEase }}
+            transition={{ duration: reduce ? 0 : 0.35, delay: reduce ? 0 : index * 0.04, ease: motionEase }}
+            onMouseEnter={() => setHovered(c.id)}
+            onMouseLeave={() => setHovered(null)}
+            className={cn(
+              'group rounded-xl border p-4 transition-all duration-200',
+              isTarget
+                ? 'border-[#d3fa99]/50 bg-[#121613]/90 shadow-[0_0_16px_rgba(211,250,153,0.08)]'
+                : 'border-white/10 bg-[#121613]/50 hover:border-white/20',
+            )}
           >
-            <TiltCard maxTilt={5} className="h-full min-h-0">
-              <BorderTrace
-                className={cn(
-                  'h-full rounded-[var(--radius-project)] transition-shadow',
-                  isActive && 'shadow-[0_0_24px_-6px_color-mix(in_oklab,var(--accent-primary)_35%,transparent)]',
-                )}
-              >
-                <div
-                  className="flex h-full flex-col rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/90 p-4 backdrop-blur-sm md:p-5"
-                  onMouseEnter={() => setActive(c.id)}
-                  onMouseLeave={() => setActive(null)}
-                  onFocusCapture={() => setActive(c.id)}
-                  onBlurCapture={() => setActive(null)}
-                  tabIndex={-1}
-                >
-                  <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
-                    {c.title}
-                  </p>
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {c.stackKeywords.slice(0, 6).map((kw) => (
-                      <li
-                        key={kw}
-                        className="rounded-full border border-[color:color-mix(in_oklab,var(--accent-primary)_28%,var(--global-border))] px-2 py-0.5 font-[var(--font-mono)] text-[9px] uppercase tracking-wide text-[var(--global-text-muted)]"
-                      >
-                        {kw}
-                      </li>
-                    ))}
-                  </ul>
-                  {technical ? (
-                    <ul className="mt-4 space-y-1.5 border-t border-[var(--global-border)] pt-3 font-[var(--font-mono)] text-[10px] leading-snug text-[var(--global-text)]">
-                      {(linesByCluster.get(c.id) ?? []).map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              </BorderTrace>
-            </TiltCard>
+            <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
+              <h4 className="font-[var(--font-display)] text-sm font-medium tracking-tight text-[#fafffa]">
+                {c.title}
+              </h4>
+              <ul className="flex flex-wrap gap-1.5">
+                {c.stackKeywords.slice(0, 5).map((kw) => (
+                  <li
+                    key={kw}
+                    className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5 font-[var(--font-mono)] text-[9px] uppercase tracking-wider text-[#fafffa]/70"
+                  >
+                    {kw}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <motion.div
-              variants={fadeInUp}
-              initial={reduce ? false : 'hidden'}
-              whileInView={reduce ? undefined : 'show'}
-              viewport={{ once: true }}
-              className="flex flex-col justify-center rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/90 p-5 backdrop-blur-sm md:p-6"
-            >
-              <p className="text-sm leading-relaxed text-[var(--global-text-muted)]">{c.prose}</p>
-            </motion.div>
+            <p className="mt-2 text-xs leading-relaxed text-[#fafffa]/70">
+              {c.prose}
+            </p>
+
+            {technical ? (
+              <ul className="mt-3 space-y-1 border-t border-white/10 pt-2 font-[var(--font-mono)] text-[10px] leading-snug text-[#d3fa99]">
+                {(linesByCluster.get(c.id) ?? []).map((line) => (
+                  <li key={line}>↳ {line}</li>
+                ))}
+              </ul>
+            ) : null}
           </motion.div>
         )
       })}

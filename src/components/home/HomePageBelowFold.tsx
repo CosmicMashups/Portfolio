@@ -7,6 +7,8 @@ import { CreativeHomeSection } from '@/components/creative/CreativeHomeSection'
 import { CredibilityHomeSection } from '@/components/credibility/CredibilityHomeSection'
 import { ProjectsAccentGuard } from '@/components/home/ProjectsAccentGuard'
 
+import { smoothScrollTo } from '@/lib/motion/gsapScroll'
+
 /** Everything below the hero — lazy-loaded from HomePage to shrink the initial bundle. */
 export default function HomePageBelowFold() {
   const { hash } = useLocation()
@@ -14,7 +16,7 @@ export default function HomePageBelowFold() {
   useEffect(() => {
     if (hash !== '#projects') return
     const id = window.requestAnimationFrame(() => {
-      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      smoothScrollTo('projects')
     })
     return () => cancelAnimationFrame(id)
   }, [hash])

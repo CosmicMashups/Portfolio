@@ -165,11 +165,11 @@ export function SchedulIoPage() {
           ))}
         </ul>
         <div className="mt-12 flex justify-end border-t border-[var(--global-border)] pt-6">
-          <Link to="/projects/mashhub" className="inline-flex items-baseline gap-2 text-sm font-medium text-[var(--accent-primary)]">
+          <Link to="/projects/sell-io" className="inline-flex items-baseline gap-2 text-sm font-medium text-[var(--accent-primary)]">
             <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.22em] text-[var(--global-text-muted)]">
               Next project
             </span>
-            <DrawUnderline color="var(--accent-primary)">MashHub: Music Matcher &amp; Database</DrawUnderline>
+            <DrawUnderline color="var(--accent-primary)">Sell.io: Stock-Aware POS &amp; Kiosk</DrawUnderline>
             <span aria-hidden>→</span>
           </Link>
         </div>

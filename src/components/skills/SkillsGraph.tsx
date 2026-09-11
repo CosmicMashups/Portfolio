@@ -44,25 +44,35 @@ export function SkillsGraph({
               {CATEGORY_LABEL[cat]}
             </p>
             <ul className="flex flex-wrap gap-2">
-              {(grouped.get(cat) ?? []).map((skill) => (
-                <li key={skill.id}>
-                  <button
-                    type="button"
-                    title={`Used in: ${projectTitles(skill.projectIds)}`}
-                    onClick={() => {
-                      const first = skill.projectIds[0]
-                      if (first) onSelectProject?.(first)
-                    }}
-                    className={cn(
-                      'rounded-full border border-[var(--color-border-default)] px-3 py-1.5 text-xs text-[var(--color-text-secondary)] transition-colors',
-                      'hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)]',
-                      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)]',
-                    )}
-                  >
-                    {skill.label}
-                  </button>
-                </li>
-              ))}
+              {(grouped.get(cat) ?? []).map((skill) => {
+                const primaryProjectId = skill.projectIds[0]
+                const primaryProj = primaryProjectId ? projectById(primaryProjectId) : null
+
+                return (
+                  <li key={skill.id}>
+                    <button
+                      type="button"
+                      title={`Used in: ${projectTitles(skill.projectIds)}`}
+                      onClick={() => {
+                        if (primaryProjectId) onSelectProject?.(primaryProjectId)
+                      }}
+                      className={cn(
+                        'group inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-base)]/40 px-3 py-1.5 text-xs text-[var(--color-text-secondary)] transition-all',
+                        'hover:border-[#d3fa99] hover:bg-[#d3fa99]/10 hover:text-[#d3fa99]',
+                        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d3fa99]',
+                        'active:scale-[0.97]',
+                      )}
+                    >
+                      <span>{skill.label}</span>
+                      {primaryProj && (
+                        <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-text-muted)] transition-colors group-hover:text-[#d3fa99]/80">
+                          ↗
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         ))}

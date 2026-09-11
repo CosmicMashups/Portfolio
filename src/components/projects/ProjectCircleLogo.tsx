@@ -30,7 +30,8 @@ export function ProjectCircleLogo({
     <div
       style={scopeStyle}
       className={cn(
-        'shrink-0 overflow-hidden rounded-full border border-[color:color-mix(in_oklab,var(--accent-primary)_32%,var(--global-border))] bg-[var(--global-surface)] shadow-[0_0_0_1px_color-mix(in_oklab,var(--accent-primary)_12%,transparent)_inset]',
+        'shrink-0 overflow-hidden rounded-2xl border border-[color:color-mix(in_oklab,var(--accent-primary)_32%,var(--global-border))] bg-[var(--global-surface)] shadow-[0_0_0_1px_color-mix(in_oklab,var(--accent-primary)_12%,transparent)_inset]',
+        size === 'sm' ? 'rounded-xl' : 'rounded-2xl',
         SIZE_CLASS[size],
         className,
       )}
@@ -41,10 +42,7 @@ export function ProjectCircleLogo({
           alt=""
           width={size === 'sm' ? 40 : 56}
           height={size === 'sm' ? 40 : 56}
-          // Source marks are exported on large square canvases with heavy padding around
-          // a small centered glyph — object-cover + scale crops that margin instead of
-          // shrinking the mark further inside the circle.
-          className="h-full w-full scale-[1.7] object-cover"
+          className="h-full w-full object-cover transition-transform"
           decoding="async"
           draggable={false}
           aria-hidden

@@ -5,7 +5,8 @@ import logoMashHub from '@/assets/logo/mashhub.png'
 import logoPocketPt from '@/assets/logo/pocketpt.png'
 import logoRegistrar from '@/assets/logo/registrar.png'
 import logoSchedulIo from '@/assets/logo/schedul_io.jpg'
-import logoSellIo from '@/assets/logo/sell_io.svg'
+import logoSellIo from '@/assets/logo/sell_io.jpg'
+import logoPurchIo from '@/assets/logo/purch_io.jpg'
 
 export const PROJECT_LOGO_SRC: Partial<Record<ProjectId, string>> = {
   arimarket: logoAriMarket,
@@ -17,6 +18,7 @@ export const PROJECT_LOGO_SRC: Partial<Record<ProjectId, string>> = {
   expens_io_business: logoExpensIo,
   schedul_io: logoSchedulIo,
   sell_io: logoSellIo,
+  purch_io: logoPurchIo,
 }
 
 export function projectLogoSrc(id: ProjectId): string | undefined {

@@ -88,6 +88,16 @@ const registryOverrides: Partial<Record<ProjectId, ThemeOverrides>> = {
     density: 'high',
     radius: 'sm',
   },
+  purch_io: {
+    accentPrimary: '#059669',
+    accentSecondary: '#0F172A',
+    chartA: '#059669',
+    chartB: '#0284C7',
+    chartC: '#F59E0B',
+    chartD: '#E11D48',
+    density: 'medium',
+    radius: 'md',
+  },
 }
 
 export function buildThemes(): Record<ProjectId, ThemeAccentBundle> {

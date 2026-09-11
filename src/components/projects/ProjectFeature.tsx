@@ -217,13 +217,14 @@ export function ProjectFeature({ project, index }: { project: ProjectEntry; inde
 
   return (
     <motion.div
+      id={project.id}
       data-project={project.id}
       data-tone={isDark ? 'dark' : 'light'}
       style={accentStyle}
       className={cn(
         // Full-bleed breakout so the alternating tone spans edge-to-edge, same trick as
         // Section's own bleed — content width/padding is reapplied by the inner wrapper.
-        'relative left-1/2 right-1/2 -mx-[50vw] w-screen scroll-mt-28 py-14 md:py-16',
+        'relative left-1/2 right-1/2 -mx-[50vw] w-screen scroll-mt-28 py-14 md:py-16 transition-all duration-500',
       )}
       initial={reduce ? false : 'hidden'}
       whileInView={reduce ? undefined : 'show'}

@@ -7,6 +7,7 @@ import bgRegistrar from '@/assets/background/registrar.jpg'
 import bgExpensIoBusiness from '@/assets/background/expens_io_business.jpg'
 import bgSchedulIo from '@/assets/background/schedul_io.jpg'
 import bgSellIo from '@/assets/background/sell_io.jpg'
+import bgPurchIo from '@/assets/background/purch_io.jpg'
 
 export type { ProjectId, VizKind }
 
@@ -178,6 +179,143 @@ export const PROJECTS: ProjectEntry[] = [
     ],
   },
   {
+    id: 'purch_io',
+    slug: 'purch-io',
+    title: 'Purch.io',
+    tagline: 'Config-driven, offline-resilient multi-vertical POS for Philippine SMEs',
+    personalHook:
+      'Off-the-shelf POS software forces cafés, groceries, and service shops into separate code forks — this replaces all of them with one pricing-engine configuration layer.',
+    repoUrl: 'https://github.com/CosmicMashups/Purch.io',
+    liveUrl: 'https://cosmicmashups.github.io/Purch.io/',
+    complexity: 'high',
+    problem:
+      'Off-the-shelf POS software for Philippine SMEs is either too generic or too expensive and rigid, fails during frequent internet outages, and lacks native compliance for BIR receipting and Senior/PWD discount automation.',
+    solution:
+      'A single Flutter (Dart) + ASP.NET Core Minimal API codebase that adapts its pricing engine and UI to retail, café, grocery, convenience, department-store, and service verticals via a data-driven pricing_type configuration layer and an offline-first Drift (SQLite) sync engine.',
+    challenge:
+      'Supporting six distinct business verticals without code branching or per-client forks, while guaranteeing zero silent transaction loss during offline network reconciliations.',
+    outcome:
+      'Shipped a 5-phase multi-vertical POS platform spanning Flutter terminals, server-enforced RBAC, sequential BIR receipt auditing, and typed offline queueing with auditable conflict resolution.',
+    lessonsLearned: [
+      'Protecting the core pricing_type discriminator turns supporting a new business vertical into a config change rather than a code fork.',
+      'Offline sync must explicitly cancel and audit conflicting transactions — silent data loss at a cash register is unacceptable.',
+      'Designing regulatory constraints (BIR sequential numbers, Senior/PWD 20% discount math) into the schema from Phase 1 eliminates compliance retrofits.',
+    ],
+    techDeep: {
+      architecture:
+        'Flutter Client (Riverpod state + Drift SQLite offline write queue) → REST API (JWT + server-enforced role claims) → ASP.NET Core Minimal API (Clean Architecture: Domain → Application → Infrastructure → Api) → PostgreSQL (Supabase multi-tenant via tenant_id).',
+      keyDecisions: [
+        'Single pricing_type discriminator (unit, weight_volume, bundle, service, combo, variant_matrix) determines UI and cart pricing logic',
+        'Offline-first sync via Drift SQLite write queue; conflicts resolved deterministically (later timestamp wins, loser auto-cancelled with audit log entry)',
+        'Server-enforced RBAC and full audit log (voids, refunds, discounts, price overrides) baked in from Phase 1',
+        'Phased BIR compliance from day one: sequential, gap-auditable receipt numbering and automated Senior/PWD discounts',
+      ],
+      tradeoffs:
+        'Shared database with tenant_id column on every table trades some cross-tenant noise isolation for dramatically lower operating costs and simplified migrations at SME scale.',
+    },
+    decisions: [
+      {
+        title: 'Polymorphic pricing_type over per-vertical forks',
+        detail:
+          'Every catalog item carries a pricing_type field that dictates editor controls and cart pricing logic, letting retail, café, produce, and salon workflows run from the exact same deployed codebase.',
+      },
+      {
+        title: 'Auditable conflict resolution over silent drop',
+        detail:
+          'When offline registers reconcile, concurrent conflicting sales resolve by client timestamp — losing transactions are auto-cancelled and permanently flagged in the audit log rather than silently overwritten.',
+      },
+      {
+        title: 'Compliance-staged schema from day one',
+        detail:
+          'Sequential receipt numbering, Senior/PWD VAT-exempt discount math, and device-pairing PIN authentication were modeled into initial migrations to avoid painful compliance rewrites.',
+      },
+    ],
+    architectureSummary:
+      'Flutter (Riverpod + Drift SQLite) → ASP.NET Core Minimal API (.NET 8 Clean Architecture) → PostgreSQL (Supabase multi-tenant); 5-phase staged build covering domain isolation, onboarding, catalog/pricing engine, and checkout.',
+    technicalNotes:
+      'Reference doc: docs/projects/purch_io_system.md. Architecture decisions are preserved as explicit ADRs (EF Core selection, offline sync boundary, BIR receipt format, data-privacy registration).',
+    stack: [
+      { name: 'Flutter (Dart) + Riverpod', reason: 'Single client codebase across POS terminal, tablet, and kiosk form factors with reactive state.' },
+      { name: 'Drift (SQLite) Local Persistence', reason: 'Encrypted local database for offline write queue and cached catalog during network outages.' },
+      { name: 'ASP.NET Core Minimal API (C#)', reason: 'Clean layered architecture (Domain → Application → Infrastructure → Api) with fast throughput.' },
+      { name: 'PostgreSQL (Supabase Multi-Tenant)', reason: 'Relational core with tenant_id row-level isolation and forward-only Flyway/EF Core migrations.' },
+      { name: 'JWT Auth & Server-Enforced RBAC', reason: 'Device PIN pairing, auto-logout on idle, and server-validated role claims.' },
+    ],
+    skillIds: ['flutter', 'dart', 'sqlite', 'csharp-dotnet', 'postgresql', 'git'],
+    viz: 'none',
+    imageUrl: bgPurchIo,
+    metrics: [
+      { label: 'Business verticals', value: 6, suffix: '', description: 'Retail, café, grocery, convenience, department, service' },
+      { label: 'Pricing models', value: 6, suffix: '', description: 'Unit, weight/volume, bundle, service, combo, matrix' },
+      { label: 'Build phases', value: 5, suffix: '', description: 'Domain, auth, onboarding, catalog, and checkout' },
+      { label: 'Offline capability', value: 100, suffix: '%', description: 'Local Drift write queue with auditable sync' },
+    ],
+  },
+  {
+    id: 'schedul_io',
+    slug: 'schedul-io',
+    title: 'Schedul.io',
+    tagline: 'Multi-tenant clinic access platform: booking, check-in, queueing, and staff/doctor consoles',
+    personalHook:
+      'Modeled as nine build milestones because a real clinic can\'t tolerate "we\'ll figure out auth later" — the schema and RBAC came first, every time.',
+    complexity: 'high',
+    problem:
+      'Clinics ran scheduling by phone: no self-service booking, no single front-desk console for walk-ins/phone bookings/check-in/queue control, and doctors had no view scoped to just their own day.',
+    solution:
+      'One Spring Boot backend and three role-specific React SPAs (patient, staff, doctor) sharing a versioned REST API, with request-scoped multi-tenancy, a slot-booking engine with row-level locking, and event-driven notifications built on the same bus that produces the audit log.',
+    challenge:
+      'Two patients must never be able to book the same slot, and tenant data must stay isolated at the persistence layer — not just behind a header check in a controller.',
+    outcome:
+      'Shipped a 9-milestone, multi-tenant SaaS covering scheduling, booking, check-in, queueing, notifications, and reporting across three independently deployable frontends.',
+    lessonsLearned: [
+      'Multi-tenancy has to be enforced at the repository/entity-listener layer — a servlet filter alone only tells you which tenant asked, it doesn\'t stop a query from leaking across tenants.',
+      'Reusing the audit-event bus for notifications meant zero changes to the services that originate those events — the audit listener and the notification listener are just two subscribers to the same fact.',
+      'Row-level pessimistic locking is worth the throughput cost in the one place correctness genuinely outranks it: concurrent slot booking.',
+    ],
+    techDeep: {
+      architecture:
+        'Modular monolith, package-by-domain (tenant, scheduling, appointment, checkin/queue, notification, reporting), with cross-domain communication through an internal DomainAuditEvent bus rather than direct service calls.',
+      keyDecisions: [
+        'Request-scoped tenant context resolved from X-Tenant-Id before Spring Security runs, cross-checked against the JWT tenant claim',
+        'SELECT ... FOR UPDATE row locking on slot booking — the one path where correctness under concurrency matters more than throughput',
+        'Notifications run in an isolated transaction so a delivery failure can never roll back the business transaction that triggered it',
+      ],
+      tradeoffs:
+        'An internal event bus adds indirection versus calling NotificationService directly from AppointmentService, but keeps Appointment/Queue completely unaware that anything downstream is listening — audit and notifications can evolve independently.',
+    },
+    decisions: [
+      {
+        title: 'One booking pipeline, tagged by source',
+        detail:
+          'Patient self-booking and staff-assisted phone/front-desk booking share the exact same state machine and validation path, distinguished only by a source tag — so there is no second, less-tested code path for staff bookings.',
+      },
+      {
+        title: 'Explicit stub boundary for third-party gateways',
+        detail:
+          'SMS/email dispatch is a well-defined interface with a stub implementation rather than a fake integration presented as done — isolating "verified code" from "an external call with no test credentials."',
+      },
+    ],
+    architectureSummary:
+      'Three React/Vite SPAs (Patient Portal, Staff Console, Doctor Portal) → REST + JWT (X-Tenant-Id) → Spring Boot modular monolith → PostgreSQL (system of record) + Redis (cache/session), with Kafka wired as the event backbone.',
+    technicalNotes:
+      'Reference doc: docs/projects/schedul_io_system.md. Flyway-versioned migrations are immutable and forward-only — one migration exists specifically to retire and reseed data from an earlier migration rather than editing it in place.',
+    stack: [
+      { name: 'Java + Spring Boot (Web, Security, Data JPA)', reason: 'Package-by-domain modular monolith with JWT auth and role/permission-based authorization.' },
+      { name: 'PostgreSQL + Flyway', reason: 'System of record with immutable, forward-only versioned schema migrations.' },
+      { name: 'Redis', reason: 'Cache and session layer for the three-frontend, multi-tenant read load.' },
+      { name: 'Kafka (event backbone)', reason: 'Wired as the async event path alongside the internal domain-audit bus.' },
+      { name: 'React + TypeScript + Vite (×3 SPAs)', reason: 'Independently deployable patient, staff, and doctor frontends sharing one REST API.' },
+    ],
+    skillIds: ['java-spring', 'postgresql', 'react', 'ts', 'git'],
+    viz: 'none',
+    imageUrl: bgSchedulIo,
+    metrics: [
+      { label: 'Build milestones', value: 9, suffix: '', description: 'Schema/auth foundations through scheduling, booking, queueing, notifications, and reporting.' },
+      { label: 'Role-scoped frontends', value: 3, suffix: '', description: 'Patient Portal, Staff Console, and Doctor Portal — independently deployable SPAs.' },
+      { label: 'Reminder tiers', value: 3, suffix: '', description: '7-day, 24-hour, and 2-hour dedupe-aware appointment reminders.' },
+    ],
+  },
+  {
     id: 'sell_io',
     slug: 'sell-io',
     title: 'Sell.io',
@@ -248,70 +386,6 @@ export const PROJECTS: ProjectEntry[] = [
       { label: 'Reservation lock', value: 5, suffix: 'min', description: 'Atomic TTL lock preventing overselling' },
       { label: 'VAT compliance', value: 12, suffix: '%', description: 'Accurate ESC/POS thermal receipt tax computation' },
       { label: 'Offline availability', value: 100, suffix: '%', description: 'Edge SQLite local queue and deterministic replay' },
-    ],
-  },
-  {
-    id: 'schedul_io',
-    slug: 'schedul-io',
-    title: 'Schedul.io',
-    tagline: 'Multi-tenant clinic access platform: booking, check-in, queueing, and staff/doctor consoles',
-    personalHook:
-      'Modeled as nine build milestones because a real clinic can\'t tolerate "we\'ll figure out auth later" — the schema and RBAC came first, every time.',
-    complexity: 'high',
-    problem:
-      'Clinics ran scheduling by phone: no self-service booking, no single front-desk console for walk-ins/phone bookings/check-in/queue control, and doctors had no view scoped to just their own day.',
-    solution:
-      'One Spring Boot backend and three role-specific React SPAs (patient, staff, doctor) sharing a versioned REST API, with request-scoped multi-tenancy, a slot-booking engine with row-level locking, and event-driven notifications built on the same bus that produces the audit log.',
-    challenge:
-      'Two patients must never be able to book the same slot, and tenant data must stay isolated at the persistence layer — not just behind a header check in a controller.',
-    outcome:
-      'Shipped a 9-milestone, multi-tenant SaaS covering scheduling, booking, check-in, queueing, notifications, and reporting across three independently deployable frontends.',
-    lessonsLearned: [
-      'Multi-tenancy has to be enforced at the repository/entity-listener layer — a servlet filter alone only tells you which tenant asked, it doesn\'t stop a query from leaking across tenants.',
-      'Reusing the audit-event bus for notifications meant zero changes to the services that originate those events — the audit listener and the notification listener are just two subscribers to the same fact.',
-      'Row-level pessimistic locking is worth the throughput cost in the one place correctness genuinely outranks it: concurrent slot booking.',
-    ],
-    techDeep: {
-      architecture:
-        'Modular monolith, package-by-domain (tenant, scheduling, appointment, checkin/queue, notification, reporting), with cross-domain communication through an internal DomainAuditEvent bus rather than direct service calls.',
-      keyDecisions: [
-        'Request-scoped tenant context resolved from X-Tenant-Id before Spring Security runs, cross-checked against the JWT tenant claim',
-        'SELECT ... FOR UPDATE row locking on slot booking — the one path where correctness under concurrency matters more than throughput',
-        'Notifications run in an isolated transaction so a delivery failure can never roll back the business transaction that triggered it',
-      ],
-      tradeoffs:
-        'An internal event bus adds indirection versus calling NotificationService directly from AppointmentService, but keeps Appointment/Queue completely unaware that anything downstream is listening — audit and notifications can evolve independently.',
-    },
-    decisions: [
-      {
-        title: 'One booking pipeline, tagged by source',
-        detail:
-          'Patient self-booking and staff-assisted phone/front-desk booking share the exact same state machine and validation path, distinguished only by a source tag — so there is no second, less-tested code path for staff bookings.',
-      },
-      {
-        title: 'Explicit stub boundary for third-party gateways',
-        detail:
-          'SMS/email dispatch is a well-defined interface with a stub implementation rather than a fake integration presented as done — isolating "verified code" from "an external call with no test credentials."',
-      },
-    ],
-    architectureSummary:
-      'Three React/Vite SPAs (Patient Portal, Staff Console, Doctor Portal) → REST + JWT (X-Tenant-Id) → Spring Boot modular monolith → PostgreSQL (system of record) + Redis (cache/session), with Kafka wired as the event backbone.',
-    technicalNotes:
-      'Reference doc: docs/projects/schedul_io_system.md. Flyway-versioned migrations are immutable and forward-only — one migration exists specifically to retire and reseed data from an earlier migration rather than editing it in place.',
-    stack: [
-      { name: 'Java + Spring Boot (Web, Security, Data JPA)', reason: 'Package-by-domain modular monolith with JWT auth and role/permission-based authorization.' },
-      { name: 'PostgreSQL + Flyway', reason: 'System of record with immutable, forward-only versioned schema migrations.' },
-      { name: 'Redis', reason: 'Cache and session layer for the three-frontend, multi-tenant read load.' },
-      { name: 'Kafka (event backbone)', reason: 'Wired as the async event path alongside the internal domain-audit bus.' },
-      { name: 'React + TypeScript + Vite (×3 SPAs)', reason: 'Independently deployable patient, staff, and doctor frontends sharing one REST API.' },
-    ],
-    skillIds: ['java-spring', 'postgresql', 'react', 'ts', 'git'],
-    viz: 'none',
-    imageUrl: bgSchedulIo,
-    metrics: [
-      { label: 'Build milestones', value: 9, suffix: '', description: 'Schema/auth foundations through scheduling, booking, queueing, notifications, and reporting.' },
-      { label: 'Role-scoped frontends', value: 3, suffix: '', description: 'Patient Portal, Staff Console, and Doctor Portal — independently deployable SPAs.' },
-      { label: 'Reminder tiers', value: 3, suffix: '', description: '7-day, 24-hour, and 2-hour dedupe-aware appointment reminders.' },
     ],
   },
   {

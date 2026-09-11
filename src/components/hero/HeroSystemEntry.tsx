@@ -1,119 +1,171 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
-import { ScrollHint } from '@/components/shell/ScrollHint'
-import { fadeInUp } from '@/lib/motion/presets'
+import { ArrowUpRight, FileText, ChevronDown } from 'lucide-react'
+import { fadeInUp, motionEase } from '@/lib/motion/presets'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { PROJECTS } from '@/config/projects.registry'
 import { RESUME_PDF_URL } from '@/config/resume'
-import profilePhotoUrl from '@/assets/profile.png'
+import { smoothScrollTo } from '@/lib/motion/gsapScroll'
+
+import yuriPortraitUrl from '@/assets/yuri-portrait.jpg'
 
 const HERO_NAME = 'Yuri Brown'
 
 /**
- * Hero text content — headline, body copy, and the bottom info/résumé cards.
- * Renders over the shared sticky backdrop from `HeroPinnedVisual`, which a
- * parent (`HeroPinnedSection`) positions behind this as a sibling.
+ * Editorial Hero Entry: Left-anchored typographic composition designed in harmony
+ * with Yuri's portrait badge and the 3D smartphone resting in the right-hand visual stage.
  */
 export function HeroSystemEntry() {
   const reduce = usePrefersReducedMotion()
 
-  const scrollToProjects = () => {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const handleExplore = () => {
+    smoothScrollTo('projects', { updateHash: true })
+  }
+
+  const handleScrollToMap = () => {
+    smoothScrollTo('system-overview', { updateHash: true })
   }
 
   return (
     <header
       id="hero"
-      className="relative z-10 flex min-h-svh w-full flex-col text-[#fafffa] md:min-h-[100svh]"
+      className="relative z-10 flex min-h-svh w-full flex-col justify-between px-[var(--shell-gutter-sm)] pb-10 pt-24 sm:px-[var(--shell-gutter-md)] sm:pt-28 lg:px-[var(--shell-gutter-lg)] lg:pb-14 lg:pt-32"
     >
-      {/* Vertically-centered open wood band: tagline + wordmark + body copy,
-          kept clear of the plant (top-left), laptop (top-right) and keys
-          (right edge) in the desk photo. */}
-      <div className="relative z-20 flex flex-1 flex-col justify-center gap-4 px-[var(--shell-gutter-sm)] pt-24 sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)] lg:pt-0">
+      {/* Top Status Strip */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: motionEase }}
+        className="flex items-center justify-between"
+      >
+        <div />
+
+        <div className="hidden items-center gap-2 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[#fafffa]/60 md:flex">
+          <span>Manila</span>
+          <span className="text-white/25">·</span>
+          <span>UTC+8</span>
+          <span className="text-white/25">·</span>
+          <span className="text-[#d3fa99]">Available for High-Impact Roles</span>
+        </div>
+      </motion.div>
+
+      {/* Main Editorial Core (Left-anchored to give 3D model space on desktop) */}
+      <div className="my-auto flex max-w-2xl flex-col gap-6 lg:max-w-3xl">
+        {/* Name + Portrait Badge Lockup */}
         <motion.div
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="max-w-2xl md:mx-auto md:text-center"
+          className="flex flex-col-reverse items-start gap-5 sm:flex-row sm:items-center sm:gap-6"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#fafffa]/75">
-            AI · ML · Full-Stack
-          </p>
-          <h1 className="mt-2 font-[var(--font-display)] text-[15vw] font-normal leading-[0.85] tracking-[-0.02em] text-[#fafffa] sm:text-[11vw] md:text-[7vw] lg:text-[5.5rem]">
+          <h1 className="font-[var(--font-display)] text-[14vw] font-normal leading-[0.86] tracking-[-0.03em] text-[#fafffa] sm:text-[10vw] md:text-[7vw] lg:text-[5.75rem]">
             {HERO_NAME}
           </h1>
+
+          {/* Yuri's Cutout Portrait Badge with Glow & Ring */}
+          <div className="group relative flex-shrink-0">
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-[#d3fa99]/30 to-white/10 opacity-75 blur-md transition-all group-hover:opacity-100 group-hover:blur-lg" />
+            <div className="relative h-20 w-16 overflow-hidden rounded-2xl border border-white/20 bg-[#121613]/90 shadow-2xl backdrop-blur-md sm:h-24 sm:w-20 md:h-28 md:w-24">
+              <img
+                src={yuriPortraitUrl}
+                alt="Yuri Brown"
+                className="h-full w-full object-cover object-top filter grayscale contrast-110 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#121613]/80 via-transparent to-transparent" />
+              <div className="absolute bottom-1.5 left-2 flex items-center gap-1 font-[var(--font-mono)] text-[8px] uppercase tracking-wider text-[#d3fa99]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#d3fa99]" />
+                <span className="font-semibold">YURI</span>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         <motion.p
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="max-w-sm text-base leading-snug text-[#fafffa]/85 md:mx-auto md:max-w-md md:text-center md:text-lg"
+          className="max-w-xl text-lg font-light leading-relaxed text-[#fafffa]/85 sm:text-xl md:text-2xl"
         >
-          I build systems for the problems I&apos;ve lived through myself.
+          I architect and ship machine learning systems, full-stack platforms, and offline-first mobile applications for real-world constraints.
         </motion.p>
-      </div>
 
-      {/* Bottom-left/center open wood area: info card + résumé card, kept
-          clear of the notebook + coffee cup in the bottom-right corner. */}
-      <div className="relative z-20 flex flex-col gap-4 px-[var(--shell-gutter-sm)] pb-8 sm:px-[var(--shell-gutter-md)] lg:flex-row lg:items-end lg:justify-start lg:gap-6 lg:px-[var(--shell-gutter-lg)] lg:pb-12">
+        {/* Shipped Signal Proof Strip */}
         <motion.div
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="max-w-sm rounded-[14px] border border-[#fafffa]/25 bg-[#121613]/55 p-5 backdrop-blur-sm"
+          className="flex flex-wrap items-center gap-3 pt-1 font-[var(--font-mono)] text-xs text-[#fafffa]/70"
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.1em] text-[#fafffa]">
-            Software / ML Engineer
-          </p>
-          <div className="my-3 border-t border-dashed border-[#fafffa]/30" />
-          <p className="text-sm leading-relaxed text-[#fafffa]/75">
-            {PROJECTS.length} shipped projects and one published thesis — systems built from problems lived
-            through firsthand.
-          </p>
-          <button
-            type="button"
-            onClick={scrollToProjects}
-            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-[#d3fa99] hover:underline"
-          >
-            View work
-            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-          </button>
+          <span className="inline-flex items-center gap-1.5">
+            <strong className="text-sm font-semibold text-[#d3fa99]">{PROJECTS.length}</strong> Shipped Systems
+          </span>
+          <span className="text-white/20" aria-hidden>·</span>
+          <span className="inline-flex items-center gap-1.5">
+            <strong className="text-sm font-semibold text-[#d3fa99]">1</strong> Published Thesis
+          </span>
+          <span className="text-white/20" aria-hidden>·</span>
+          <span>Edge Neural Nets & Full-Stack</span>
         </motion.div>
 
-        <motion.a
-          href={RESUME_PDF_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          download="Brown_Resume.pdf"
+        {/* Action Controls */}
+        <motion.div
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="group flex w-full max-w-[220px] items-center gap-3 self-end rounded-[14px] border border-dashed border-[#d3fa99]/70 bg-[#121613]/55 p-3 backdrop-blur-sm transition-colors hover:border-[#d3fa99] lg:self-auto"
+          className="flex flex-wrap items-center gap-4 pt-2"
         >
-          <img
-            src={profilePhotoUrl}
-            alt="Yuri Brown"
-            className="h-14 w-14 shrink-0 rounded-[10px] object-cover"
-          />
-          <span className="flex flex-1 items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-[#d3fa99]">
-            Résumé
+          <button
+            type="button"
+            onClick={handleExplore}
+            className="group inline-flex items-center gap-2 rounded-full border border-[#d3fa99] bg-[#d3fa99] px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#121613] shadow-[0_2px_16px_rgba(211,250,153,0.25)] transition-all hover:bg-[#c4f285] hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span>Explore Architecture</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
-          </span>
-        </motion.a>
+          </button>
+
+          <a
+            href={RESUME_PDF_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Brown_Resume.pdf"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#121613]/70 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#fafffa] backdrop-blur-md transition-all hover:border-[#d3fa99] hover:text-[#d3fa99] active:scale-[0.98]"
+          >
+            <FileText className="h-4 w-4 text-[#d3fa99] transition-transform group-hover:scale-110" aria-hidden />
+            <span>Résumé / CV</span>
+          </a>
+
+          <Link
+            to="/thoughts"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#fafffa]/75 underline-offset-4 hover:text-[#fafffa] hover:underline"
+          >
+            <span>Engineering notes</span>
+            <span aria-hidden>→</span>
+          </Link>
+        </motion.div>
       </div>
 
-      <Link
-        to="/thoughts"
-        className="relative z-20 mb-3 self-center text-xs text-[#fafffa]/70 underline-offset-4 hover:text-[#fafffa] hover:underline"
+      {/* Bottom Cue to Capability Map */}
+      <motion.div
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+        className="flex items-center justify-between pt-6"
       >
-        Read thoughts →
-      </Link>
+        <button
+          type="button"
+          onClick={handleScrollToMap}
+          className="group flex items-center gap-2.5 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-[#fafffa]/60 transition-colors hover:text-[#d3fa99]"
+        >
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/20 transition-all group-hover:border-[#d3fa99] group-hover:bg-[#d3fa99]/10">
+            <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" aria-hidden />
+          </span>
+          <span>Capability Architecture Map</span>
+        </button>
 
-      <div className="relative z-20 mb-5 hidden self-center md:block">
-        <ScrollHint className="mt-0 text-[#fafffa]/70" />
-      </div>
+        <span className="hidden font-[var(--font-mono)] text-[10px] tracking-[0.15em] text-[#fafffa]/40 sm:block">
+          SCROLL TO INSPECT LIVE HARDWARE RUNTIME
+        </span>
+      </motion.div>
     </header>
   )
 }

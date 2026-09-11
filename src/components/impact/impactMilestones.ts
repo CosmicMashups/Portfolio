@@ -10,6 +10,17 @@ export interface ImpactMilestone {
 /** Curated milestones; titles align with registry entries. */
 export const IMPACT_MILESTONES: ImpactMilestone[] = [
   {
+    projectId: 'purch_io',
+    year: 'Aug–Sep 2026',
+    impact:
+      'Config-driven multi-vertical POS platform: single pricing engine adapting to six business verticals with offline-first Drift SQLite sync and BIR-staged compliance.',
+    metrics: [
+      { label: 'Verticals', value: '6 from 1 codebase' },
+      { label: 'Pricing engine', value: '6 item models' },
+      { label: 'Offline sync', value: 'Drift + ASP.NET Core' },
+    ],
+  },
+  {
     projectId: 'sell_io',
     year: 'Aug–Sep 2026',
     impact:
