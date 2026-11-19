@@ -4,23 +4,17 @@ import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion
 import { motionEase } from '@/lib/motion/presets'
 
 const LOADER_DURATION_MS = 1500
-const WORDMARK = 'YURI BROWN'
-
-const letterVariants = {
-  hidden: { y: '110%' },
-  show: (i: number) => ({
-    y: '0%',
-    transition: { duration: 0.6, ease: motionEase, delay: 0.08 + i * 0.028 },
-  }),
-}
+const RING_RADIUS = 42
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
 
 /**
- * Brief branded splash shown once per load before the hero reveals. Reads as an
- * actual loading sequence — a staggered wordmark reveal, a filling progress rule,
- * and a counting percentage readout, all synced to LOADER_DURATION_MS — rather
- * than a static logo fading in. Skipped entirely under reduced motion rather than
- * played in a shortened form — there is nothing left worth showing once the
- * motion driving it is stripped.
+ * Brief branded splash shown once per load before the hero reveals. The loading
+ * state is carried entirely by an animated SVG mark — a progress ring that fills
+ * as the page actually loads, a diamond glyph that draws itself on, and a slow
+ * orbiting tick — rather than by text (a static or letter-staggered logotype
+ * reads as decoration, not as something loading). Skipped entirely under reduced
+ * motion rather than played in a shortened form — there is nothing left worth
+ * showing once the motion driving it is stripped.
  */
 export function BrandLoader() {
   const reduce = usePrefersReducedMotion()
@@ -47,64 +41,94 @@ export function BrandLoader() {
 
   if (reduce) return null
 
+  const dashOffset = RING_CIRCUMFERENCE * (1 - percent / 100)
+
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[var(--z-system)] flex flex-col items-center justify-center gap-6 bg-[var(--color-bg-base)]"
+          className="fixed inset-0 z-[var(--z-system)] flex flex-col items-center justify-center gap-5 bg-[var(--color-bg-base)]"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.45, ease: motionEase, delay: 0.1 } }}
           aria-hidden="true"
         >
+          <motion.div
+            exit={{ scale: 0.88, filter: 'blur(6px)' }}
+            transition={{ duration: 0.45, ease: motionEase }}
+            className="relative h-28 w-28 sm:h-32 sm:w-32"
+          >
+            <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+              {/* Track */}
+              <circle
+                cx="50"
+                cy="50"
+                r={RING_RADIUS}
+                fill="none"
+                stroke="var(--color-border-subtle)"
+                strokeWidth="1.5"
+              />
+              {/* Progress — fills as the page actually loads, not on a loop */}
+              <circle
+                cx="50"
+                cy="50"
+                r={RING_RADIUS}
+                fill="none"
+                stroke="var(--color-accent-primary)"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeDasharray={RING_CIRCUMFERENCE}
+                strokeDashoffset={dashOffset}
+                style={{ transition: 'stroke-dashoffset 120ms linear' }}
+              />
+              {/* A short orbiting tick, separate from the progress fill, so the ring
+                  reads as actively working even while the fill itself moves slowly. */}
+              <motion.g
+                style={{ transformOrigin: '50px 50px' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
+              >
+                <circle cx="50" cy={50 - RING_RADIUS} r="2.4" fill="var(--color-accent-primary)" />
+              </motion.g>
+            </svg>
+
+            {/* Center glyph — a diamond that draws itself on once, then idles with a
+                slow counter-rotation for a sense of a system coming online. */}
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 9, repeat: Infinity, ease: 'linear' }}
+            >
+              <svg viewBox="0 0 100 100" className="h-10 w-10 sm:h-11 sm:w-11">
+                <motion.path
+                  d="M50 22 L78 50 L50 78 L22 50 Z"
+                  fill="none"
+                  stroke="var(--color-text-primary)"
+                  strokeWidth="2.5"
+                  strokeLinejoin="round"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 0.9, ease: motionEase, delay: 0.15 }}
+                />
+              </svg>
+            </motion.div>
+
+            {/* Percentage readout, dead center, unaffected by the glyph's rotation */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-[var(--font-mono)] text-xs tabular-nums text-[var(--color-text-primary)]/70">
+                {percent}%
+              </span>
+            </div>
+          </motion.div>
+
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
             className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.4em] text-[var(--color-accent-primary)]"
           >
             Initializing System
           </motion.span>
-
-          <motion.div
-            exit={{ scale: 0.94, filter: 'blur(6px)' }}
-            transition={{ duration: 0.45, ease: motionEase }}
-            className="flex overflow-hidden"
-          >
-            {WORDMARK.split('').map((char, i) => (
-              <span key={`${char}-${i}`} className="inline-block overflow-hidden">
-                <motion.span
-                  custom={i}
-                  initial="hidden"
-                  animate="show"
-                  variants={letterVariants}
-                  className="inline-block font-[var(--font-display)] text-5xl uppercase leading-[0.9] tracking-[-0.01em] text-[var(--color-text-primary)] sm:text-6xl"
-                >
-                  {char === ' ' ? ' ' : char}
-                </motion.span>
-              </span>
-            ))}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className="flex w-40 items-center gap-3 sm:w-56"
-          >
-            <div className="relative h-px flex-1 overflow-hidden bg-[var(--color-border-subtle)]">
-              <motion.div
-                className="absolute inset-y-0 left-0 bg-[var(--color-accent-primary)]"
-                initial={{ width: '0%' }}
-                animate={{ width: `${percent}%` }}
-                transition={{ ease: 'linear', duration: 0.1 }}
-              />
-            </div>
-            <span className="w-9 shrink-0 font-[var(--font-mono)] text-[11px] tabular-nums text-[var(--color-text-primary)]/60">
-              {percent}%
-            </span>
-          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
