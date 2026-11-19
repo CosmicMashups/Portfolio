@@ -17,12 +17,37 @@ import mainAltPortraitUrl from '@/assets/main_alt.png'
 const HERO_NAME = 'Yuri Brown'
 const REVEAL_RADIUS_PX = 170
 
+// A cluster of overlapping circles (one per "petal" plus a center blob), each offset from
+// the cursor and sized unevenly, unioned together by CSS mask layering. This reads as one
+// organic, wavy/splash-shaped patch following the cursor instead of a perfect circle —
+// built from plain radial-gradient masks so it renders consistently across browsers
+// (an SVG turbulence-filtered mask was tried first and proved too unreliable cross-engine).
+const SPLASH_PETALS: Array<{ angleDeg: number; ringFactor: number; radiusFactor: number }> = [
+  { angleDeg: 12, ringFactor: 0.6, radiusFactor: 0.58 },
+  { angleDeg: 70, ringFactor: 0.64, radiusFactor: 0.52 },
+  { angleDeg: 132, ringFactor: 0.58, radiusFactor: 0.6 },
+  { angleDeg: 189, ringFactor: 0.66, radiusFactor: 0.5 },
+  { angleDeg: 241, ringFactor: 0.6, radiusFactor: 0.56 },
+  { angleDeg: 300, ringFactor: 0.63, radiusFactor: 0.54 },
+]
+
+const SPLASH_MASK_IMAGE = [
+  `radial-gradient(${REVEAL_RADIUS_PX * 0.8}px circle at var(--mx, 50%) var(--my, 50%), black 97%, transparent 100%)`,
+  ...SPLASH_PETALS.map(({ angleDeg, ringFactor, radiusFactor }) => {
+    const rad = (angleDeg * Math.PI) / 180
+    const dx = Math.cos(rad) * REVEAL_RADIUS_PX * ringFactor
+    const dy = Math.sin(rad) * REVEAL_RADIUS_PX * ringFactor
+    const r = REVEAL_RADIUS_PX * radiusFactor
+    return `radial-gradient(${r}px circle at calc(var(--mx, 50%) + ${dx.toFixed(1)}px) calc(var(--my, 50%) + ${dy.toFixed(1)}px), black 97%, transparent 100%)`
+  }),
+].join(', ')
+
 /**
  * Origin — full-bleed portrait hero. The name renders as a massive wordmark
  * overlapping the bottom third of the photo (landonorris.com's actual
  * composition), not a small side-by-side badge. Hovering the portrait reveals
- * the serious (main_alt) photo only in a circular region following the cursor
- * (landonorris.com's actual hover treatment), not a full-image crossfade.
+ * the serious (main_alt) photo only in an organic, wavy/splash-shaped patch
+ * following the cursor (not a plain circle, not a full-image crossfade).
  */
 export function HeroSystemEntry() {
   const reduce = usePrefersReducedMotion()
@@ -97,8 +122,8 @@ export function HeroSystemEntry() {
       {/* Portrait panel, right-anchored at full height so the near-square source photo
           isn't forced to cover the full (much wider) viewport width — that was cropping
           it down to an over-zoomed close-up of just the face. Hovering reveals the serious
-          (main_alt) photo only in a circular region that follows the cursor, matching
-          landonorris.com's hover treatment — not a full-image crossfade. */}
+          (main_alt) photo only in an organic, wavy/splash-shaped patch that follows the
+          cursor — not a plain circle, not a full-image crossfade. */}
       <div
         ref={frameRef}
         className="absolute inset-y-0 right-0 w-full sm:w-[72%] md:w-[60%] lg:w-[52%]"
@@ -129,10 +154,10 @@ export function HeroSystemEntry() {
           className="absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-100"
           style={{
             opacity: revealing ? 1 : 0,
-            // Hard-edged circle (no soft falloff) — landonorris.com's actual hover patch is a
-            // crisp cutout, not a blurred spotlight.
-            maskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 99%, transparent 100%)`,
-            WebkitMaskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 99%, transparent 100%)`,
+            // Hard-edged splash blob (no soft falloff), built from several overlapping
+            // circles unioned via mask layering — see SPLASH_MASK_IMAGE above.
+            maskImage: SPLASH_MASK_IMAGE,
+            WebkitMaskImage: SPLASH_MASK_IMAGE,
           }}
         />
         {/* Subtle bottom-only darken so the wordmark overlapping the lower third stays
