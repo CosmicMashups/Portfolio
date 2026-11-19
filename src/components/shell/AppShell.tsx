@@ -109,10 +109,6 @@ export function AppShell() {
             <span className="font-[var(--font-display)] text-xl uppercase leading-none tracking-[-0.01em] text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-primary)]">
               Yuri Brown
             </span>
-            <span className="hidden h-4 w-px bg-[var(--color-border-default)]/30 lg:block" aria-hidden />
-            <span className="hidden max-w-[9rem] truncate font-[var(--font-mono)] text-[10px] uppercase leading-tight tracking-[0.18em] text-[var(--color-text-muted)] lg:block">
-              Software / ML Engineer
-            </span>
           </NavLink>
 
           <nav
