@@ -7,7 +7,7 @@ import { IMPACT_MILESTONES } from '@/components/impact/impactMilestones'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { fadeInUp } from '@/lib/motion/presets'
 import { cn } from '@/components/ui/cn'
-import { gsap, ScrollTrigger } from '@/lib/motion/gsapScroll'
+import { gsap } from '@/lib/motion/gsapScroll'
 
 export function ImpactTimeline() {
   const reduce = usePrefersReducedMotion()

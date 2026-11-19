@@ -1,23 +1,16 @@
 import { Section } from '@/components/shell/Section'
-import { SectionEyebrow } from '@/components/ui/SectionEyebrow'
-import { RevealText } from '@/components/ui/RevealText'
+import { ChapterTitleCard } from '@/components/shell/ChapterTitleCard'
 import { AggregateMetricsBar } from '@/components/impact/AggregateMetricsBar'
 import { ImpactTimeline } from '@/components/impact/ImpactTimeline'
 
 export function ImpactHomeSection() {
   return (
-    <Section
-      id="impact"
-      tone="light"
-      kicker={<SectionEyebrow>Impact</SectionEyebrow>}
-      title={
-        <span className="font-[var(--font-display)]">
-          <RevealText>Built to Last.</RevealText>
-        </span>
-      }
-    >
-      <AggregateMetricsBar />
-      <ImpactTimeline />
-    </Section>
+    <div id="impact" className="scroll-mt-[var(--shell-header-height)]">
+      <ChapterTitleCard kicker="04 // Impact" title="Built to Last." />
+      <Section id="impact-content" tone="dark" hideHeader bleed={false}>
+        <AggregateMetricsBar />
+        <ImpactTimeline />
+      </Section>
+    </div>
   )
 }

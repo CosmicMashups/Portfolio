@@ -65,10 +65,7 @@ export function CreativeCosmic() {
   return (
     <div className="space-y-10">
       <div>
-        <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-          On track / off track
-        </p>
-        <p className="mt-1 max-w-xl text-sm text-[var(--global-text-muted)]">
+        <p className="max-w-xl text-sm text-[var(--global-text-muted)]">
           The work everywhere else on this page is the on-track story. This is off track — who I am in the field and
           in front of clients.
         </p>

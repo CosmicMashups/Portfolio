@@ -1,18 +1,13 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
-import { useTextScramble } from '@/hooks/useTextScramble'
 import { Section } from '@/components/shell/Section'
-import { SectionEyebrow } from '@/components/ui/SectionEyebrow'
-import { KineticCounter } from '@/components/ui/KineticCounter'
+import { ChapterTitleCard } from '@/components/shell/ChapterTitleCard'
 import { ProjectGalleryCard } from '@/components/projects/ProjectGalleryCard'
 import { PROJECTS } from '@/config/projects.registry'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { gsap, ScrollTrigger } from '@/lib/motion/gsapScroll'
 
-const TITLE = 'Selected Work'
-
 export function ProjectsShowcaseSection() {
-  const scramble = useTextScramble({ targetText: TITLE, durationMs: 1100 })
   const reduce = usePrefersReducedMotion()
   const gridRef = useRef<HTMLDivElement>(null)
 
@@ -38,32 +33,24 @@ export function ProjectsShowcaseSection() {
   }, [reduce])
 
   return (
-    <Section
-      id="projects"
-      tone="dark"
-      kicker={<SectionEyebrow>What I've Built</SectionEyebrow>}
-      title={
-        <span className="flex flex-wrap items-baseline gap-3 font-[var(--font-display)] uppercase">
-          <span ref={scramble.ref} aria-label={TITLE}>
-            {scramble.displayText}
-          </span>
-          <span className="inline-flex items-baseline gap-1 font-[var(--font-mono)] text-sm normal-case text-[var(--global-text-muted)]">
-            <KineticCounter value={PROJECTS.length} className="!text-[var(--accent-primary)]" />
-            <span>modules</span>
-          </span>
-        </span>
-      }
-    >
-      <p className="max-w-3xl text-sm leading-relaxed text-[var(--global-text-muted)]">
-        Every shipped system, as a gallery — image-forward, one consistent card chrome, no horizontal scroll required
-        to see the whole body of work.
-      </p>
+    <div id="projects" className="scroll-mt-[var(--shell-header-height)]">
+      <ChapterTitleCard
+        kicker="03 // What I've Built"
+        title="Selected Work"
+        subtitle={`${PROJECTS.length} shipped systems, one consistent chrome.`}
+      />
+      <Section id="projects-grid" tone="dark" hideHeader bleed={false}>
+        <p className="max-w-3xl text-sm leading-relaxed text-[var(--global-text-muted)]">
+          Every shipped system, as a gallery — image-forward, one consistent card chrome, no horizontal scroll
+          required to see the whole body of work.
+        </p>
 
-      <div ref={gridRef} className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {PROJECTS.map((project, index) => (
-          <ProjectGalleryCard key={project.id} project={project} index={index} />
-        ))}
-      </div>
-    </Section>
+        <div ref={gridRef} className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {PROJECTS.map((project, index) => (
+            <ProjectGalleryCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+      </Section>
+    </div>
   )
 }

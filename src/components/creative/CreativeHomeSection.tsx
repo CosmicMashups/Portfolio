@@ -1,21 +1,14 @@
 import { Section } from '@/components/shell/Section'
-import { SectionEyebrow } from '@/components/ui/SectionEyebrow'
-import { RevealText } from '@/components/ui/RevealText'
+import { ChapterTitleCard } from '@/components/shell/ChapterTitleCard'
 import { CreativeCosmic } from '@/components/creative/CreativeCosmic'
 
 export function CreativeHomeSection() {
   return (
-    <Section
-      id="creative"
-      tone="light"
-      kicker={<SectionEyebrow>Beyond Code</SectionEyebrow>}
-      title={
-        <span className="font-[var(--font-display)] uppercase">
-          <RevealText>Off the Clock, Same Rigor.</RevealText>
-        </span>
-      }
-    >
-      <CreativeCosmic />
-    </Section>
+    <div id="creative" className="scroll-mt-[var(--shell-header-height)]">
+      <ChapterTitleCard kicker="06 // Beyond Code" title="Off the Clock, Same Rigor." />
+      <Section id="creative-content" tone="dark" hideHeader bleed={false}>
+        <CreativeCosmic />
+      </Section>
+    </div>
   )
 }
