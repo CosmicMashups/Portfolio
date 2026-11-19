@@ -39,7 +39,7 @@ export function ProjectsShowcaseSection() {
         title="Selected Work"
         subtitle={`${PROJECTS.length} shipped systems, one consistent chrome.`}
       />
-      <Section id="projects-grid" tone="dark" hideHeader bleed={false}>
+      <Section id="projects-grid" tone="light" hideHeader bleed={false}>
         <p className="max-w-3xl text-sm leading-relaxed text-[var(--global-text-muted)]">
           Every shipped system, as a gallery: image-forward, one consistent card chrome, no horizontal scroll
           required to see the whole body of work.

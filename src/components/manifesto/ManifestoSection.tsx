@@ -63,13 +63,13 @@ export function ManifestoSection() {
   }, [reduce])
 
   return (
-    <div ref={sectionRef} id="manifesto" className="relative min-h-[280vh] w-full bg-[#0a0a0a]">
+    <div ref={sectionRef} id="manifesto" className="relative min-h-[280vh] w-full bg-[var(--color-bg-base)]">
       <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-[var(--shell-gutter-sm)] sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
         <TopographicTexture />
 
-        <h2 className="relative z-0 max-w-6xl text-center font-[var(--font-display)] text-[clamp(2.75rem,9vw,7.5rem)] uppercase leading-[0.95] tracking-[-0.01em] text-[#f5f5f0]">
-          <span className="text-[#ff6b1a]">Challenging the limits</span>, shipping systems that hold up under real
-          use, bringing <span className="text-[#ff6b1a]">the rigor</span> to every release.
+        <h2 className="relative z-0 max-w-6xl text-center font-[var(--font-display)] text-[clamp(2.75rem,9vw,7.5rem)] uppercase leading-[0.95] tracking-[-0.01em] text-[var(--color-text-primary)]">
+          <span className="text-[var(--color-accent-primary)]">Challenging the limits</span>, shipping systems that hold up under real
+          use, bringing <span className="text-[var(--color-accent-primary)]">the rigor</span> to every release.
         </h2>
 
         {CASUAL_IMAGES.length > 0 && (

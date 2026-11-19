@@ -6,7 +6,7 @@ export function CreativeHomeSection() {
   return (
     <div id="creative" className="scroll-mt-[var(--shell-header-height)]">
       <ChapterTitleCard kicker="07 // Beyond Code" title="Off the Clock, Same Rigor." />
-      <Section id="creative-content" tone="dark" hideHeader bleed={false}>
+      <Section id="creative-content" tone="light" hideHeader bleed={false}>
         <CreativeCosmic />
       </Section>
     </div>

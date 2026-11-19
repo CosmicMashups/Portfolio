@@ -17,7 +17,7 @@ export function HeroRevealSection() {
       />
       <Section
         id="system-overview-lifecycle"
-        tone="dark"
+        tone="light"
         hideHeader
         bleed={false}
         paintBackground={false}
@@ -26,7 +26,7 @@ export function HeroRevealSection() {
         <div className="flex w-full flex-col justify-center gap-6 py-10 sm:gap-8 sm:py-14 lg:py-16">
           <LifecycleCarousel />
 
-          <div className="flex flex-wrap items-center gap-3 pt-0.5 font-[var(--font-mono)] text-[9.5px] text-[#f5f5f0]/60">
+          <div className="flex flex-wrap items-center gap-3 pt-0.5 font-[var(--font-mono)] text-[9.5px] text-[var(--color-text-primary)]/60">
             <span className="inline-flex items-center gap-1">
               <ShieldCheck className="h-3 w-3 text-[#ff6b1a]" />
               <span>Zero-Cloud Dependency Where It Matters</span>

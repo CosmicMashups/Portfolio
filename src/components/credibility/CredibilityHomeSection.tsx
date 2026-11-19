@@ -8,7 +8,7 @@ export function CredibilityHomeSection() {
   return (
     <div id="credibility" className="scroll-mt-[var(--shell-header-height)]">
       <ChapterTitleCard kicker="08 // Proof" title="Consistent. Curious. Compounding." />
-      <Section id="credibility-content" tone="dark" hideHeader bleed={false}>
+      <Section id="credibility-content" tone="light" hideHeader bleed={false}>
         <GitHubCredibility />
         <div className="mt-10 md:mt-12">
           <BuiltWith />

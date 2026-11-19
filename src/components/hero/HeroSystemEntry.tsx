@@ -76,7 +76,7 @@ export function HeroSystemEntry() {
   }, [reduce])
 
   return (
-    <header id="hero" className="relative flex min-h-svh w-full flex-col overflow-hidden bg-[#0a0a0a]">
+    <header id="hero" className="relative flex min-h-svh w-full flex-col overflow-hidden bg-[var(--color-bg-base)]">
       {/* Portrait panel, right-anchored at full height so the near-square source photo
           isn't forced to cover the full (much wider) viewport width — that was cropping
           it down to an over-zoomed close-up of just the face. Hovering reveals the serious
@@ -109,11 +109,11 @@ export function HeroSystemEntry() {
           }}
         />
         {/* Blend the photo's left edge into the near-black background so the text column reads cleanly */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg-base)] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-[var(--color-bg-base)]/20 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_30%,rgba(255,107,26,0.1),transparent_60%)]" />
       </div>
-      <div className="absolute inset-0 -z-10 bg-[#0a0a0a]" />
+      <div className="absolute inset-0 -z-10 bg-[var(--color-bg-base)]" />
 
       <TopographicTexture />
 
@@ -124,15 +124,15 @@ export function HeroSystemEntry() {
         transition={{ duration: 0.6, ease: motionEase }}
         className="relative z-10 flex items-center justify-between px-[var(--shell-gutter-sm)] pt-24 sm:px-[var(--shell-gutter-md)] sm:pt-28 lg:px-[var(--shell-gutter-lg)] lg:pt-32"
       >
-        <span className="font-[var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[#ff6b1a]">
+        <span className="font-[var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[var(--color-accent-primary)]">
           01 // Origin
         </span>
-        <div className="hidden items-center gap-2 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[#f5f5f0]/60 md:flex">
+        <div className="hidden items-center gap-2 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[var(--color-text-primary)]/60 md:flex">
           <span>Manila</span>
           <span className="text-white/25">·</span>
           <span>UTC+8</span>
           <span className="text-white/25">·</span>
-          <span className="text-[#ff6b1a]">Available for High-Impact Roles</span>
+          <span className="text-[var(--color-accent-primary)]">Available for High-Impact Roles</span>
         </div>
       </motion.div>
 
@@ -145,7 +145,7 @@ export function HeroSystemEntry() {
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="font-[var(--font-display)] text-[18vw] uppercase leading-[0.82] tracking-[-0.01em] text-[#f5f5f0] sm:text-[13vw] md:text-[10vw] lg:text-[8rem]"
+          className="font-[var(--font-display)] text-[18vw] uppercase leading-[0.82] tracking-[-0.01em] text-[var(--color-text-primary)] sm:text-[13vw] md:text-[10vw] lg:text-[8rem]"
         >
           {HERO_NAME}
         </motion.h1>
@@ -154,7 +154,7 @@ export function HeroSystemEntry() {
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="max-w-xl text-sm font-medium uppercase tracking-[0.1em] text-[#f5f5f0]/80 sm:text-base"
+          className="max-w-xl text-sm font-medium uppercase tracking-[0.1em] text-[var(--color-text-primary)]/80 sm:text-base"
         >
           Software / ML engineer
         </motion.p>
@@ -163,7 +163,7 @@ export function HeroSystemEntry() {
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="max-w-xl text-base font-light leading-relaxed text-[#f5f5f0]/85 sm:text-lg"
+          className="max-w-xl text-base font-light leading-relaxed text-[var(--color-text-primary)]/85 sm:text-lg"
         >
           I architect and ship machine learning systems, full-stack platforms, and offline-first mobile applications
           for real-world constraints.
@@ -173,14 +173,14 @@ export function HeroSystemEntry() {
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="flex flex-wrap items-center gap-3 pt-1 font-[var(--font-mono)] text-xs text-[#f5f5f0]/70"
+          className="flex flex-wrap items-center gap-3 pt-1 font-[var(--font-mono)] text-xs text-[var(--color-text-primary)]/70"
         >
           <span className="inline-flex items-center gap-1.5">
-            <strong className="text-sm font-semibold text-[#ff6b1a]">{PROJECTS.length}</strong> Shipped Systems
+            <strong className="text-sm font-semibold text-[var(--color-accent-primary)]">{PROJECTS.length}</strong> Shipped Systems
           </span>
           <span className="text-white/20" aria-hidden>·</span>
           <span className="inline-flex items-center gap-1.5">
-            <strong className="text-sm font-semibold text-[#ff6b1a]">1</strong> Published Thesis
+            <strong className="text-sm font-semibold text-[var(--color-accent-primary)]">1</strong> Published Thesis
           </span>
         </motion.div>
 
@@ -193,7 +193,7 @@ export function HeroSystemEntry() {
           <button
             type="button"
             onClick={handleExplore}
-            className="group inline-flex items-center gap-2 rounded-full border border-[#ff6b1a] bg-[#ff6b1a] px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#0a0a0a] shadow-[0_2px_16px_rgba(255,107,26,0.3)] transition-all hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
+            className="group inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-inverse)] shadow-[0_2px_16px_rgba(255,107,26,0.3)] transition-all hover:scale-[1.02] hover:brightness-110 active:scale-[0.98]"
           >
             <span>Explore the Work</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -204,15 +204,15 @@ export function HeroSystemEntry() {
             target="_blank"
             rel="noopener noreferrer"
             download="Brown_Resume.pdf"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[#f5f5f0] backdrop-blur-md transition-all hover:border-[#ff6b1a] hover:text-[#ff6b1a] active:scale-[0.98]"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/30 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-text-primary)] backdrop-blur-md transition-all hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)] active:scale-[0.98]"
           >
-            <FileText className="h-4 w-4 text-[#ff6b1a] transition-transform group-hover:scale-110" aria-hidden />
+            <FileText className="h-4 w-4 text-[var(--color-accent-primary)] transition-transform group-hover:scale-110" aria-hidden />
             <span>Résumé / CV</span>
           </a>
 
           <Link
             to="/thoughts"
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[#f5f5f0]/75 underline-offset-4 hover:text-[#f5f5f0] hover:underline"
+            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-[var(--color-text-primary)]/75 underline-offset-4 hover:text-[var(--color-text-primary)] hover:underline"
           >
             <span>Engineering notes</span>
             <span aria-hidden>→</span>
@@ -225,9 +225,9 @@ export function HeroSystemEntry() {
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="group pointer-events-auto mt-4 flex items-center gap-2.5 self-start font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-[#f5f5f0]/60 transition-colors hover:text-[#ff6b1a]"
+          className="group pointer-events-auto mt-4 flex items-center gap-2.5 self-start font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-[var(--color-text-primary)]/60 transition-colors hover:text-[var(--color-accent-primary)]"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/25 transition-all group-hover:border-[#ff6b1a] group-hover:bg-[#ff6b1a]/10">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/25 transition-all group-hover:border-[var(--color-accent-primary)] group-hover:bg-[var(--color-accent-primary-dim)]">
             <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" aria-hidden />
           </span>
           <span>Next: Manifesto</span>

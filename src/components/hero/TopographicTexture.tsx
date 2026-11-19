@@ -11,7 +11,7 @@ export function TopographicTexture() {
           <path
             d="M0,110 C55,60 165,160 220,110 M0,60 C55,10 165,110 220,60 M0,160 C55,110 165,210 220,160"
             fill="none"
-            stroke="#f5f5f0"
+            stroke="var(--color-text-primary)"
             strokeWidth="1"
           />
         </pattern>

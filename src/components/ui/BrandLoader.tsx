@@ -26,7 +26,7 @@ export function BrandLoader() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[var(--z-system)] flex items-center justify-center bg-[#0a0a0a]"
+          className="fixed inset-0 z-[var(--z-system)] flex items-center justify-center bg-[var(--color-bg-base)]"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: motionEase }}

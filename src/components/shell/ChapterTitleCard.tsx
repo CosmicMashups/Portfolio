@@ -21,14 +21,14 @@ export function ChapterTitleCard({
   const reduce = usePrefersReducedMotion()
 
   return (
-    <div className="relative flex flex-col items-center justify-center gap-4 overflow-hidden bg-[#0a0a0a] px-[var(--shell-gutter-sm)] py-20 text-center sm:px-[var(--shell-gutter-md)] sm:py-28 lg:px-[var(--shell-gutter-lg)]">
+    <div className="relative flex flex-col items-center justify-center gap-4 overflow-hidden bg-[var(--color-bg-base)] px-[var(--shell-gutter-sm)] py-20 text-center sm:px-[var(--shell-gutter-md)] sm:py-28 lg:px-[var(--shell-gutter-lg)]">
       <TopographicTexture />
       <motion.span
         initial={reduce ? false : 'hidden'}
         whileInView={reduce ? undefined : 'show'}
         viewport={{ once: true, margin: '-10% 0px' }}
         variants={chapterEnter}
-        className="relative z-10 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.3em] text-[#ff6b1a]"
+        className="relative z-10 font-[var(--font-mono)] text-[11px] uppercase tracking-[0.3em] text-[var(--color-accent-primary)]"
       >
         {kicker}
       </motion.span>
@@ -37,7 +37,7 @@ export function ChapterTitleCard({
         whileInView={reduce ? undefined : 'show'}
         viewport={{ once: true, margin: '-10% 0px' }}
         variants={chapterEnter}
-        className="relative z-10 max-w-5xl font-[var(--font-display)] text-[12vw] uppercase leading-[0.9] tracking-[-0.01em] text-[#f5f5f0] sm:text-7xl md:text-8xl"
+        className="relative z-10 max-w-5xl font-[var(--font-display)] text-[12vw] uppercase leading-[0.9] tracking-[-0.01em] text-[var(--color-text-primary)] sm:text-7xl md:text-8xl"
       >
         {title}
       </motion.h2>
@@ -47,7 +47,7 @@ export function ChapterTitleCard({
           whileInView={reduce ? undefined : 'show'}
           viewport={{ once: true, margin: '-10% 0px' }}
           variants={chapterEnter}
-          className="relative z-10 max-w-xl text-sm text-[#f5f5f0]/70 sm:text-base"
+          className="relative z-10 max-w-xl text-sm text-[var(--color-text-primary)]/70 sm:text-base"
         >
           {subtitle}
         </motion.p>
