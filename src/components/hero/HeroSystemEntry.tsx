@@ -77,10 +77,9 @@ export function HeroSystemEntry() {
 
   return (
     <header id="hero" className="relative flex min-h-svh w-full flex-col overflow-hidden bg-[var(--color-bg-base)]">
-      {/* Ambient amber glow behind the portrait panel — a single full-bleed radial gradient
-          (no blur filter, nothing for the header's overflow-hidden to clip into a hard
-          edge) that fades to fully transparent well before every edge of the viewport, so
-          it reads as a soft ambient wash rather than a hard-edged patch or visible seam. */}
+      {/* Ambient amber glow — a single full-bleed radial gradient (no blur filter, nothing
+          for the header's overflow-hidden to clip into a hard edge) that fades to fully
+          transparent well before every edge of the viewport. */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -88,6 +87,12 @@ export function HeroSystemEntry() {
             'radial-gradient(ellipse 70% 60% at 62% 40%, color-mix(in oklab, var(--color-accent-primary) 18%, transparent), transparent 70%)',
         }}
       />
+
+      {/* Left-edge blend into the near-black background so the text column reads cleanly.
+          This spans the FULL header width (not just the panel) so the fade is continuous
+          across the panel's left edge instead of two separately-clipped gradients meeting
+          there and reading as a hard seam. */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--color-bg-base)] via-[var(--color-bg-base)]/40 to-transparent sm:from-20% sm:via-45% sm:to-75%" />
 
       {/* Portrait panel, right-anchored at full height so the near-square source photo
           isn't forced to cover the full (much wider) viewport width — that was cropping
@@ -120,9 +125,9 @@ export function HeroSystemEntry() {
             WebkitMaskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 99%, transparent 100%)`,
           }}
         />
-        {/* Blend the photo's left edge into the near-black background so the text column reads cleanly */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bg-base)] via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-[var(--color-bg-base)]/20 to-transparent" />
+        {/* Subtle bottom-only darken so the wordmark overlapping the lower third stays
+            legible, without washing the whole photo in a translucent tint. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)]/70 via-transparent via-40% to-transparent" />
       </div>
       <div className="absolute inset-0 -z-10 bg-[var(--color-bg-base)]" />
 
