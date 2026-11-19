@@ -45,12 +45,15 @@ export function ManifestoSection() {
         },
       })
 
+      // Diagonal path: starts upper-right at a moderate size, travels down-left
+      // through the center at its largest, then continues down to settle small
+      // and centered near the bottom as the chapter hands off to the next one.
       tl.fromTo(
         insetRef.current,
-        { x: '26vw', y: '-24vh', scale: 0.4, autoAlpha: 0.85 },
-        { x: 0, y: 0, scale: 1.15, autoAlpha: 1, duration: 0.65, ease: 'none' },
+        { x: '28vw', y: '-26vh', scale: 0.55, autoAlpha: 0.9 },
+        { x: '-4vw', y: '2vh', scale: 1.2, autoAlpha: 1, duration: 0.5, ease: 'none' },
         0,
-      ).to(insetRef.current, { x: 0, y: '4vh', scale: 0.42, duration: 0.35, ease: 'none' }, 0.65)
+      ).to(insetRef.current, { x: 0, y: '24vh', scale: 0.38, autoAlpha: 1, duration: 0.5, ease: 'none' }, 0.5)
     }, sectionRef)
 
     return () => ctx.revert()
