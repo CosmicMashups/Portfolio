@@ -1,20 +1,18 @@
 import { Section } from '@/components/shell/Section'
-import { ChapterTitleCard } from '@/components/shell/ChapterTitleCard'
-import { LifecycleCarousel } from '@/components/system-overview/LifecycleCarousel'
+import { LifecycleSection } from '@/components/system-overview/LifecycleSection'
 import { ShieldCheck, Zap } from 'lucide-react'
 
 /**
- * How I Build — opens with a full-width chapter title card, then the engineering
- * lifecycle carousel at full width (no longer sharing space with a 3D phone stage).
+ * How I Build — the chapter opens directly with the engineering lifecycle rail (no
+ * separate chapter-title intro beat): on desktop this is a pinned, scroll-scrubbed
+ * horizontal storytelling rail carrying its own kicker/title/stage-counter in a fixed
+ * text panel, so a standalone ChapterTitleCard above it would be redundant. Touch and
+ * reduced-motion visitors get the original drag/snap carousel instead (see
+ * LifecycleSection), which keeps its own compact header strip for the same context.
  */
 export function HeroRevealSection() {
   return (
     <div id="system-overview" className="scroll-mt-[var(--shell-header-height)]">
-      <ChapterTitleCard
-        kicker="03 // How I Build"
-        title="The Engineering Lifecycle"
-        subtitle="Every system advances through 10 disciplined phases from problem formulation to production maintenance."
-      />
       <Section
         id="system-overview-lifecycle"
         tone="light"
@@ -24,7 +22,7 @@ export function HeroRevealSection() {
         className="relative z-10 flex flex-col justify-center"
       >
         <div className="flex w-full flex-col justify-center gap-6 py-10 sm:gap-8 sm:py-14 lg:py-16">
-          <LifecycleCarousel />
+          <LifecycleSection />
 
           <div className="flex flex-wrap items-center gap-3 pt-0.5 font-[var(--font-mono)] text-[9.5px] text-[var(--color-text-primary)]/60">
             <span className="inline-flex items-center gap-1">

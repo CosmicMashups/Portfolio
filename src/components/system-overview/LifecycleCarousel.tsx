@@ -1,50 +1,9 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { ENGINEERING_LIFECYCLE_STEPS } from './lifecycleSteps.data'
+import { STEP_ICONS, CARD_THEMES } from './lifecycleVisuals'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { gsap } from '@/lib/motion/gsapScroll'
-import type { LucideIcon } from 'lucide-react'
-import { ArrowLeft, ArrowRight, CheckCircle2, Terminal, Code2, Database, Layers, GitPullRequest, CloudUpload, Activity, Wrench } from 'lucide-react'
-
-const STEP_ICONS: Record<string, LucideIcon> = {
-  requirements: Terminal,
-  analysis: Layers,
-  architecture: Code2,
-  'database-design': Database,
-  implementation: Layers,
-  testing: CheckCircle2,
-  'code-review': GitPullRequest,
-  deployment: CloudUpload,
-  monitoring: Activity,
-  maintenance: Wrench,
-}
-
-// Amber-family tint accents, varied by intensity per lifecycle category phase.
-const CARD_THEMES: Record<string, { bg: string; border: string; badge: string; accent: string }> = {
-  strategy: {
-    bg: 'from-[var(--color-bg-elevated)]/90 to-[var(--color-bg-surface)]/90',
-    border: 'border-[#ff6b1a]/20 hover:border-[#ff6b1a]/40',
-    badge: 'bg-[#ff6b1a]/10 text-[#ff6b1a] border-[#ff6b1a]/20',
-    accent: '#ff6b1a',
-  },
-  architecture: {
-    bg: 'from-[var(--color-bg-elevated)]/90 to-[var(--color-bg-surface)]/90',
-    border: 'border-[#ffa64d]/20 hover:border-[#ffa64d]/40',
-    badge: 'bg-[#ffa64d]/10 text-[#ffa64d] border-[#ffa64d]/20',
-    accent: '#ffa64d',
-  },
-  execution: {
-    bg: 'from-[var(--color-bg-elevated)]/90 to-[var(--color-bg-surface)]/90',
-    border: 'border-[#ffd199]/20 hover:border-[#ffd199]/40',
-    badge: 'bg-[#ffd199]/10 text-[#ffd199] border-[#ffd199]/20',
-    accent: '#ffd199',
-  },
-  reliability: {
-    bg: 'from-[var(--color-bg-elevated)]/90 to-[var(--color-bg-surface)]/90',
-    border: 'border-[#c9560f]/20 hover:border-[#c9560f]/40',
-    badge: 'bg-[#c9560f]/10 text-[#ffb27a] border-[#c9560f]/20',
-    accent: '#ffb27a',
-  },
-}
+import { ArrowLeft, ArrowRight, CheckCircle2, Terminal } from 'lucide-react'
 
 export function LifecycleCarousel() {
   const containerRef = useRef<HTMLDivElement>(null)
