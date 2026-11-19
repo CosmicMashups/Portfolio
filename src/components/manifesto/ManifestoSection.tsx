@@ -36,7 +36,10 @@ export function ManifestoSection() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top top',
+          // Starts as soon as the chapter begins entering the viewport (not
+          // only once it's fully in view / pinned) — end stays tied to the
+          // chapter's natural exit.
+          start: 'top bottom',
           end: 'bottom bottom',
           scrub: 0.6,
           onUpdate: (self) => {
@@ -46,14 +49,14 @@ export function ManifestoSection() {
       })
 
       // Diagonal path: starts upper-right at a moderate size, travels down-left
-      // through the center at its largest, then continues down to settle small
-      // and centered near the bottom as the chapter hands off to the next one.
+      // through the center at its largest, then continues down well clear of
+      // the quote's own text block so it never overlaps on exit.
       tl.fromTo(
         insetRef.current,
         { x: '28vw', y: '-26vh', scale: 0.55, autoAlpha: 0.9 },
         { x: '-4vw', y: '2vh', scale: 1.2, autoAlpha: 1, duration: 0.5, ease: 'none' },
         0,
-      ).to(insetRef.current, { x: 0, y: '24vh', scale: 0.38, autoAlpha: 1, duration: 0.5, ease: 'none' }, 0.5)
+      ).to(insetRef.current, { x: 0, y: '30vh', scale: 0.3, autoAlpha: 1, duration: 0.5, ease: 'none' }, 0.5)
     }, sectionRef)
 
     return () => ctx.revert()
