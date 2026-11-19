@@ -56,7 +56,7 @@ export function ManifestoSection() {
         { x: '28vw', y: '-26vh', scale: 0.55, autoAlpha: 0.9 },
         { x: '-4vw', y: '2vh', scale: 1.2, autoAlpha: 1, duration: 0.5, ease: 'none' },
         0,
-      ).to(insetRef.current, { x: 0, y: '30vh', scale: 0.3, autoAlpha: 1, duration: 0.5, ease: 'none' }, 0.5)
+      ).to(insetRef.current, { x: 0, y: '44vh', scale: 0.22, autoAlpha: 1, duration: 0.5, ease: 'none' }, 0.5)
     }, sectionRef)
 
     return () => ctx.revert()
@@ -64,7 +64,10 @@ export function ManifestoSection() {
 
   return (
     <div ref={sectionRef} id="manifesto" className="relative min-h-[280vh] w-full bg-[var(--color-bg-base)]">
-      <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-[var(--shell-gutter-sm)] sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
+      {/* pt-[header-height] so centering is computed over the space actually visible
+          below the fixed nav bar, not the full sticky viewport it overlaps — otherwise
+          the quote reads as vertically high instead of centered. */}
+      <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-[var(--shell-gutter-sm)] pt-[var(--shell-header-height)] sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
         <TopographicTexture />
 
         <h2 className="relative z-0 max-w-6xl text-center font-[var(--font-display)] text-[clamp(2.75rem,9vw,7.5rem)] uppercase leading-[0.95] tracking-[-0.01em] text-[var(--color-text-primary)]">
@@ -73,20 +76,27 @@ export function ManifestoSection() {
         </h2>
 
         {CASUAL_IMAGES.length > 0 && (
-          <div
-            ref={insetRef}
-            className="pointer-events-none absolute z-10 aspect-[3/4] h-[26vh] overflow-hidden rounded-md border border-white/15 shadow-2xl sm:h-[34vh]"
-          >
-            {CASUAL_IMAGES.map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover"
-                style={{ opacity: i === frame ? 1 : 0 }}
-              />
-            ))}
+          // Centering wrapper: the GSAP timeline below animates the inset panel via a
+          // transform, so the panel itself must have no absolute top/left of its own —
+          // otherwise its "static" position (where the transform offsets are measured
+          // from) is undefined/left-anchored instead of true center, throwing off every
+          // waypoint in the diagonal path, including the "centered" one.
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+            <div
+              ref={insetRef}
+              className="aspect-[3/4] h-[26vh] overflow-hidden rounded-md border border-white/15 shadow-2xl sm:h-[34vh]"
+            >
+              {CASUAL_IMAGES.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ opacity: i === frame ? 1 : 0 }}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
