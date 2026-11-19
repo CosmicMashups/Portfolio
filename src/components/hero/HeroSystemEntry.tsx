@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { useRef, useState } from 'react'
+import { useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { ArrowUpRight, FileText, ChevronDown } from 'lucide-react'
 import { useGSAP } from '@gsap/react'
 import { fadeInUp, motionEase } from '@/lib/motion/presets'
@@ -15,18 +15,32 @@ import mainPortraitUrl from '@/assets/main.png'
 import mainAltPortraitUrl from '@/assets/main_alt.png'
 
 const HERO_NAME = 'Yuri Brown'
+const REVEAL_RADIUS_PX = 170
 
 /**
  * Origin — full-bleed portrait hero. The name renders as a massive wordmark
  * overlapping the bottom third of the photo (landonorris.com's actual
- * composition), not a small side-by-side badge. Hover/tap crossfades the
- * portrait from smiling (default) to serious.
+ * composition), not a small side-by-side badge. Hovering the portrait reveals
+ * the serious (main_alt) photo only in a circular region following the cursor
+ * (landonorris.com's actual hover treatment), not a full-image crossfade.
  */
 export function HeroSystemEntry() {
   const reduce = usePrefersReducedMotion()
-  const [altPortrait, setAltPortrait] = useState(false)
+  const [revealing, setRevealing] = useState(false)
   const frameRef = useRef<HTMLDivElement>(null)
+  const altImgRef = useRef<HTMLImageElement>(null)
   const nameRef = useRef<HTMLHeadingElement>(null)
+
+  const handlePointerMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const frame = frameRef.current
+    const altImg = altImgRef.current
+    if (!frame || !altImg) return
+    const rect = frame.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    altImg.style.setProperty('--mx', `${x}px`)
+    altImg.style.setProperty('--my', `${y}px`)
+  }
 
   const handleExplore = () => {
     smoothScrollTo('projects', { updateHash: true })
@@ -62,29 +76,35 @@ export function HeroSystemEntry() {
   }, [reduce])
 
   return (
-    <header
-      id="hero"
-      className="relative flex min-h-svh w-full flex-col overflow-hidden bg-[#0a0a0a]"
-      onMouseEnter={() => setAltPortrait(true)}
-      onMouseLeave={() => setAltPortrait(false)}
-    >
+    <header id="hero" className="relative flex min-h-svh w-full flex-col overflow-hidden bg-[#0a0a0a]">
       {/* Portrait panel, right-anchored at full height so the near-square source photo
           isn't forced to cover the full (much wider) viewport width — that was cropping
-          it down to an over-zoomed close-up of just the face. Crossfades smiling -> serious
-          on hover. */}
-      <div ref={frameRef} className="absolute inset-y-0 right-0 w-full sm:w-[72%] md:w-[60%] lg:w-[52%]">
+          it down to an over-zoomed close-up of just the face. Hovering reveals the serious
+          (main_alt) photo only in a circular region that follows the cursor, matching
+          landonorris.com's hover treatment — not a full-image crossfade. */}
+      <div
+        ref={frameRef}
+        className="absolute inset-y-0 right-0 w-full sm:w-[72%] md:w-[60%] lg:w-[52%]"
+        onMouseEnter={() => setRevealing(true)}
+        onMouseLeave={() => setRevealing(false)}
+        onMouseMove={handlePointerMove}
+      >
         <img
           src={mainPortraitUrl}
           alt="Yuri Brown"
-          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-700"
-          style={{ opacity: altPortrait ? 0 : 1 }}
+          className="absolute inset-0 h-full w-full object-cover object-top grayscale"
         />
         <img
+          ref={altImgRef}
           src={mainAltPortraitUrl}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-700"
-          style={{ opacity: altPortrait ? 1 : 0 }}
+          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-200"
+          style={{
+            opacity: revealing ? 1 : 0,
+            maskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 60%, transparent 100%)`,
+            WebkitMaskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 60%, transparent 100%)`,
+          }}
         />
         {/* Blend the photo's left edge into the near-black background so the text column reads cleanly */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-transparent" />
