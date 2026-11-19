@@ -49,6 +49,12 @@ export interface ProjectEntry {
   viz: VizKind
   /** Feature-section hero image (drop into /public or /src/assets and point here); falls back to a placeholder. */
   imageUrl?: string
+  /**
+   * Optional gallery image set for the home-page Projects showcase — when present, the
+   * gallery card hover-cycles through these instead of showing a single static image.
+   * Falls back to `[imageUrl]` when absent, so existing single-image projects need no changes.
+   */
+  images?: string[]
   metrics?: {
     label: string
     value: number
