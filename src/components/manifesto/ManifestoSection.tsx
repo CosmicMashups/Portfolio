@@ -61,7 +61,7 @@ export function ManifestoSection() {
       <div className="sticky top-0 flex h-svh w-full items-center justify-center overflow-hidden px-[var(--shell-gutter-sm)] sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
         <TopographicTexture />
 
-        <h2 className="relative z-0 max-w-5xl text-center font-[var(--font-display)] text-[7vw] uppercase leading-[0.95] tracking-[-0.01em] text-[#f5f5f0] sm:text-6xl">
+        <h2 className="relative z-0 max-w-6xl text-center font-[var(--font-display)] text-[clamp(2.75rem,9vw,7.5rem)] uppercase leading-[0.95] tracking-[-0.01em] text-[#f5f5f0]">
           <span className="text-[#ff6b1a]">Challenging the limits</span>, shipping systems that hold up under real
           use, bringing <span className="text-[#ff6b1a]">the rigor</span> to every release.
         </h2>
