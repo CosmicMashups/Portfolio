@@ -18,19 +18,20 @@ import client5 from '@/assets/client/client_5.jpg'
 
 type Width = 'lg' | 'md' | 'sm'
 type Aspect = 'portrait' | 'landscape' | 'square'
+type Offset = 'none' | 'sm' | 'lg'
 
 interface GalleryPhoto {
   src: string
-  eyebrow: string
-  caption: string
+  label: string
   width: Width
   aspect: Aspect
+  offset: Offset
 }
 
 const WIDTH_CLASS: Record<Width, string> = {
-  lg: 'sm:w-[66%]',
-  md: 'sm:w-[54%]',
-  sm: 'sm:w-[42%]',
+  lg: 'sm:w-[60%]',
+  md: 'sm:w-[42%]',
+  sm: 'sm:w-[30%]',
 }
 
 const ASPECT_CLASS: Record<Aspect, string> = {
@@ -39,39 +40,64 @@ const ASPECT_CLASS: Record<Aspect, string> = {
   square: 'aspect-[4/4]',
 }
 
-const INTERNSHIP_PHOTOS: GalleryPhoto[] = [
-  { src: intern1, eyebrow: 'Manila, 2024', caption: 'Onboarding week', width: 'lg', aspect: 'landscape' },
-  { src: intern2, eyebrow: 'On-site, 02', caption: 'Standups and whiteboards', width: 'sm', aspect: 'portrait' },
-  { src: intern3, eyebrow: 'On-site, 03', caption: 'Deployment day', width: 'md', aspect: 'square' },
-  { src: intern4, eyebrow: 'On-site, 04', caption: 'Shipping under deadline', width: 'sm', aspect: 'portrait' },
-  { src: intern5, eyebrow: 'On-site, 05', caption: 'Team retro', width: 'lg', aspect: 'landscape' },
-  { src: intern6, eyebrow: 'On-site, 06', caption: 'Closing the sprint', width: 'md', aspect: 'portrait' },
+const OFFSET_CLASS: Record<Offset, string> = {
+  none: 'sm:mt-0',
+  sm: 'sm:mt-10',
+  lg: 'sm:mt-24',
+}
+
+interface GalleryStory {
+  eyebrow: string
+  title: string
+  quote: string
+  photos: GalleryPhoto[]
+}
+
+const STORIES: GalleryStory[] = [
+  {
+    eyebrow: '2024 — Present',
+    title: 'On Site, Internship',
+    quote: 'Showing up in person is still how most of the trust gets built.',
+    photos: [
+      { src: intern1, label: 'Manila, 2024', width: 'lg', aspect: 'landscape', offset: 'none' },
+      { src: intern2, label: 'Manila, 2024', width: 'sm', aspect: 'portrait', offset: 'lg' },
+      { src: intern3, label: 'Manila, 2024', width: 'md', aspect: 'square', offset: 'sm' },
+      { src: intern4, label: 'Manila, 2024', width: 'sm', aspect: 'portrait', offset: 'none' },
+      { src: intern5, label: 'Manila, 2024', width: 'lg', aspect: 'landscape', offset: 'lg' },
+      { src: intern6, label: 'Manila, 2024', width: 'md', aspect: 'portrait', offset: 'sm' },
+    ],
+  },
+  {
+    eyebrow: '2024 — Present',
+    title: 'In Front of Clients',
+    quote: 'Engineering is also a people problem — explaining the trade-off is half the job.',
+    photos: [
+      { src: client1, label: 'Client site, 2024', width: 'md', aspect: 'portrait', offset: 'sm' },
+      { src: client2, label: 'Client site, 2024', width: 'lg', aspect: 'landscape', offset: 'none' },
+      { src: client3, label: 'Client site, 2024', width: 'sm', aspect: 'square', offset: 'lg' },
+      { src: client4, label: 'Client site, 2024', width: 'md', aspect: 'portrait', offset: 'none' },
+      { src: client5, label: 'Client site, 2024', width: 'lg', aspect: 'landscape', offset: 'sm' },
+    ],
+  },
 ]
 
-const CLIENT_PHOTOS: GalleryPhoto[] = [
-  { src: client1, eyebrow: 'Engagement, 01', caption: 'Discovery session', width: 'md', aspect: 'portrait' },
-  { src: client2, eyebrow: 'Engagement, 02', caption: 'Walking the requirements', width: 'lg', aspect: 'landscape' },
-  { src: client3, eyebrow: 'Engagement, 03', caption: 'Live demo', width: 'sm', aspect: 'square' },
-  { src: client4, eyebrow: 'Engagement, 04', caption: 'Sign-off', width: 'md', aspect: 'portrait' },
-  { src: client5, eyebrow: 'Engagement, 05', caption: 'Handover', width: 'lg', aspect: 'landscape' },
-]
-
-function PhotoRow({ photo, index }: { photo: GalleryPhoto; index: number }) {
+function PhotoTile({ photo, index }: { photo: GalleryPhoto; index: number }) {
   const alignRight = index % 2 === 1
   return (
-    <div className={cn('essay-frame flex flex-col gap-3', alignRight ? 'items-end text-right' : 'items-start')}>
-      <div className="flex flex-col gap-0.5">
-        <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
-          {photo.eyebrow}
-        </span>
-        <span className="font-[var(--font-display)] text-2xl uppercase leading-[0.95] tracking-[-0.01em] text-[var(--global-text)] sm:text-4xl">
-          {photo.caption}
-        </span>
-      </div>
+    <div
+      className={cn(
+        'essay-frame flex flex-col gap-2',
+        alignRight ? 'items-end text-right' : 'items-start',
+        OFFSET_CLASS[photo.offset],
+      )}
+    >
+      <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+        {photo.label}
+      </span>
       <div className={cn('w-full overflow-hidden rounded-[var(--radius-project)]', WIDTH_CLASS[photo.width])}>
         <img
           src={photo.src}
-          alt={photo.caption}
+          alt={photo.label}
           loading="lazy"
           className={cn(
             'w-full object-cover transition-transform duration-500 hover:scale-[1.03]',
@@ -83,11 +109,36 @@ function PhotoRow({ photo, index }: { photo: GalleryPhoto; index: number }) {
   )
 }
 
+function Story({ story }: { story: GalleryStory }) {
+  return (
+    <div className="flex flex-col gap-10">
+      <div className="essay-frame flex flex-col gap-3 sm:max-w-md">
+        <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+          {story.eyebrow}
+        </span>
+        <h3 className="font-[Playfair_Display,serif] text-4xl italic leading-[1.05] text-[var(--global-text)] sm:text-5xl">
+          {story.title}
+        </h3>
+        <p className="font-[Playfair_Display,serif] text-lg italic leading-snug text-[var(--global-text-muted)]">
+          "{story.quote}"
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-8 sm:gap-2">
+        {story.photos.map((photo, i) => (
+          <PhotoTile key={photo.src} photo={photo} index={i} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /**
- * Beyond Code — asymmetric, alternating-alignment photo layout with heavy editorial
- * captions above each image and mixed portrait/landscape/square aspect ratios,
- * matching landonorris.com's actual off-track gallery (checked directly at
- * landonorris.com/off-track) rather than a uniform grid with overlay labels.
+ * Beyond Code — one big editorial (serif) heading + a short quote per story, then
+ * photos scattered around it at staggered offsets with simple location/year labels,
+ * matching landonorris.com's actual pattern (e.g. "MASTERING THE GREEN" / "2006 —
+ * CURRENT" + scattered "AUSTRALIA 2024" photos) — not a giant display headline
+ * repeated over every single photo.
  */
 export function BeyondCodeGallery() {
   const reduce = usePrefersReducedMotion()
@@ -100,12 +151,12 @@ export function BeyondCodeGallery() {
 
     const ctx = gsap.context(() => {
       ScrollTrigger.batch(frames, {
-        start: 'top 90%',
+        start: 'top 92%',
         onEnter: (batch) =>
           gsap.fromTo(
             batch,
-            { opacity: 0, y: 32 },
-            { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out', overwrite: true },
+            { opacity: 0, y: 28 },
+            { opacity: 1, y: 0, duration: 0.55, stagger: 0.07, ease: 'power2.out', overwrite: true },
           ),
         once: true,
       })
@@ -115,24 +166,10 @@ export function BeyondCodeGallery() {
   }, [reduce])
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-16">
-      <div className="flex flex-col gap-8">
-        <h3 className="font-[var(--font-display)] text-2xl uppercase tracking-[-0.01em] text-[var(--global-text)] sm:text-3xl">
-          On Site — Internship
-        </h3>
-        {INTERNSHIP_PHOTOS.map((photo, i) => (
-          <PhotoRow key={photo.src} photo={photo} index={i} />
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-8">
-        <h3 className="font-[var(--font-display)] text-2xl uppercase tracking-[-0.01em] text-[var(--global-text)] sm:text-3xl">
-          In Front of Clients
-        </h3>
-        {CLIENT_PHOTOS.map((photo, i) => (
-          <PhotoRow key={photo.src} photo={photo} index={i} />
-        ))}
-      </div>
+    <div ref={rootRef} className="flex flex-col gap-24">
+      {STORIES.map((story) => (
+        <Story key={story.title} story={story} />
+      ))}
     </div>
   )
 }
