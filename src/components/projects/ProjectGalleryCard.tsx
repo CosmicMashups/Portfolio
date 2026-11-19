@@ -56,11 +56,11 @@ export function ProjectGalleryCard({ project, index }: { project: ProjectEntry; 
     <div
       id={project.id}
       data-project={project.id}
-      className={cn('gallery-tile scroll-mt-28', open && 'col-span-full')}
+      className={cn('gallery-tile h-full scroll-mt-28', open && 'col-span-full')}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <TiltCard noBackdrop>
+      <TiltCard noBackdrop className="h-full">
         <div className="group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-project)] border border-[var(--color-border-default)] bg-[var(--color-bg-surface)] transition-colors hover:border-[var(--color-accent-primary)]/50 hover:shadow-[0_0_0_1px_rgba(255,107,26,0.15),0_12px_40px_rgba(0,0,0,0.35)]">
           <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-[var(--color-border-default)]">
             {currentImage ? (
@@ -109,7 +109,7 @@ export function ProjectGalleryCard({ project, index }: { project: ProjectEntry; 
               </span>
             </div>
 
-            <h3 className="font-[var(--font-display)] text-xl uppercase leading-tight tracking-[-0.01em] text-[var(--color-text-primary)]">
+            <h3 className="line-clamp-1 font-[var(--font-display)] text-xl uppercase leading-tight tracking-[0.01em] text-[var(--color-text-primary)]">
               <Link
                 to={`/projects/${project.slug}`}
                 data-cursor="link"
@@ -119,20 +119,34 @@ export function ProjectGalleryCard({ project, index }: { project: ProjectEntry; 
               </Link>
             </h3>
 
-            <p className="line-clamp-2 text-sm leading-relaxed text-[var(--color-text-muted)]">{project.tagline}</p>
+            <p className="line-clamp-2 min-h-[2lh] text-sm leading-relaxed text-[var(--color-text-muted)]">
+              {project.tagline}
+            </p>
 
-            {primaryMetric ? (
-              <div className="inline-flex w-fit flex-col gap-0.5 rounded-[10px] border border-[var(--color-border-default)] px-3 py-2">
-                <span className="text-[9.5px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
-                  {primaryMetric.label}
-                </span>
-                <span className="font-[var(--font-display)] text-lg tabular-nums text-[var(--color-text-primary)]">
-                  <KineticCounter value={primaryMetric.value} suffix={primaryMetric.suffix} decimals={metricDecimals} />
-                </span>
-              </div>
-            ) : null}
+            <div
+              className={cn(
+                'inline-flex w-fit flex-col gap-0.5 rounded-[10px] border border-[var(--color-border-default)] px-3 py-2',
+                !primaryMetric && 'invisible',
+              )}
+              aria-hidden={!primaryMetric}
+            >
+              <span className="text-[9.5px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+                {primaryMetric?.label ?? 'placeholder'}
+              </span>
+              <span className="font-[var(--font-display)] text-lg tabular-nums text-[var(--color-text-primary)]">
+                {primaryMetric ? (
+                  <KineticCounter
+                    value={primaryMetric.value}
+                    suffix={primaryMetric.suffix}
+                    decimals={metricDecimals}
+                  />
+                ) : (
+                  '0'
+                )}
+              </span>
+            </div>
 
-            <ul className="flex flex-wrap gap-1.5" aria-label="Key technologies">
+            <ul className="flex min-h-[1.75rem] flex-wrap gap-1.5" aria-label="Key technologies">
               {techStrip.map((item) => (
                 <li
                   key={item.name}
