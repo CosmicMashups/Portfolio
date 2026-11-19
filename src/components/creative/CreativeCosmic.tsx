@@ -31,7 +31,7 @@ const PRINCIPLES = [
   },
   {
     title: 'Systems over Surfaces',
-    body: 'Typography pairs Space Grotesk with JetBrains Mono so headlines and data read as one system, not a template swap.',
+    body: 'Typography pairs Anton with JetBrains Mono so headlines and data read as one system, not a template swap.',
   },
 ] as const
 
@@ -77,7 +77,7 @@ export function CreativeCosmic() {
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-[var(--global-text-muted)]">
         <p>
           I default to dark, data-dense interfaces because financial and clinical tools fail when they hide uncertainty
-          behind white cards. Syne and JetBrains Mono are deliberate: display type carries narrative weight while mono
+          behind white cards. Anton and JetBrains Mono are deliberate: display type carries narrative weight while mono
           keeps metrics aligned and comparable across modules.
         </p>
         <p>
