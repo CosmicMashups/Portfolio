@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { gsap, ScrollTrigger } from '@/lib/motion/gsapScroll'
+import { cn } from '@/components/ui/cn'
 
 import intern1 from '@/assets/internship/intern_1.jpg'
 import intern2 from '@/assets/internship/intern_2.jpg'
@@ -17,28 +18,59 @@ import client5 from '@/assets/client/client_5.jpg'
 
 interface GalleryPhoto {
   src: string
-  caption: string
-  track: 'On Track' | 'Off Track'
+  tag: string
+  /** Width as a fraction of the row, matching landonorris.com's varied, non-uniform image sizing. */
+  width: 'lg' | 'md' | 'sm'
 }
 
-const PHOTOS: GalleryPhoto[] = [
-  { src: intern1, caption: 'Internship, on-site', track: 'Off Track' },
-  { src: client1, caption: 'Client engagement', track: 'Off Track' },
-  { src: intern2, caption: 'Internship, on-site', track: 'Off Track' },
-  { src: client2, caption: 'Client engagement', track: 'Off Track' },
-  { src: intern3, caption: 'Internship, on-site', track: 'Off Track' },
-  { src: client3, caption: 'Client engagement', track: 'Off Track' },
-  { src: intern4, caption: 'Internship, on-site', track: 'Off Track' },
-  { src: client4, caption: 'Client engagement', track: 'Off Track' },
-  { src: intern5, caption: 'Internship, on-site', track: 'Off Track' },
-  { src: client5, caption: 'Client engagement', track: 'Off Track' },
-  { src: intern6, caption: 'Internship, on-site', track: 'Off Track' },
+const WIDTH_CLASS: Record<GalleryPhoto['width'], string> = {
+  lg: 'sm:w-[66%]',
+  md: 'sm:w-[54%]',
+  sm: 'sm:w-[44%]',
+}
+
+const INTERNSHIP_PHOTOS: GalleryPhoto[] = [
+  { src: intern1, tag: 'On-site, 01', width: 'lg' },
+  { src: intern2, tag: 'On-site, 02', width: 'sm' },
+  { src: intern3, tag: 'On-site, 03', width: 'md' },
+  { src: intern4, tag: 'On-site, 04', width: 'sm' },
+  { src: intern5, tag: 'On-site, 05', width: 'lg' },
+  { src: intern6, tag: 'On-site, 06', width: 'md' },
 ]
 
+const CLIENT_PHOTOS: GalleryPhoto[] = [
+  { src: client1, tag: 'Engagement, 01', width: 'md' },
+  { src: client2, tag: 'Engagement, 02', width: 'lg' },
+  { src: client3, tag: 'Engagement, 03', width: 'sm' },
+  { src: client4, tag: 'Engagement, 04', width: 'md' },
+  { src: client5, tag: 'Engagement, 05', width: 'lg' },
+]
+
+function PhotoRow({ photo, index }: { photo: GalleryPhoto; index: number }) {
+  const alignRight = index % 2 === 1
+  return (
+    <div className={cn('essay-frame flex flex-col gap-2', alignRight ? 'items-end text-right' : 'items-start')}>
+      <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-accent-primary)]">
+        {photo.tag}
+      </span>
+      <div className={cn('w-full overflow-hidden rounded-[var(--radius-project)]', WIDTH_CLASS[photo.width])}>
+        <img
+          src={photo.src}
+          alt={photo.tag}
+          loading="lazy"
+          className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-[1.03] sm:aspect-[4/3]"
+        />
+      </div>
+    </div>
+  )
+}
+
 /**
- * Beyond Code — one large captioned photo at a time, landonorris.com's photo-essay
- * pacing ("QATAR, 2024" style captions) rather than a grid. Engineering is the "on
- * track" story everywhere else on this page; this is the "off track" half.
+ * Beyond Code — asymmetric, alternating-alignment photo layout with captions placed
+ * above each image (not overlaid), matching landonorris.com's actual off-track
+ * gallery (checked directly at landonorris.com/off-track): varied image sizes,
+ * alternating left/right placement, generous whitespace, grouped under small
+ * sub-section labels — not a uniform centered stack with gradient-overlay captions.
  */
 export function BeyondCodeGallery() {
   const reduce = usePrefersReducedMotion()
@@ -51,12 +83,12 @@ export function BeyondCodeGallery() {
 
     const ctx = gsap.context(() => {
       ScrollTrigger.batch(frames, {
-        start: 'top 85%',
+        start: 'top 90%',
         onEnter: (batch) =>
           gsap.fromTo(
             batch,
-            { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power2.out', overwrite: true },
+            { opacity: 0, y: 32 },
+            { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out', overwrite: true },
           ),
         once: true,
       })
@@ -66,31 +98,24 @@ export function BeyondCodeGallery() {
   }, [reduce])
 
   return (
-    <div ref={rootRef} className="flex flex-col gap-10">
-      <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
-        On track / off track
-      </p>
-      {PHOTOS.map((photo, i) => (
-        <div
-          key={photo.src}
-          className="essay-frame relative mx-auto w-full max-w-3xl overflow-hidden rounded-[var(--radius-project)] border border-[var(--global-border)]"
-        >
-          <img
-            src={photo.src}
-            alt={`${photo.caption} ${i + 1}`}
-            loading="lazy"
-            className="aspect-[4/5] w-full object-cover sm:aspect-video"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent px-5 py-4">
-            <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-accent-primary)]">
-              {photo.track}
-            </span>
-            <p className="mt-0.5 font-[var(--font-display)] text-lg uppercase tracking-[-0.01em] text-[#f5f5f0]">
-              {photo.caption}
-            </p>
-          </div>
-        </div>
-      ))}
+    <div ref={rootRef} className="flex flex-col gap-16">
+      <div className="flex flex-col gap-8">
+        <h3 className="font-[var(--font-display)] text-2xl uppercase tracking-[-0.01em] text-[var(--global-text)] sm:text-3xl">
+          On Site — Internship
+        </h3>
+        {INTERNSHIP_PHOTOS.map((photo, i) => (
+          <PhotoRow key={photo.src} photo={photo} index={i} />
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-8">
+        <h3 className="font-[var(--font-display)] text-2xl uppercase tracking-[-0.01em] text-[var(--global-text)] sm:text-3xl">
+          In Front of Clients
+        </h3>
+        {CLIENT_PHOTOS.map((photo, i) => (
+          <PhotoRow key={photo.src} photo={photo} index={i} />
+        ))}
+      </div>
     </div>
   )
 }
