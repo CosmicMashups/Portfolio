@@ -76,11 +76,6 @@ export function CreativeCosmic() {
 
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-[var(--global-text-muted)]">
         <p>
-          I default to dark, data-dense interfaces because financial and clinical tools fail when they hide uncertainty
-          behind white cards. Anton and JetBrains Mono are deliberate: display type carries narrative weight while mono
-          keeps metrics aligned and comparable across modules.
-        </p>
-        <p>
           Mashups are the same muscle as engineering — pattern matching under noise — which is why MashHub exists as a
           serious creative tool, not a side gimmick.
         </p>
