@@ -44,28 +44,28 @@ interface GalleryStory {
 
 const STORIES: GalleryStory[] = [
   {
-    eyebrow: '2024 — Present',
+    eyebrow: 'June 2025 — August 2025',
     title: 'On Site, Internship',
     quote: 'Showing up in person is still how most of the trust gets built.',
     photos: [
-      { src: intern1, label: 'Manila, 2024', aspect: 'landscape', captionPos: 'above' },
-      { src: intern2, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'side' },
-      { src: intern3, label: 'Manila, 2024', aspect: 'square', captionPos: 'below' },
-      { src: intern4, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'above' },
-      { src: intern5, label: 'Manila, 2024', aspect: 'landscape', captionPos: 'side' },
-      { src: intern6, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'below' },
+      { src: intern1, label: 'Manila, 2025', aspect: 'landscape', captionPos: 'above' },
+      { src: intern2, label: 'Manila, 2025', aspect: 'portrait', captionPos: 'side' },
+      { src: intern3, label: 'Manila, 2025', aspect: 'square', captionPos: 'below' },
+      { src: intern4, label: 'Manila, 2025', aspect: 'portrait', captionPos: 'above' },
+      { src: intern5, label: 'Manila, 2025', aspect: 'landscape', captionPos: 'side' },
+      { src: intern6, label: 'Manila, 2025', aspect: 'portrait', captionPos: 'below' },
     ],
   },
   {
-    eyebrow: '2024 — Present',
+    eyebrow: '2026',
     title: 'In Front of Clients',
     quote: 'Engineering is also a people problem — explaining the trade-off is half the job.',
     photos: [
-      { src: client1, label: 'Client site, 2024', aspect: 'portrait', captionPos: 'side' },
-      { src: client2, label: 'Client site, 2024', aspect: 'landscape', captionPos: 'above' },
-      { src: client3, label: 'Client site, 2024', aspect: 'square', captionPos: 'below' },
-      { src: client4, label: 'Client site, 2024', aspect: 'portrait', captionPos: 'above' },
-      { src: client5, label: 'Client site, 2024', aspect: 'landscape', captionPos: 'side' },
+      { src: client1, label: 'Client site, 2026', aspect: 'portrait', captionPos: 'side' },
+      { src: client2, label: 'Client site, 2026', aspect: 'landscape', captionPos: 'above' },
+      { src: client3, label: 'Client site, 2026', aspect: 'square', captionPos: 'below' },
+      { src: client4, label: 'Client site, 2026', aspect: 'portrait', captionPos: 'above' },
+      { src: client5, label: 'Client site, 2026', aspect: 'landscape', captionPos: 'side' },
     ],
   },
 ]
