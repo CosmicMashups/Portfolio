@@ -68,24 +68,30 @@ export function HeroSystemEntry() {
       onMouseEnter={() => setAltPortrait(true)}
       onMouseLeave={() => setAltPortrait(false)}
     >
-      {/* Full-bleed portrait, crossfades smiling -> serious on hover */}
-      <div ref={frameRef} className="absolute inset-0">
+      {/* Portrait panel, right-anchored at full height so the near-square source photo
+          isn't forced to cover the full (much wider) viewport width — that was cropping
+          it down to an over-zoomed close-up of just the face. Crossfades smiling -> serious
+          on hover. */}
+      <div ref={frameRef} className="absolute inset-y-0 right-0 w-full sm:w-[72%] md:w-[60%] lg:w-[52%]">
         <img
           src={mainPortraitUrl}
           alt="Yuri Brown"
-          className="absolute inset-0 h-full w-full object-cover grayscale transition-opacity duration-700"
+          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-700"
           style={{ opacity: altPortrait ? 0 : 1 }}
         />
         <img
           src={mainAltPortraitUrl}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover grayscale transition-opacity duration-700"
+          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-700"
           style={{ opacity: altPortrait ? 1 : 0 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/35 to-[#0a0a0a]/10" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_30%,rgba(255,107,26,0.12),transparent_60%)]" />
+        {/* Blend the photo's left edge into the near-black background so the text column reads cleanly */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_30%,rgba(255,107,26,0.1),transparent_60%)]" />
       </div>
+      <div className="absolute inset-0 -z-10 bg-[#0a0a0a]" />
 
       <TopographicTexture />
 
