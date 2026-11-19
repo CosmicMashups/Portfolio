@@ -50,13 +50,13 @@
     --global-border: #1a1310;
     --global-text: #1a1310;
     --global-text-muted: #6b5f52;
-    --global-accent: #ff6b1a;
-    --global-accent-muted: rgba(255, 107, 26, 0.1);
-    --global-accent-lime: #ff6b1a;
-    --accent-secondary: #c9560f;
+    --global-accent: #c9560f;
+    --global-accent-muted: rgba(201, 86, 15, 0.12);
+    --global-accent-lime: #c9560f;
+    --accent-secondary: #a3450c;
     --surface-tint: rgba(252, 250, 245, 0.9);
-    --chart-a: #ff6b1a;
-    --chart-b: #c9560f;
+    --chart-a: #c9560f;
+    --chart-b: #a3450c;
     --chart-c: #1a1310;
     --chart-d: #6b5f52;
   }
@@ -70,13 +70,13 @@
   --global-border: #1a1310;
   --global-text: #1a1310;
   --global-text-muted: #6b5f52;
-  --global-accent: #ff6b1a;
-  --global-accent-muted: rgba(255, 107, 26, 0.1);
-  --global-accent-lime: #ff6b1a;
-  --accent-secondary: #c9560f;
+  --global-accent: #c9560f;
+  --global-accent-muted: rgba(201, 86, 15, 0.12);
+  --global-accent-lime: #c9560f;
+  --accent-secondary: #a3450c;
   --surface-tint: rgba(252, 250, 245, 0.9);
-  --chart-a: #ff6b1a;
-  --chart-b: #c9560f;
+  --chart-a: #c9560f;
+  --chart-b: #a3450c;
   --chart-c: #1a1310;
   --chart-d: #6b5f52;
 }
