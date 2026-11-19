@@ -16,49 +16,67 @@ import client3 from '@/assets/client/client_3.jpg'
 import client4 from '@/assets/client/client_4.jpg'
 import client5 from '@/assets/client/client_5.jpg'
 
+type Width = 'lg' | 'md' | 'sm'
+type Aspect = 'portrait' | 'landscape' | 'square'
+
 interface GalleryPhoto {
   src: string
-  tag: string
-  /** Width as a fraction of the row, matching landonorris.com's varied, non-uniform image sizing. */
-  width: 'lg' | 'md' | 'sm'
+  eyebrow: string
+  caption: string
+  width: Width
+  aspect: Aspect
 }
 
-const WIDTH_CLASS: Record<GalleryPhoto['width'], string> = {
+const WIDTH_CLASS: Record<Width, string> = {
   lg: 'sm:w-[66%]',
   md: 'sm:w-[54%]',
-  sm: 'sm:w-[44%]',
+  sm: 'sm:w-[42%]',
+}
+
+const ASPECT_CLASS: Record<Aspect, string> = {
+  portrait: 'aspect-[4/5]',
+  landscape: 'aspect-[3/2]',
+  square: 'aspect-[4/4]',
 }
 
 const INTERNSHIP_PHOTOS: GalleryPhoto[] = [
-  { src: intern1, tag: 'On-site, 01', width: 'lg' },
-  { src: intern2, tag: 'On-site, 02', width: 'sm' },
-  { src: intern3, tag: 'On-site, 03', width: 'md' },
-  { src: intern4, tag: 'On-site, 04', width: 'sm' },
-  { src: intern5, tag: 'On-site, 05', width: 'lg' },
-  { src: intern6, tag: 'On-site, 06', width: 'md' },
+  { src: intern1, eyebrow: 'Manila, 2024', caption: 'Onboarding week', width: 'lg', aspect: 'landscape' },
+  { src: intern2, eyebrow: 'On-site, 02', caption: 'Standups and whiteboards', width: 'sm', aspect: 'portrait' },
+  { src: intern3, eyebrow: 'On-site, 03', caption: 'Deployment day', width: 'md', aspect: 'square' },
+  { src: intern4, eyebrow: 'On-site, 04', caption: 'Shipping under deadline', width: 'sm', aspect: 'portrait' },
+  { src: intern5, eyebrow: 'On-site, 05', caption: 'Team retro', width: 'lg', aspect: 'landscape' },
+  { src: intern6, eyebrow: 'On-site, 06', caption: 'Closing the sprint', width: 'md', aspect: 'portrait' },
 ]
 
 const CLIENT_PHOTOS: GalleryPhoto[] = [
-  { src: client1, tag: 'Engagement, 01', width: 'md' },
-  { src: client2, tag: 'Engagement, 02', width: 'lg' },
-  { src: client3, tag: 'Engagement, 03', width: 'sm' },
-  { src: client4, tag: 'Engagement, 04', width: 'md' },
-  { src: client5, tag: 'Engagement, 05', width: 'lg' },
+  { src: client1, eyebrow: 'Engagement, 01', caption: 'Discovery session', width: 'md', aspect: 'portrait' },
+  { src: client2, eyebrow: 'Engagement, 02', caption: 'Walking the requirements', width: 'lg', aspect: 'landscape' },
+  { src: client3, eyebrow: 'Engagement, 03', caption: 'Live demo', width: 'sm', aspect: 'square' },
+  { src: client4, eyebrow: 'Engagement, 04', caption: 'Sign-off', width: 'md', aspect: 'portrait' },
+  { src: client5, eyebrow: 'Engagement, 05', caption: 'Handover', width: 'lg', aspect: 'landscape' },
 ]
 
 function PhotoRow({ photo, index }: { photo: GalleryPhoto; index: number }) {
   const alignRight = index % 2 === 1
   return (
-    <div className={cn('essay-frame flex flex-col gap-2', alignRight ? 'items-end text-right' : 'items-start')}>
-      <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-accent-primary)]">
-        {photo.tag}
-      </span>
+    <div className={cn('essay-frame flex flex-col gap-3', alignRight ? 'items-end text-right' : 'items-start')}>
+      <div className="flex flex-col gap-0.5">
+        <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-accent-primary)]">
+          {photo.eyebrow}
+        </span>
+        <span className="font-[var(--font-display)] text-2xl uppercase leading-[0.95] tracking-[-0.01em] text-[var(--global-text)] sm:text-4xl">
+          {photo.caption}
+        </span>
+      </div>
       <div className={cn('w-full overflow-hidden rounded-[var(--radius-project)]', WIDTH_CLASS[photo.width])}>
         <img
           src={photo.src}
-          alt={photo.tag}
+          alt={photo.caption}
           loading="lazy"
-          className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-[1.03] sm:aspect-[4/3]"
+          className={cn(
+            'w-full object-cover transition-transform duration-500 hover:scale-[1.03]',
+            ASPECT_CLASS[photo.aspect],
+          )}
         />
       </div>
     </div>
@@ -66,11 +84,10 @@ function PhotoRow({ photo, index }: { photo: GalleryPhoto; index: number }) {
 }
 
 /**
- * Beyond Code — asymmetric, alternating-alignment photo layout with captions placed
- * above each image (not overlaid), matching landonorris.com's actual off-track
- * gallery (checked directly at landonorris.com/off-track): varied image sizes,
- * alternating left/right placement, generous whitespace, grouped under small
- * sub-section labels — not a uniform centered stack with gradient-overlay captions.
+ * Beyond Code — asymmetric, alternating-alignment photo layout with heavy editorial
+ * captions above each image and mixed portrait/landscape/square aspect ratios,
+ * matching landonorris.com's actual off-track gallery (checked directly at
+ * landonorris.com/off-track) rather than a uniform grid with overlay labels.
  */
 export function BeyondCodeGallery() {
   const reduce = usePrefersReducedMotion()
