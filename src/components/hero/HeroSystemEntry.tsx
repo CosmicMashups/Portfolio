@@ -99,11 +99,13 @@ export function HeroSystemEntry() {
           src={mainAltPortraitUrl}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-200"
+          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-100"
           style={{
             opacity: revealing ? 1 : 0,
-            maskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 60%, transparent 100%)`,
-            WebkitMaskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 60%, transparent 100%)`,
+            // Hard-edged circle (no soft falloff) — landonorris.com's actual hover patch is a
+            // crisp cutout, not a blurred spotlight.
+            maskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 99%, transparent 100%)`,
+            WebkitMaskImage: `radial-gradient(${REVEAL_RADIUS_PX}px circle at var(--mx, 50%) var(--my, 50%), black 99%, transparent 100%)`,
           }}
         />
         {/* Blend the photo's left edge into the near-black background so the text column reads cleanly */}
