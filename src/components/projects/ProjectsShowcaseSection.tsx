@@ -35,7 +35,7 @@ export function ProjectsShowcaseSection() {
   return (
     <div id="projects" className="scroll-mt-[var(--shell-header-height)]">
       <ChapterTitleCard
-        kicker="03 // What I've Built"
+        kicker="04 // What I've Built"
         title="Selected Work"
         subtitle={`${PROJECTS.length} shipped systems, one consistent chrome.`}
       />

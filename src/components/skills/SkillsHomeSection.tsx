@@ -36,7 +36,7 @@ export function SkillsHomeSection() {
 
   return (
     <div id="skills" className="scroll-mt-[var(--shell-header-height)]">
-      <ChapterTitleCard kicker="05 // Skills" title="Expertise Network" />
+      <ChapterTitleCard kicker="06 // Skills" title="Expertise Network" />
       <Section id="skills-content" tone="dark" hideHeader bleed={false}>
         <p className="mb-6 max-w-3xl text-sm text-[var(--global-text-muted)] md:mb-8">
           Nodes aggregate to shipped projects; edges encode adjacent practice. Hover for context, click to jump to a

@@ -47,7 +47,7 @@ export function HeroSystemEntry() {
   }
 
   const handleScrollToMap = () => {
-    smoothScrollTo('system-overview', { updateHash: true })
+    smoothScrollTo('manifesto', { updateHash: true })
   }
 
   useGSAP(() => {
@@ -230,7 +230,7 @@ export function HeroSystemEntry() {
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/25 transition-all group-hover:border-[#ff6b1a] group-hover:bg-[#ff6b1a]/10">
             <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" aria-hidden />
           </span>
-          <span>Next: How I Build</span>
+          <span>Next: Manifesto</span>
         </motion.button>
       </div>
     </header>

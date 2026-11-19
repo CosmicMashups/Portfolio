@@ -11,7 +11,7 @@ export function HeroRevealSection() {
   return (
     <div id="system-overview" className="scroll-mt-[var(--shell-header-height)]">
       <ChapterTitleCard
-        kicker="02 // How I Build"
+        kicker="03 // How I Build"
         title="The Engineering Lifecycle"
         subtitle="Every system advances through 10 disciplined phases from problem formulation to production maintenance."
       />

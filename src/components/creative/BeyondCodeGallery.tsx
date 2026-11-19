@@ -16,22 +16,14 @@ import client3 from '@/assets/client/client_3.jpg'
 import client4 from '@/assets/client/client_4.jpg'
 import client5 from '@/assets/client/client_5.jpg'
 
-type Width = 'lg' | 'md' | 'sm'
 type Aspect = 'portrait' | 'landscape' | 'square'
-type Offset = 'none' | 'sm' | 'lg'
+type CaptionPos = 'above' | 'below' | 'side'
 
 interface GalleryPhoto {
   src: string
   label: string
-  width: Width
   aspect: Aspect
-  offset: Offset
-}
-
-const WIDTH_CLASS: Record<Width, string> = {
-  lg: 'sm:w-[60%]',
-  md: 'sm:w-[42%]',
-  sm: 'sm:w-[30%]',
+  captionPos: CaptionPos
 }
 
 const ASPECT_CLASS: Record<Aspect, string> = {
@@ -40,11 +32,8 @@ const ASPECT_CLASS: Record<Aspect, string> = {
   square: 'aspect-[4/4]',
 }
 
-const OFFSET_CLASS: Record<Offset, string> = {
-  none: 'sm:mt-0',
-  sm: 'sm:mt-10',
-  lg: 'sm:mt-24',
-}
+/** Smaller than the image itself used to be — leaves room for the caption to carry more weight. */
+const TILE_WIDTH_CLASS = 'w-[62vw] sm:w-[220px]'
 
 interface GalleryStory {
   eyebrow: string
@@ -59,12 +48,12 @@ const STORIES: GalleryStory[] = [
     title: 'On Site, Internship',
     quote: 'Showing up in person is still how most of the trust gets built.',
     photos: [
-      { src: intern1, label: 'Manila, 2024', width: 'lg', aspect: 'landscape', offset: 'none' },
-      { src: intern2, label: 'Manila, 2024', width: 'sm', aspect: 'portrait', offset: 'lg' },
-      { src: intern3, label: 'Manila, 2024', width: 'md', aspect: 'square', offset: 'sm' },
-      { src: intern4, label: 'Manila, 2024', width: 'sm', aspect: 'portrait', offset: 'none' },
-      { src: intern5, label: 'Manila, 2024', width: 'lg', aspect: 'landscape', offset: 'lg' },
-      { src: intern6, label: 'Manila, 2024', width: 'md', aspect: 'portrait', offset: 'sm' },
+      { src: intern1, label: 'Manila, 2024', aspect: 'landscape', captionPos: 'above' },
+      { src: intern2, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'side' },
+      { src: intern3, label: 'Manila, 2024', aspect: 'square', captionPos: 'below' },
+      { src: intern4, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'above' },
+      { src: intern5, label: 'Manila, 2024', aspect: 'landscape', captionPos: 'side' },
+      { src: intern6, label: 'Manila, 2024', aspect: 'portrait', captionPos: 'below' },
     ],
   },
   {
@@ -72,39 +61,57 @@ const STORIES: GalleryStory[] = [
     title: 'In Front of Clients',
     quote: 'Engineering is also a people problem — explaining the trade-off is half the job.',
     photos: [
-      { src: client1, label: 'Client site, 2024', width: 'md', aspect: 'portrait', offset: 'sm' },
-      { src: client2, label: 'Client site, 2024', width: 'lg', aspect: 'landscape', offset: 'none' },
-      { src: client3, label: 'Client site, 2024', width: 'sm', aspect: 'square', offset: 'lg' },
-      { src: client4, label: 'Client site, 2024', width: 'md', aspect: 'portrait', offset: 'none' },
-      { src: client5, label: 'Client site, 2024', width: 'lg', aspect: 'landscape', offset: 'sm' },
+      { src: client1, label: 'Client site, 2024', aspect: 'portrait', captionPos: 'side' },
+      { src: client2, label: 'Client site, 2024', aspect: 'landscape', captionPos: 'above' },
+      { src: client3, label: 'Client site, 2024', aspect: 'square', captionPos: 'below' },
+      { src: client4, label: 'Client site, 2024', aspect: 'portrait', captionPos: 'above' },
+      { src: client5, label: 'Client site, 2024', aspect: 'landscape', captionPos: 'side' },
     ],
   },
 ]
 
-function PhotoTile({ photo, index }: { photo: GalleryPhoto; index: number }) {
-  const alignRight = index % 2 === 1
+function PhotoTile({ photo }: { photo: GalleryPhoto }) {
+  const image = (
+    <div className={cn('shrink-0 overflow-hidden rounded-[var(--radius-project)]', TILE_WIDTH_CLASS)}>
+      <img
+        src={photo.src}
+        alt={photo.label}
+        loading="lazy"
+        className={cn(
+          'w-full object-cover transition-transform duration-500 hover:scale-[1.03]',
+          ASPECT_CLASS[photo.aspect],
+        )}
+      />
+    </div>
+  )
+
+  const caption = (
+    <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+      {photo.label}
+    </span>
+  )
+
+  if (photo.captionPos === 'side') {
+    return (
+      <div className={cn('essay-frame flex shrink-0 items-center gap-3 snap-start', TILE_WIDTH_CLASS)}>
+        {image}
+        <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-muted)] [writing-mode:vertical-rl]">
+          {photo.label}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
-        'essay-frame flex flex-col gap-2',
-        alignRight ? 'items-end text-right' : 'items-start',
-        OFFSET_CLASS[photo.offset],
+        'essay-frame flex shrink-0 snap-start flex-col gap-2',
+        TILE_WIDTH_CLASS,
+        photo.captionPos === 'below' && 'flex-col-reverse',
       )}
     >
-      <span className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-        {photo.label}
-      </span>
-      <div className={cn('w-full overflow-hidden rounded-[var(--radius-project)]', WIDTH_CLASS[photo.width])}>
-        <img
-          src={photo.src}
-          alt={photo.label}
-          loading="lazy"
-          className={cn(
-            'w-full object-cover transition-transform duration-500 hover:scale-[1.03]',
-            ASPECT_CLASS[photo.aspect],
-          )}
-        />
-      </div>
+      {caption}
+      {image}
     </div>
   )
 }
@@ -124,9 +131,12 @@ function Story({ story }: { story: GalleryStory }) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-8 sm:gap-2">
-        {story.photos.map((photo, i) => (
-          <PhotoTile key={photo.src} photo={photo} index={i} />
+      <div
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+      >
+        {story.photos.map((photo) => (
+          <PhotoTile key={photo.src} photo={photo} />
         ))}
       </div>
     </div>
