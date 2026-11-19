@@ -92,14 +92,14 @@ export function HeroSystemEntry() {
         <img
           src={mainPortraitUrl}
           alt="Yuri Brown"
-          className="absolute inset-0 h-full w-full object-cover object-top grayscale"
+          className="absolute inset-0 h-full w-full object-cover object-top"
         />
         <img
           ref={altImgRef}
           src={mainAltPortraitUrl}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-top grayscale transition-opacity duration-100"
+          className="absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-100"
           style={{
             opacity: revealing ? 1 : 0,
             // Hard-edged circle (no soft falloff) — landonorris.com's actual hover patch is a
