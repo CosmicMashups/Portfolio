@@ -4,10 +4,9 @@ import { HeroDeviceModel } from '@/components/hero/HeroDeviceModel'
 import { motionEase } from '@/lib/motion/presets'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { gsap } from '@/lib/motion/gsapScroll'
-import deskBackgroundUrl from '@/assets/bg.jpg'
 
 /**
- * Sticky desk + 3D phone backdrop shared by the hero and capability map.
+ * Sticky near-black backdrop + 3D phone stage shared by the hero and capability map.
  * Synchronized with GSAP ScrollTrigger for smooth darkening, scale, and lateral framing.
  */
 export function HeroPinnedVisual({
@@ -70,20 +69,15 @@ export function HeroPinnedVisual({
 
   return (
     <div className="sticky top-0 left-0 z-0 h-svh w-screen overflow-hidden md:h-[100svh]">
-      {/* Base background texture */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-1000"
-        style={{ backgroundImage: `url(${deskBackgroundUrl})` }}
-      />
-
-      {/* Atmospheric depth: rich deep blackened walnut brown gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#18110c]/35 via-[#140e0a]/10 to-[#120b08]/55" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(20,13,9,0.42)_100%)]" />
+      {/* Flat near-black base with a subtle amber-tinted glow — portrait is the only photographic element */}
+      <div className="absolute inset-0 bg-[#0a0a0a]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,rgba(255,107,26,0.08),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.5)_100%)]" />
 
       {/* GSAP scroll-linked progressive darkening for Capability Map clarity */}
       <div
         ref={revealOverlayRef}
-        className="pointer-events-none absolute inset-0 bg-[#120c08]/92 backdrop-blur-[2px]"
+        className="pointer-events-none absolute inset-0 bg-[#0a0a0a]/92 backdrop-blur-[2px]"
         style={{ opacity: 0 }}
       />
 

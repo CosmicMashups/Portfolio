@@ -6,12 +6,12 @@ import { cssVarsForProject } from '@/lib/designDoc/buildProjectThemes'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 
 const globalAccentVars = {
-  '--accent-primary': '#22c55e',
-  '--accent-secondary': '#38bdf8',
-  '--chart-a': '#10b981',
-  '--chart-b': '#f43f5e',
-  '--chart-c': '#3b82f6',
-  '--chart-d': '#f59e0b',
+  '--accent-primary': '#ff6b1a',
+  '--accent-secondary': '#ffa64d',
+  '--chart-a': '#ff6b1a',
+  '--chart-b': '#ffa64d',
+  '--chart-c': '#f5f5f0',
+  '--chart-d': '#9a9a94',
 } as const
 
 export function ThemeAccentProvider({ children }: { children: ReactNode }) {

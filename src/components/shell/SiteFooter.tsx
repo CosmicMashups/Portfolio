@@ -5,10 +5,10 @@ import { RESUME_PDF_URL } from '@/config/resume'
 import { useContactDialog } from '@/components/ui/ContactDialog'
 
 const FOOTER_LINK_CLASS =
-  'text-sm text-[rgba(252,252,247,0.72)] transition-colors hover:text-[#fcfcf7]'
+  'text-sm text-[rgba(245,245,240,0.72)] transition-colors hover:text-[#f5f5f0]'
 
 /**
- * Site-wide footer, dark Forest Depths band — fixed to that surface regardless of the
+ * Site-wide footer, near-black signal band — fixed to that surface regardless of the
  * light/dark toggle, same treatment as the alternating project sections and the old
  * decorative band this replaces. Unlike that band, every element here is a real,
  * keyboard-reachable link (not `aria-hidden`).
@@ -30,8 +30,8 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#1c3a13] text-[#fcfcf7]"
-      style={{ '--accent-primary': '#d3fa99', '--color-accent-primary': '#d3fa99' } as React.CSSProperties}
+      className="relative left-1/2 right-1/2 -mx-[50vw] w-screen bg-[#0a0a0a] text-[#f5f5f0]"
+      style={{ '--accent-primary': '#ff6b1a', '--color-accent-primary': '#ff6b1a' } as React.CSSProperties}
     >
       <div className="mx-auto max-w-[var(--shell-content-max-width)] px-[var(--shell-gutter-sm)] py-16 sm:px-[var(--shell-gutter-md)] md:py-20 lg:px-[var(--shell-gutter-lg)]">
         <span className="block font-[var(--font-display)] text-4xl font-normal tracking-[-0.02em] md:text-6xl">

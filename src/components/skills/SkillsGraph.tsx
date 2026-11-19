@@ -58,14 +58,14 @@ export function SkillsGraph({
                       }}
                       className={cn(
                         'group inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border-default)] bg-[var(--color-bg-base)]/40 px-3 py-1.5 text-xs text-[var(--color-text-secondary)] transition-all',
-                        'hover:border-[#d3fa99] hover:bg-[#d3fa99]/10 hover:text-[#d3fa99]',
-                        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d3fa99]',
+                        'hover:border-[var(--color-accent-primary)] hover:bg-[var(--color-accent-primary)]/10 hover:text-[var(--color-accent-primary)]',
+                        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)]',
                         'active:scale-[0.97]',
                       )}
                     >
                       <span>{skill.label}</span>
                       {primaryProj && (
-                        <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-text-muted)] transition-colors group-hover:text-[#d3fa99]/80">
+                        <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-text-muted)] transition-colors group-hover:text-[var(--color-accent-primary)]/80">
                           ↗
                         </span>
                       )}

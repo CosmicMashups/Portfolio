@@ -12,3 +12,13 @@ export const fadeInUp = {
 export const staggerChildren = (gap = 0.06) => ({
   show: { transition: { staggerChildren: gap } },
 })
+
+/** Slightly heavier reveal for chapter-level headings/kickers — used once per chapter entry, not per card. */
+export const chapterEnter = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: motionEase },
+  },
+}

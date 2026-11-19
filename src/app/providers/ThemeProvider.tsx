@@ -18,9 +18,9 @@ function readStoredTheme(): Theme | null {
   return stored === 'light' || stored === 'dark' ? stored : null
 }
 
-/** Light by default; only used if the visitor previously chose dark explicitly. */
+/** Dark (signal) by default; only used if the visitor previously chose light explicitly. */
 function initialTheme(): Theme {
-  return readStoredTheme() ?? 'light'
+  return readStoredTheme() ?? 'dark'
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

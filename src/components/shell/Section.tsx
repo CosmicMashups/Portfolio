@@ -4,50 +4,52 @@ import { fadeInUp } from '@/lib/motion/presets'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
 import { cn } from '@/components/ui/cn'
 
+/** Deepest near-black band — used for high-contrast chapter beats. */
 export const DARK_TONE_VARS: Record<string, string> = {
-  '--global-bg': '#121613',
-  '--global-surface': '#121613',
-  '--global-surface-elevated': '#121613',
-  '--global-border': '#fafffa',
-  '--global-text': '#fafffa',
-  '--global-text-muted': '#516254',
-  '--surface-tint': 'rgba(18, 22, 19, 0.9)',
-  '--chart-c': '#fafffa',
-  '--color-bg-base': '#121613',
-  '--color-bg-surface': '#121613',
-  '--color-bg-elevated': '#121613',
-  '--color-bg-glass': 'rgba(250, 255, 250, 0.04)',
-  '--color-bg-glass-hover': 'rgba(250, 255, 250, 0.07)',
-  '--color-text-primary': '#fafffa',
-  '--color-text-secondary': '#fafffa',
-  '--color-text-muted': '#516254',
-  '--color-text-inverse': '#121613',
-  '--color-border-subtle': 'rgba(250, 255, 250, 0.08)',
-  '--color-border-default': '#fafffa',
-  '--color-border-strong': 'rgba(250, 255, 250, 0.24)',
+  '--global-bg': '#0a0a0a',
+  '--global-surface': '#0a0a0a',
+  '--global-surface-elevated': '#141414',
+  '--global-border': '#f5f5f0',
+  '--global-text': '#f5f5f0',
+  '--global-text-muted': '#9a9a94',
+  '--surface-tint': 'rgba(10, 10, 10, 0.9)',
+  '--chart-c': '#f5f5f0',
+  '--color-bg-base': '#0a0a0a',
+  '--color-bg-surface': '#0a0a0a',
+  '--color-bg-elevated': '#141414',
+  '--color-bg-glass': 'rgba(245, 245, 240, 0.04)',
+  '--color-bg-glass-hover': 'rgba(245, 245, 240, 0.07)',
+  '--color-text-primary': '#f5f5f0',
+  '--color-text-secondary': '#f5f5f0',
+  '--color-text-muted': '#9a9a94',
+  '--color-text-inverse': '#0a0a0a',
+  '--color-border-subtle': 'rgba(245, 245, 240, 0.08)',
+  '--color-border-default': '#f5f5f0',
+  '--color-border-strong': 'rgba(245, 245, 240, 0.24)',
 }
 
+/** Slightly elevated tonal band — still near-black-first, used to vary rhythm between chapters without breaking the cinematic feel. */
 export const LIGHT_TONE_VARS: Record<string, string> = {
-  '--global-bg': '#fafffa',
-  '--global-surface': '#fafffa',
-  '--global-surface-elevated': '#fafffa',
-  '--global-border': '#121613',
-  '--global-text': '#121613',
-  '--global-text-muted': '#516254',
-  '--surface-tint': 'rgba(250, 255, 250, 0.9)',
-  '--chart-c': '#121613',
-  '--color-bg-base': '#fafffa',
-  '--color-bg-surface': '#fafffa',
-  '--color-bg-elevated': '#fafffa',
-  '--color-bg-glass': 'rgba(18, 22, 19, 0.03)',
-  '--color-bg-glass-hover': 'rgba(18, 22, 19, 0.05)',
-  '--color-text-primary': '#121613',
-  '--color-text-secondary': '#121613',
-  '--color-text-muted': '#516254',
-  '--color-text-inverse': '#fafffa',
-  '--color-border-subtle': 'rgba(18, 22, 19, 0.06)',
-  '--color-border-default': '#121613',
-  '--color-border-strong': 'rgba(18, 22, 19, 0.22)',
+  '--global-bg': '#1a1a1a',
+  '--global-surface': '#1a1a1a',
+  '--global-surface-elevated': '#242424',
+  '--global-border': '#f5f5f0',
+  '--global-text': '#f5f5f0',
+  '--global-text-muted': '#9a9a94',
+  '--surface-tint': 'rgba(26, 26, 26, 0.9)',
+  '--chart-c': '#f5f5f0',
+  '--color-bg-base': '#1a1a1a',
+  '--color-bg-surface': '#1a1a1a',
+  '--color-bg-elevated': '#242424',
+  '--color-bg-glass': 'rgba(245, 245, 240, 0.05)',
+  '--color-bg-glass-hover': 'rgba(245, 245, 240, 0.08)',
+  '--color-text-primary': '#f5f5f0',
+  '--color-text-secondary': '#f5f5f0',
+  '--color-text-muted': '#9a9a94',
+  '--color-text-inverse': '#1a1a1a',
+  '--color-border-subtle': 'rgba(245, 245, 240, 0.1)',
+  '--color-border-default': '#f5f5f0',
+  '--color-border-strong': 'rgba(245, 245, 240, 0.26)',
 }
 
 export function Section({
@@ -80,10 +82,10 @@ export function Section({
 
   const toneStyle =
     tone === 'dark'
-      ? // Pinned dark accent band — always dark green/cream, independent of the
+      ? // Pinned near-black/signal band — always dark, independent of the
         // site's own light/dark toggle (used for hero-adjacent chrome that sits
         // over the fixed dark photo backdrop).
-        { ...(paintBackground ? { background: '#121613' } : {}), color: '#fafffa', ...DARK_TONE_VARS }
+        { ...(paintBackground ? { background: '#0a0a0a' } : {}), color: '#f5f5f0', ...DARK_TONE_VARS }
       : tone === 'light'
         ? // Theme-aware surface: `--global-*` already flips correctly with
           // `data-theme`, so this just paints using the live variables instead of

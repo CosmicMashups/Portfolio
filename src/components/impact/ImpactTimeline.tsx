@@ -1,22 +1,48 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useRef } from 'react'
+import { useGSAP } from '@gsap/react'
 import { projectById } from '@/config/projects.registry'
 import { IMPACT_MILESTONES } from '@/components/impact/impactMilestones'
 import { usePrefersReducedMotion } from '@/app/providers/usePrefersReducedMotion'
-import { fadeInUp, motionEase } from '@/lib/motion/presets'
+import { fadeInUp } from '@/lib/motion/presets'
 import { cn } from '@/components/ui/cn'
+import { gsap, ScrollTrigger } from '@/lib/motion/gsapScroll'
 
 export function ImpactTimeline() {
   const reduce = usePrefersReducedMotion()
+  const rootRef = useRef<HTMLDivElement>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
+
+  // Scrub-tied draw-on: the line's length is literally progress-over-time, so it
+  // tracks scroll position through the whole timeline instead of a one-shot reveal.
+  useGSAP(() => {
+    if (reduce || !rootRef.current || !lineRef.current) return
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        lineRef.current,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: 'top 85%',
+            end: 'bottom 60%',
+            scrub: true,
+          },
+        },
+      )
+    })
+    return () => ctx.revert()
+  }, [reduce])
 
   return (
-    <div className="relative">
-      <motion.div
+    <div ref={rootRef} className="relative">
+      <div
+        ref={lineRef}
         className="absolute bottom-0 left-[7px] top-0 w-px origin-top bg-[color:color-mix(in_oklab,var(--accent-primary)_55%,var(--global-border))] md:left-[11px]"
-        initial={reduce ? { scaleY: 1 } : { scaleY: 0 }}
-        whileInView={reduce ? undefined : { scaleY: 1 }}
-        viewport={{ once: true, margin: '-15% 0px' }}
-        transition={{ duration: reduce ? 0 : 1.1, ease: motionEase }}
+        style={reduce ? undefined : { transform: 'scaleY(0)' }}
         aria-hidden
       />
 

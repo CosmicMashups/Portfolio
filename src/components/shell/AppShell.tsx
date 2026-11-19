@@ -7,6 +7,7 @@ import { RESUME_PDF_URL } from '@/config/resume'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { cn } from '@/components/ui/cn'
 import { SkipLink } from '@/components/ui/SkipLink'
+import { BrandLoader } from '@/components/ui/BrandLoader'
 import { ToggleTechnical } from '@/components/ui/ToggleTechnical'
 import { ScrollProgressBar } from '@/components/ui/ScrollProgressBar'
 import { PageTransition } from '@/components/ui/PageTransition'
@@ -27,20 +28,20 @@ function scrollToId(id: string) {
  * site's own light/dark toggle, rather than following it like page content does.
  */
 const PINNED_DARK_CHROME_VARS = {
-  '--color-bg-base': '#1c3a13',
-  '--color-bg-surface': '#1c3a13',
-  '--color-bg-elevated': '#1c3a13',
-  '--color-bg-glass': 'rgba(252, 252, 247, 0.04)',
-  '--color-bg-glass-hover': 'rgba(252, 252, 247, 0.07)',
-  '--color-text-primary': '#fcfcf7',
-  '--color-text-secondary': '#fcfcf7',
-  '--color-text-muted': '#c4c7c4',
-  '--color-text-inverse': '#1c3a13',
-  '--color-accent-primary': '#d3fa99',
-  '--color-accent-primary-dim': 'rgba(211, 250, 153, 0.14)',
-  '--color-border-subtle': 'rgba(252, 252, 247, 0.08)',
-  '--color-border-default': '#fcfcf7',
-  '--color-border-strong': 'rgba(252, 252, 247, 0.24)',
+  '--color-bg-base': '#0a0a0a',
+  '--color-bg-surface': '#121212',
+  '--color-bg-elevated': '#1a1a1a',
+  '--color-bg-glass': 'rgba(245, 245, 240, 0.04)',
+  '--color-bg-glass-hover': 'rgba(245, 245, 240, 0.07)',
+  '--color-text-primary': '#f5f5f0',
+  '--color-text-secondary': '#f5f5f0',
+  '--color-text-muted': '#9a9a94',
+  '--color-text-inverse': '#0a0a0a',
+  '--color-accent-primary': '#ff6b1a',
+  '--color-accent-primary-dim': 'rgba(255, 107, 26, 0.14)',
+  '--color-border-subtle': 'rgba(245, 245, 240, 0.08)',
+  '--color-border-default': '#f5f5f0',
+  '--color-border-strong': 'rgba(245, 245, 240, 0.24)',
 } as CSSProperties
 
 function ThemeToggle() {
@@ -86,6 +87,7 @@ export function AppShell() {
 
   return (
     <div className="relative min-h-svh overflow-x-clip bg-[var(--color-bg-base)]">
+      <BrandLoader />
       <SkipLink />
       <ToggleTechnical />
       <ScrollProgressBar />
@@ -285,7 +287,7 @@ export function AppShell() {
               >
                 <span className="sr-only">{s.label}</span>
                 <span aria-hidden className="font-[var(--font-mono)]">{s.short}</span>
-                <span className="pointer-events-none absolute right-10 whitespace-nowrap rounded-md border border-white/10 bg-[#121613] px-2.5 py-1 text-[11px] font-medium tracking-wide text-[#fafffa] opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+                <span className="pointer-events-none absolute right-10 whitespace-nowrap rounded-md border border-white/10 bg-[#121212] px-2.5 py-1 text-[11px] font-medium tracking-wide text-[#f5f5f0] opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
                   {s.label}
                 </span>
               </button>

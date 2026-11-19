@@ -18,9 +18,9 @@ function scrollToProject(id: ProjectId) {
     smoothScrollTo(el, {
       updateHash: true,
       onComplete: () => {
-        el.classList.add('ring-2', 'ring-[#d3fa99]', 'ring-offset-4', 'ring-offset-[#121613]')
+        el.classList.add('ring-2', 'ring-[#ff6b1a]', 'ring-offset-4', 'ring-offset-[#0a0a0a]')
         setTimeout(() => {
-          el.classList.remove('ring-2', 'ring-[#d3fa99]', 'ring-offset-4', 'ring-offset-[#121613]')
+          el.classList.remove('ring-2', 'ring-[#ff6b1a]', 'ring-offset-4', 'ring-offset-[#0a0a0a]')
         }, 1800)
       },
     })

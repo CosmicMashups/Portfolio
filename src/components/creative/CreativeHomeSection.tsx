@@ -8,10 +8,10 @@ export function CreativeHomeSection() {
     <Section
       id="creative"
       tone="light"
-      kicker={<SectionEyebrow>Creative Layer</SectionEyebrow>}
+      kicker={<SectionEyebrow>Beyond Code</SectionEyebrow>}
       title={
-        <span className="font-[var(--font-display)]">
-          <RevealText>Engineering with Intent.</RevealText>
+        <span className="font-[var(--font-display)] uppercase">
+          <RevealText>Off the Clock, Same Rigor.</RevealText>
         </span>
       }
     >

@@ -18,31 +18,31 @@ const STEP_ICONS: Record<string, LucideIcon> = {
   maintenance: Wrench,
 }
 
-// Visual color tint accents matching the project's botanical/Seed aesthetic
+// Amber-family tint accents, varied by intensity per lifecycle category phase.
 const CARD_THEMES: Record<string, { bg: string; border: string; badge: string; accent: string }> = {
   strategy: {
-    bg: 'from-[#162318]/90 to-[#101811]/90',
-    border: 'border-[#d3fa99]/20 hover:border-[#d3fa99]/40',
-    badge: 'bg-[#d3fa99]/10 text-[#d3fa99] border-[#d3fa99]/20',
-    accent: '#d3fa99',
+    bg: 'from-[#1a1510]/90 to-[#121212]/90',
+    border: 'border-[#ff6b1a]/20 hover:border-[#ff6b1a]/40',
+    badge: 'bg-[#ff6b1a]/10 text-[#ff6b1a] border-[#ff6b1a]/20',
+    accent: '#ff6b1a',
   },
   architecture: {
-    bg: 'from-[#1a2b1d]/90 to-[#121c14]/90',
-    border: 'border-[#9f995b]/20 hover:border-[#9f995b]/40',
-    badge: 'bg-[#9f995b]/10 text-[#e2dc9d] border-[#9f995b]/20',
-    accent: '#e2dc9d',
+    bg: 'from-[#1a1510]/90 to-[#121212]/90',
+    border: 'border-[#ffa64d]/20 hover:border-[#ffa64d]/40',
+    badge: 'bg-[#ffa64d]/10 text-[#ffa64d] border-[#ffa64d]/20',
+    accent: '#ffa64d',
   },
   execution: {
-    bg: 'from-[#142619]/90 to-[#0e1a12]/90',
-    border: 'border-[#698e79]/20 hover:border-[#698e79]/40',
-    badge: 'bg-[#698e79]/10 text-[#a3d4ba] border-[#698e79]/20',
-    accent: '#a3d4ba',
+    bg: 'from-[#1a1510]/90 to-[#121212]/90',
+    border: 'border-[#ffd199]/20 hover:border-[#ffd199]/40',
+    badge: 'bg-[#ffd199]/10 text-[#ffd199] border-[#ffd199]/20',
+    accent: '#ffd199',
   },
   reliability: {
-    bg: 'from-[#152518]/90 to-[#0f1b11]/90',
-    border: 'border-[#757c5d]/20 hover:border-[#757c5d]/40',
-    badge: 'bg-[#757c5d]/10 text-[#c8d4a6] border-[#757c5d]/20',
-    accent: '#c8d4a6',
+    bg: 'from-[#1a1510]/90 to-[#121212]/90',
+    border: 'border-[#c9560f]/20 hover:border-[#c9560f]/40',
+    badge: 'bg-[#c9560f]/10 text-[#ffb27a] border-[#c9560f]/20',
+    accent: '#ffb27a',
   },
 }
 
@@ -213,12 +213,12 @@ export function LifecycleCarousel() {
       {/* Top Header Controls Bar (Matching Phantom.com style: category chip on left, arrows on right) */}
       <div className="flex items-center justify-between pb-4 sm:pb-6">
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-[#121613]/70 px-3 py-1 text-[11px] font-[var(--font-mono)] uppercase tracking-[0.16em] text-[#fafffa]/85 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#d3fa99]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-[#121212]/70 px-3 py-1 text-[11px] font-[var(--font-mono)] uppercase tracking-[0.16em] text-[#f5f5f0]/85 backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#ff6b1a]" />
             <span>10-Stage Lifecycle Pipeline</span>
           </div>
 
-          <span className="hidden font-[var(--font-mono)] text-[11px] text-[#fafffa]/40 sm:inline">
+          <span className="hidden font-[var(--font-mono)] text-[11px] text-[#f5f5f0]/40 sm:inline">
             Stage {String(currentIndex + 1).padStart(2, '0')} / {totalSteps}
           </span>
         </div>
@@ -232,7 +232,7 @@ export function LifecycleCarousel() {
             aria-label="Previous lifecycle stage"
             className={`group flex h-9 w-9 items-center justify-center rounded-full border transition-all ${
               canScrollLeft
-                ? 'border-white/20 bg-white/5 text-[#fafffa] hover:border-[#d3fa99] hover:bg-[#d3fa99]/15 hover:text-[#d3fa99] active:scale-95'
+                ? 'border-white/20 bg-white/5 text-[#f5f5f0] hover:border-[#ff6b1a] hover:bg-[#ff6b1a]/15 hover:text-[#ff6b1a] active:scale-95'
                 : 'border-white/5 bg-transparent text-white/20 cursor-not-allowed'
             }`}
           >
@@ -246,7 +246,7 @@ export function LifecycleCarousel() {
             aria-label="Next lifecycle stage"
             className={`group flex h-9 w-9 items-center justify-center rounded-full border transition-all ${
               canScrollRight
-                ? 'border-white/20 bg-white/5 text-[#fafffa] hover:border-[#d3fa99] hover:bg-[#d3fa99]/15 hover:text-[#d3fa99] active:scale-95'
+                ? 'border-white/20 bg-white/5 text-[#f5f5f0] hover:border-[#ff6b1a] hover:bg-[#ff6b1a]/15 hover:text-[#ff6b1a] active:scale-95'
                 : 'border-white/5 bg-transparent text-white/20 cursor-not-allowed'
             }`}
           >
@@ -295,7 +295,7 @@ export function LifecycleCarousel() {
               }}
               className={`group relative flex flex-col justify-between shrink-0 snap-start select-none rounded-2xl sm:rounded-3xl border bg-gradient-to-b ${theme.bg} ${theme.border} p-5 sm:p-6 backdrop-blur-xl transition-all duration-300 ${
                 isSelected
-                  ? 'ring-1 ring-[#d3fa99]/30 shadow-[0_8px_30px_rgba(0,0,0,0.4)]'
+                  ? 'ring-1 ring-[#ff6b1a]/30 shadow-[0_8px_30px_rgba(0,0,0,0.4)]'
                   : 'opacity-70 hover:opacity-100 hover:scale-[1.01]'
               } w-[84vw] max-w-[340px] sm:w-[320px] md:w-[340px] lg:w-[360px] h-[340px] sm:h-[360px] max-h-[50vh]`}
             >
@@ -303,7 +303,7 @@ export function LifecycleCarousel() {
               <div>
                 <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <div className="flex items-center gap-2">
-                    <span className="font-[var(--font-mono)] text-xs font-semibold text-[#d3fa99]">
+                    <span className="font-[var(--font-mono)] text-xs font-semibold text-[#ff6b1a]">
                       {step.number}
                     </span>
                     <span className={`rounded-full border px-2 py-0.5 font-[var(--font-mono)] text-[9.5px] uppercase tracking-wider ${theme.badge}`}>
@@ -311,34 +311,34 @@ export function LifecycleCarousel() {
                     </span>
                   </div>
 
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-[#fafffa]/80 transition-colors group-hover:border-[#d3fa99]/40 group-hover:text-[#d3fa99]">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-[#f5f5f0]/80 transition-colors group-hover:border-[#ff6b1a]/40 group-hover:text-[#ff6b1a]">
                     <Icon className="h-3.5 w-3.5" />
                   </div>
                 </div>
 
                 {/* Title & Subtitle */}
                 <div className="pt-3">
-                  <h3 className="font-[var(--font-display)] text-xl font-normal leading-snug text-[#fafffa] group-hover:text-[#d3fa99] transition-colors">
+                  <h3 className="font-[var(--font-display)] text-xl font-normal leading-snug text-[#f5f5f0] group-hover:text-[#ff6b1a] transition-colors">
                     {step.title}
                   </h3>
-                  <p className="mt-0.5 line-clamp-1 font-[var(--font-mono)] text-[11px] text-[#fafffa]/60">
+                  <p className="mt-0.5 line-clamp-1 font-[var(--font-mono)] text-[11px] text-[#f5f5f0]/60">
                     {step.subtitle}
                   </p>
                 </div>
 
                 {/* Concise 2-line Description */}
-                <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-[#fafffa]/80">
+                <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-[#f5f5f0]/80">
                   {step.description}
                 </p>
               </div>
 
               {/* Card Bottom: Shipped Exemplar Proof Pill */}
               <div className="mt-auto pt-3 border-t border-white/10">
-                <div className="flex items-center gap-1.5 pb-1 font-[var(--font-mono)] text-[9.5px] uppercase tracking-wider text-[#d3fa99]">
+                <div className="flex items-center gap-1.5 pb-1 font-[var(--font-mono)] text-[9.5px] uppercase tracking-wider text-[#ff6b1a]">
                   <CheckCircle2 className="h-3 w-3" />
                   <span>Verified Production Proof</span>
                 </div>
-                <p className="line-clamp-2 text-[11px] text-[#fafffa]/70 leading-relaxed font-light">
+                <p className="line-clamp-2 text-[11px] text-[#f5f5f0]/70 leading-relaxed font-light">
                   {step.exemplar}
                 </p>
               </div>
@@ -357,7 +357,7 @@ export function LifecycleCarousel() {
             aria-label={`Jump to stage ${step.number}: ${step.title}`}
             className={`h-1.5 rounded-full transition-all ${
               idx === currentIndex
-                ? 'w-6 bg-[#d3fa99]'
+                ? 'w-6 bg-[#ff6b1a]'
                 : 'w-1.5 bg-white/20 hover:bg-white/40'
             }`}
           />

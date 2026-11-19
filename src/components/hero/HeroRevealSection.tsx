@@ -23,15 +23,15 @@ export function HeroRevealSection() {
         {/* Header Strip */}
         <div className="flex flex-col gap-3 border-b border-white/10 pb-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="font-[var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[#d3fa99]">
-              02 // Capability Architecture
+            <span className="font-[var(--font-mono)] text-[11px] uppercase tracking-[0.22em] text-[#ff6b1a]">
+              02 // How I Build
             </span>
-            <h2 className="mt-1 font-[var(--font-display)] text-2xl font-normal leading-tight tracking-[-0.02em] text-[#fafffa] sm:text-3xl md:text-4xl">
-              Engineering Lifecycle
+            <h2 className="mt-1 font-[var(--font-display)] text-3xl uppercase leading-tight tracking-[-0.01em] text-[#f5f5f0] sm:text-4xl md:text-5xl">
+              The Engineering Lifecycle
             </h2>
           </div>
 
-          <p className="max-w-md text-xs leading-relaxed text-[#fafffa]/75 sm:text-sm md:text-right">
+          <p className="max-w-md text-xs leading-relaxed text-[#f5f5f0]/75 sm:text-sm md:text-right">
             Every system—whether an edge neural net, distributed backend, or cross-platform client—advances through 10 disciplined phases from problem formulation to production maintenance.
           </p>
         </div>
@@ -49,29 +49,29 @@ export function HeroRevealSection() {
             <div className="min-h-[160px] xl:min-h-[200px]" aria-hidden="true" />
 
             {/* Hardware Layer Badge anchored at bottom */}
-            <div className="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-[#121613]/50 p-4 backdrop-blur-md">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[#d3fa99]">
+            <div className="flex flex-col gap-2.5 rounded-2xl border border-white/10 bg-[#121212]/50 p-4 backdrop-blur-md">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5 font-[var(--font-mono)] text-[10px] uppercase tracking-[0.16em] text-[#ff6b1a]">
                 <span className="inline-flex items-center gap-1.5">
                   <Cpu className="h-3.5 w-3.5" />
                   <span>Hardware Runtime</span>
                 </span>
-                <span className="rounded-full border border-[#d3fa99]/30 bg-[#d3fa99]/10 px-2 py-0.5 text-[8.5px] text-[#d3fa99]">
+                <span className="rounded-full border border-[#ff6b1a]/30 bg-[#ff6b1a]/10 px-2 py-0.5 text-[8.5px] text-[#ff6b1a]">
                   Live Stage
                 </span>
               </div>
 
-              <p className="text-[11px] leading-relaxed text-[#fafffa]/70">
+              <p className="text-[11px] leading-relaxed text-[#f5f5f0]/70">
                 The 3D smartphone model in this viewport represents physical deployment: executing on-device TFLite quantization, background sync queues, and zero-cloud edge resilience.
               </p>
 
-              <div className="flex flex-wrap items-center gap-3 pt-0.5 font-[var(--font-mono)] text-[9.5px] text-[#fafffa]/60">
+              <div className="flex flex-wrap items-center gap-3 pt-0.5 font-[var(--font-mono)] text-[9.5px] text-[#f5f5f0]/60">
                 <span className="inline-flex items-center gap-1">
-                  <ShieldCheck className="h-3 w-3 text-[#d3fa99]" />
+                  <ShieldCheck className="h-3 w-3 text-[#ff6b1a]" />
                   <span>Zero-Cloud Dependency</span>
                 </span>
                 <span className="text-white/20">·</span>
                 <span className="inline-flex items-center gap-1">
-                  <Zap className="h-3 w-3 text-[#d3fa99]" />
+                  <Zap className="h-3 w-3 text-[#ff6b1a]" />
                   <span>Sub-40ms Inference</span>
                 </span>
               </div>

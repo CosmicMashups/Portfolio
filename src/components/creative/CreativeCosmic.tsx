@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { TiltCard } from '@/components/ui/TiltCard'
 import { BorderTrace } from '@/components/ui/BorderTrace'
 import { useMagneticEffect } from '@/hooks/useMagneticEffect'
+import { BeyondCodeGallery } from '@/components/creative/BeyondCodeGallery'
 
 function Waveform() {
   const bars = [12, 28, 18, 40, 22, 32, 16, 36, 20, 44, 18, 30]
@@ -63,6 +64,19 @@ export function CreativeCosmic() {
 
   return (
     <div className="space-y-10">
+      <div>
+        <p className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
+          On track / off track
+        </p>
+        <p className="mt-1 max-w-xl text-sm text-[var(--global-text-muted)]">
+          The work everywhere else on this page is the on-track story. This is off track — who I am in the field and
+          in front of clients.
+        </p>
+        <div className="mt-5">
+          <BeyondCodeGallery />
+        </div>
+      </div>
+
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-[var(--global-text-muted)]">
         <p>
           I default to dark, data-dense interfaces because financial and clinical tools fail when they hide uncertainty
