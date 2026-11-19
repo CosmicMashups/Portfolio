@@ -105,6 +105,16 @@ export function HeroSystemEntry() {
         onMouseEnter={() => setRevealing(true)}
         onMouseLeave={() => setRevealing(false)}
         onMouseMove={handlePointerMove}
+        style={{
+          // Fades the bottom edge and bottom corners to transparent instead of the photo
+          // ending in a hard rectangular cut where it meets the next chapter's background.
+          maskImage:
+            'linear-gradient(to top, transparent, black 14%), radial-gradient(ellipse 45% 40% at 0% 100%, transparent 55%, black 100%), radial-gradient(ellipse 45% 40% at 100% 100%, transparent 55%, black 100%)',
+          maskComposite: 'intersect',
+          WebkitMaskImage:
+            'linear-gradient(to top, transparent, black 14%), radial-gradient(ellipse 45% 40% at 0% 100%, transparent 55%, black 100%), radial-gradient(ellipse 45% 40% at 100% 100%, transparent 55%, black 100%)',
+          WebkitMaskComposite: 'source-in, source-in',
+        }}
       >
         <img
           src={mainPortraitUrl}
