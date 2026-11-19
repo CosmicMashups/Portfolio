@@ -134,8 +134,10 @@ export function HeroSystemEntry() {
         </div>
       </motion.div>
 
-      {/* Wordmark overlapping the bottom third of the photo */}
-      <div className="relative z-10 mt-auto flex flex-col gap-4 px-[var(--shell-gutter-sm)] pb-10 sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)] lg:pb-14">
+      {/* Wordmark overlapping the bottom third of the photo. pointer-events-none here (with
+          pointer-events-auto on each interactive child below) so this full-width flex item
+          doesn't sit over — and block hover on — the portrait's lower portion. */}
+      <div className="relative z-10 mt-auto flex flex-col gap-4 px-[var(--shell-gutter-sm)] pb-10 pointer-events-none sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)] lg:pb-14">
         <motion.h1
           ref={nameRef}
           initial={reduce ? false : 'hidden'}
@@ -184,7 +186,7 @@ export function HeroSystemEntry() {
           initial={reduce ? false : 'hidden'}
           animate="show"
           variants={fadeInUp}
-          className="flex flex-wrap items-center gap-4 pt-2"
+          className="pointer-events-auto flex flex-wrap items-center gap-4 pt-2"
         >
           <button
             type="button"
@@ -221,7 +223,7 @@ export function HeroSystemEntry() {
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="group mt-4 flex items-center gap-2.5 self-start font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-[#f5f5f0]/60 transition-colors hover:text-[#ff6b1a]"
+          className="group pointer-events-auto mt-4 flex items-center gap-2.5 self-start font-[var(--font-mono)] text-[11px] uppercase tracking-[0.2em] text-[#f5f5f0]/60 transition-colors hover:text-[#ff6b1a]"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/25 transition-all group-hover:border-[#ff6b1a] group-hover:bg-[#ff6b1a]/10">
             <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" aria-hidden />
