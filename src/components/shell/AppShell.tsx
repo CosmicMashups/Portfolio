@@ -79,10 +79,11 @@ export function AppShell() {
 
   const navItemClass = (active: boolean) =>
     cn(
-      'rounded-full px-3 py-1.5 text-xs font-medium tracking-wide transition-colors duration-150',
-      'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-glass-hover)] hover:text-[var(--color-text-primary)]',
+      'relative px-1 py-1.5 font-[var(--font-mono)] text-[11px] font-medium uppercase tracking-[0.14em] transition-colors duration-150',
+      'after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:scale-x-0 after:bg-[var(--color-accent-primary)] after:transition-transform after:duration-200',
+      'text-[var(--color-text-secondary)]/75 hover:text-[var(--color-text-primary)] hover:after:scale-x-100',
       'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-primary)]',
-      active && 'bg-[var(--color-accent-primary-dim)] text-[var(--color-accent-primary)]',
+      active && 'text-[var(--color-accent-primary)] after:scale-x-100',
     )
 
   return (
@@ -102,22 +103,14 @@ export function AppShell() {
           borderColor: navSolid ? 'var(--color-border-default)' : 'transparent',
         }}
       >
-        <div className="relative mx-auto flex h-16 max-w-[var(--shell-content-max-width)] items-center gap-2 px-[var(--shell-gutter-sm)] sm:gap-4 sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
-          <NavLink
-            to="/"
-            end
-            className="group flex shrink-0 items-center gap-2 rounded-md px-1 py-1.5"
-          >
-            <img
-              src={logoMark}
-              alt=""
-              className="h-8 w-8 shrink-0 rounded-full object-cover"
-            />
-            <span className="font-[var(--font-display)] text-lg font-semibold leading-none tracking-tight text-[var(--color-text-primary)] sm:text-xl">
+        <div className="relative mx-auto flex h-[var(--shell-header-height)] max-w-[var(--shell-content-max-width)] items-center gap-3 px-[var(--shell-gutter-sm)] sm:gap-5 sm:px-[var(--shell-gutter-md)] lg:px-[var(--shell-gutter-lg)]">
+          <NavLink to="/" end className="group flex shrink-0 items-center gap-2.5 rounded-md py-1.5">
+            <img src={logoMark} alt="" className="h-7 w-7 shrink-0 rounded-full object-cover grayscale" />
+            <span className="font-[var(--font-display)] text-xl uppercase leading-none tracking-[-0.01em] text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-primary)]">
               Yuri Brown
             </span>
-            <span className="hidden h-5 w-px bg-[var(--color-border-default)] sm:block" aria-hidden />
-            <span className="hidden max-w-[9rem] truncate font-[var(--font-mono)] text-[10px] uppercase leading-tight tracking-[0.14em] text-[var(--color-text-muted)] sm:block">
+            <span className="hidden h-4 w-px bg-[var(--color-border-default)]/30 lg:block" aria-hidden />
+            <span className="hidden max-w-[9rem] truncate font-[var(--font-mono)] text-[10px] uppercase leading-tight tracking-[0.18em] text-[var(--color-text-muted)] lg:block">
               Software / ML Engineer
             </span>
           </NavLink>
@@ -126,7 +119,7 @@ export function AppShell() {
             className="hidden min-w-0 flex-1 justify-center overflow-x-auto sm:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             aria-label="Primary"
           >
-            <div className="inline-flex items-center gap-0.5">
+            <div className="inline-flex items-center gap-6">
               <NavLink to="/" end className={({ isActive }) => navItemClass(isActive)}>
                 Home
               </NavLink>
@@ -165,7 +158,7 @@ export function AppShell() {
               href={RESUME_PDF_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden shrink-0 items-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3 py-1.5 text-xs font-medium text-[var(--color-text-inverse)] transition-opacity hover:opacity-90 sm:inline-flex sm:gap-2 sm:px-4 sm:py-2"
+              className="hidden shrink-0 items-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3.5 py-1.5 font-[var(--font-mono)] text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-inverse)] transition-all hover:scale-[1.03] hover:brightness-110 sm:inline-flex sm:gap-2 sm:px-4 sm:py-2"
               download="Brown_Resume.pdf"
             >
               <FileText className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -244,7 +237,7 @@ export function AppShell() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="mt-1 inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3 py-2 text-xs font-medium text-[var(--color-text-inverse)]"
+                  className="mt-1 inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--color-accent-primary)] bg-[var(--color-accent-primary)] px-3 py-2 font-[var(--font-mono)] text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-text-inverse)]"
                   download="Brown_Resume.pdf"
                 >
                   <FileText className="h-3.5 w-3.5 shrink-0" aria-hidden />
@@ -281,7 +274,7 @@ export function AppShell() {
                 className={cn(
                   'group relative flex h-8 w-8 items-center justify-center rounded-full border text-[10px] transition-all duration-300 outline-none',
                   isActive
-                    ? 'border-[var(--color-accent-primary)] bg-[var(--color-accent-primary-dim)] text-[var(--color-accent-primary)] scale-110 shadow-[0_0_12px_rgba(211,250,153,0.35)]'
+                    ? 'border-[var(--color-accent-primary)] bg-[var(--color-accent-primary-dim)] text-[var(--color-accent-primary)] scale-110 shadow-[0_0_12px_rgba(255,107,26,0.4)]'
                     : 'border-[var(--color-border-default)] bg-[var(--color-bg-surface)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-primary)] hover:text-[var(--color-accent-primary)] hover:scale-105',
                 )}
               >
