@@ -44,7 +44,7 @@ interface GalleryStory {
 
 const STORIES: GalleryStory[] = [
   {
-    eyebrow: 'June 2025 — August 2025',
+    eyebrow: 'June 2025 to August 2025',
     title: 'On Site, Internship',
     quote: 'Showing up in person is still how most of the trust gets built.',
     photos: [
@@ -59,7 +59,7 @@ const STORIES: GalleryStory[] = [
   {
     eyebrow: '2026',
     title: 'In Front of Clients',
-    quote: 'Engineering is also a people problem — explaining the trade-off is half the job.',
+    quote: 'Engineering is also a people problem: explaining the trade-off is half the job.',
     photos: [
       { src: client1, label: 'Client site, 2026', aspect: 'portrait', captionPos: 'side' },
       { src: client2, label: 'Client site, 2026', aspect: 'landscape', captionPos: 'above' },

@@ -43,7 +43,7 @@ export const IMPACT_MILESTONES: ImpactMilestone[] = [
   {
     projectId: 'expens_io_business',
     year: 'May–Aug 2026',
-    impact: 'Enterprise procurement ERP replacing four Excel workbooks — Row Level Security as the real authorization boundary, not just UI gating.',
+    impact: 'Enterprise procurement ERP replacing four Excel workbooks, with Row Level Security as the real authorization boundary, not just UI gating.',
     metrics: [
       { label: 'Route screens', value: '37' },
       { label: 'User roles', value: '12' },
@@ -88,7 +88,7 @@ export const IMPACT_MILESTONES: ImpactMilestone[] = [
   {
     projectId: 'registrar',
     year: '2019',
-    impact: 'Shipped a dual-portal registrar system with parameterized SQL and discrete status scripts — thesis-defended.',
+    impact: 'Shipped a dual-portal registrar system with parameterized SQL and discrete status scripts, thesis-defended.',
     metrics: [
       { label: 'Document pipelines', value: '7 types' },
       { label: 'Portals', value: '2 roles' },

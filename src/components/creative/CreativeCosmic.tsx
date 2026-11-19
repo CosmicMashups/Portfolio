@@ -23,11 +23,11 @@ function Waveform() {
 const PRINCIPLES = [
   {
     title: 'Density with Clarity',
-    body: 'Dark-first shells and monospaced numerics keep dashboards legible under load — the same discipline as AriMarket and MashHub.',
+    body: 'Dark-first shells and monospaced numerics keep dashboards legible under load, the same discipline as AriMarket and MashHub.',
   },
   {
     title: 'Motion with Purpose',
-    body: 'Scroll-entry choreography and counters answer “what changed?” — never ornamental loops that fight reading order.',
+    body: 'Scroll-entry choreography and counters answer “what changed?” rather than running ornamental loops that fight reading order.',
   },
   {
     title: 'Systems over Surfaces',
@@ -66,7 +66,7 @@ export function CreativeCosmic() {
     <div className="space-y-10">
       <div>
         <p className="max-w-xl text-sm text-[var(--global-text-muted)]">
-          The work everywhere else on this page is the on-track story. This is off track — who I am in the field and
+          The work everywhere else on this page is the on-track story. This is off track: who I am in the field and
           in front of clients.
         </p>
         <div className="mt-5">
@@ -76,7 +76,7 @@ export function CreativeCosmic() {
 
       <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-[var(--global-text-muted)]">
         <p>
-          Mashups are the same muscle as engineering — pattern matching under noise — which is why MashHub exists as a
+          Mashups are the same muscle as engineering, pattern matching under noise, which is why MashHub exists as a
           serious creative tool, not a side gimmick.
         </p>
       </div>
@@ -105,8 +105,8 @@ export function CreativeCosmic() {
               </p>
               <h3 className="mt-2 text-xl font-semibold text-[var(--global-text)]">Creative signal, same rigor</h3>
               <p className="mt-2 text-sm leading-relaxed text-[var(--global-text-muted)]">
-                Mashups share the same narrative: controlled composition under noisy inputs. This panel stays minimal — a
-                waveform motif and a direct link — so the engineering story stays primary.
+                Mashups share the same narrative: controlled composition under noisy inputs. This panel stays minimal,
+                a waveform motif and a direct link, so the engineering story stays primary.
               </p>
               <a
                 href="https://www.youtube.com/@CosmicMashups"
@@ -182,7 +182,7 @@ export function CreativeCosmic() {
                   <div className="relative aspect-video w-full">
                     {loadedVideos[id] ? (
                       <iframe
-                        title={`CosmicMashups #PersonalBest — video ${index + 1} (playlist context)`}
+                        title={`CosmicMashups #PersonalBest, video ${index + 1} (playlist context)`}
                         src={creativePlaylistEmbedSrc(id)}
                         className="absolute inset-0 h-full w-full border-0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

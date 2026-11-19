@@ -192,7 +192,7 @@ export function GitHubCredibility() {
         <div className="rounded-[var(--radius-project)] border border-[var(--global-border)] bg-[var(--global-surface)]/55 p-6 md:p-7">
           <h3 className="text-lg font-semibold text-[var(--global-text)]">Project complexity (registry)</h3>
           <p className="mt-3 text-sm leading-relaxed text-[var(--global-text-muted)]">
-            High / medium / low encodes integration surface area plus design-system coupling — not line count.
+            High / medium / low encodes integration surface area plus design-system coupling, not line count.
           </p>
           <LanguageBars />
           <ul className="mt-6 space-y-2.5 text-sm">

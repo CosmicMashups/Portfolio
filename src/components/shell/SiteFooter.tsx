@@ -38,7 +38,7 @@ export function SiteFooter() {
           Yuri Brown
         </span>
         <p className="mt-3 max-w-md text-sm leading-relaxed text-[rgba(252,252,247,0.72)]">
-          Software / ML Engineer — I build systems for the problems I&apos;ve lived through myself.
+          Software / ML Engineer. I build systems for the problems I&apos;ve lived through myself.
         </p>
 
         <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-3 md:mt-12">

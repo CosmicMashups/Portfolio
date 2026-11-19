@@ -156,7 +156,7 @@ export function HeroSystemEntry() {
           variants={fadeInUp}
           className="max-w-xl text-sm font-medium uppercase tracking-[0.1em] text-[#f5f5f0]/80 sm:text-base"
         >
-          Software / ML engineer — systems portfolio since {new Date().getFullYear() - 2}
+          Software / ML engineer
         </motion.p>
 
         <motion.p
